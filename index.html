@@ -2083,20 +2083,25 @@
 
         .ticker-content {
             display: flex;
-            animation: tickerScroll 60s linear infinite;
+            animation: tickerScroll 30s linear infinite;
             white-space: nowrap;
             align-items: center;
             height: 100%;
         }
 
         .ticker-item {
-            padding: 0 40px;
+            padding: 0 20px;
             font-size: 16px;
-            color: var(--dark-ink);
             font-weight: 500;
             border-right: 1px solid var(--light-gray);
             flex-shrink: 0;
         }
+
+        .ticker-item:nth-child(5n+1) { color: #0f766e; }
+        .ticker-item:nth-child(5n+2) { color: #7c3aed; }
+        .ticker-item:nth-child(5n+3) { color: #b45309; }
+        .ticker-item:nth-child(5n+4) { color: #dc2626; }
+        .ticker-item:nth-child(5n+5) { color: #2563eb; }
 
         @keyframes tickerScroll {
             0% { transform: translateX(100%); }
