@@ -3650,7 +3650,7 @@
                                 <span class="route-title" id="routeTitle">Route NJ-7 | North Jersey</span>
                                 <span class="route-badge" id="routeBadge">Optimizing...</span>
                             </div>
-                            <svg class="route-svg" id="routeSvg" viewBox="0 0 400 240"></svg>
+                            <svg class="route-svg" id="routeSvg" viewBox="0 0 400 240" preserveAspectRatio="none"></svg>
                             <div id="routeStops"></div>
                             <div class="route-truck" id="routeTruck">🚛</div>
                             <div class="route-stats-panel">
@@ -4392,7 +4392,7 @@
                 document.querySelector('.route-stats-panel').classList.add('visible');
 
                 // State outline
-                outlineEl.innerHTML = '<svg viewBox="0 0 400 240" style="width:100%;height:100%;"><path d="' + s.outline + '" fill="none" stroke="rgba(148,163,184,0.08)" stroke-width="1.5"/></svg>';
+                outlineEl.innerHTML = '<svg viewBox="0 0 400 240" preserveAspectRatio="none" style="width:100%;height:100%;"><path d="' + s.outline + '" fill="none" stroke="rgba(148,163,184,0.08)" stroke-width="1.5"/></svg>';
 
                 // Create stop elements (positioned via same coordinate system)
                 s.stops.forEach(function(st, i) {
@@ -4419,11 +4419,11 @@
                 act.style.strokeDasharray = len;
                 act.style.strokeDashoffset = len;
 
-                // Show warehouse
+                // Show warehouse stop (parent + pin)
+                var whStop = stopsEl.querySelector('[data-si="0"]');
+                if (whStop) whStop.classList.add('visible');
                 var wh = stopsEl.querySelector('[data-si="0"] .stop-pin');
                 if (wh) wh.classList.add('visible');
-                var whLbl = stopsEl.querySelector('[data-si="0"] .stop-label');
-                if (whLbl) whLbl.style.opacity = '1';
 
                 // Start drawing after brief pause
                 setTimeout(function() {
@@ -4448,13 +4448,11 @@
                         // Reveal stops
                         var si = Math.floor(p * (nStops - 1)) + 1;
                         for (var j = 1; j < Math.min(si + 1, nStops); j++) {
-                            var pin = stopsEl.querySelector('[data-si="' + j + '"] .stop-pin');
-                            if (pin && !pin.classList.contains('visible')) {
-                                pin.classList.add('visible');
-                                pin.classList.remove('pending');
-                                pin.classList.add('delivered');
-                                var lbl = stopsEl.querySelector('[data-si="' + j + '"] .stop-label');
-                                if (lbl) lbl.style.opacity = '1';
+                            var stopEl = stopsEl.querySelector('[data-si="' + j + '"]');
+                            if (stopEl && !stopEl.classList.contains('visible')) {
+                                stopEl.classList.add('visible');
+                                var pin = stopEl.querySelector('.stop-pin');
+                                if (pin) { pin.classList.add('visible'); pin.classList.remove('pending'); pin.classList.add('delivered'); }
                             }
                         }
 
@@ -4489,6 +4487,7 @@
 
             // Use same viewBox for SVG and stop positioning
             document.getElementById('routeSvg').setAttribute('viewBox', '0 0 400 240');
+            document.getElementById('routeSvg').setAttribute('preserveAspectRatio', 'none');
 
             var routeObs = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
