@@ -2520,43 +2520,37 @@
                             <div class="status-indicator">
                                 <div class="status-dot"></div>
                                 <span style="color: #D1D5DB; font-size: 14px;">Live</span>
+                                <span id="dashClock" style="color: #6B7280; font-size: 12px; margin-left: 8px;"></span>
                             </div>
                         </div>
                         <div class="dashboard-stats">
                             <div class="stat-card">
-                                <div class="stat-number">47</div>
+                                <div class="stat-number" id="statRoutes">47</div>
                                 <div class="stat-label">Active Routes</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">96.2%</div>
+                                <div class="stat-number" id="statDelivery">96.2%</div>
                                 <div class="stat-label">On-Time Delivery</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-number">$1.2M</div>
+                                <div class="stat-number" id="statRevenue">$1.2M</div>
                                 <div class="stat-label">Revenue Today</div>
                             </div>
                         </div>
-                        <div class="mini-chart">
-                            <div class="chart-bar"></div>
-                            <div class="chart-bar"></div>
-                            <div class="chart-bar"></div>
-                            <div class="chart-bar"></div>
-                            <div class="chart-bar"></div>
-                            <div class="chart-bar"></div>
+                        <!-- Live mini chart -->
+                        <div style="display: flex; align-items: flex-end; gap: 4px; height: 60px; margin-bottom: 12px;">
+                            <div id="liveBar0" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 30px;"></div>
+                            <div id="liveBar1" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 45px;"></div>
+                            <div id="liveBar2" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 25px;"></div>
+                            <div id="liveBar3" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 50px;"></div>
+                            <div id="liveBar4" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 35px;"></div>
+                            <div id="liveBar5" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 40px;"></div>
+                            <div id="liveBar6" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 20px;"></div>
+                            <div id="liveBar7" style="flex:1; background: linear-gradient(180deg, var(--teal-accent), var(--muted-indigo)); border-radius: 3px 3px 0 0; transition: height 1s ease; height: 55px;"></div>
                         </div>
-                        <div style="margin-top: 12px;">
-                            <div class="data-row">
-                                <span style="color: #D1D5DB; font-size: 12px;">Order #2847</span>
-                                <span style="color: var(--signal-green); font-size: 12px;">✓ Delivered</span>
-                            </div>
-                            <div class="data-row">
-                                <span style="color: #D1D5DB; font-size: 12px;">Route NYC-1</span>
-                                <span style="color: var(--teal-accent); font-size: 12px;">● En Route</span>
-                            </div>
-                            <div class="data-row">
-                                <span style="color: #D1D5DB; font-size: 12px;">Quote #Q5521</span>
-                                <span style="color: #fbbf24; font-size: 12px;">◐ Pending</span>
-                            </div>
+                        <!-- Live activity feed -->
+                        <div id="activityFeed" style="margin-top: 4px; overflow: hidden; height: 72px; position: relative;">
+                            <div id="feedInner" style="transition: transform 0.5s ease;"></div>
                         </div>
                     </div>
                 </div>
@@ -3430,6 +3424,101 @@
         // Initialize ticker on load and resize
         initTicker();
         window.addEventListener('resize', initTicker);
+
+        // ========== LIVE DASHBOARD ==========
+        (function() {
+            const activities = [
+                { text: 'Order #2847 - Sysco Northeast', status: 'Delivered', color: '#2ECC71', icon: '✓' },
+                { text: 'Route NYC-1 - 12 stops remaining', status: 'En Route', color: '#1B9AAA', icon: '●' },
+                { text: 'Quote #Q5521 - Metro Foods', status: 'Pending', color: '#fbbf24', icon: '◐' },
+                { text: 'PO #8834 - Restaurant Depot', status: 'Processing', color: '#818cf8', icon: '◉' },
+                { text: 'Route BOS-3 - Final delivery', status: 'Arriving', color: '#1B9AAA', icon: '●' },
+                { text: 'Invoice #INV-4401 - US Foods', status: 'Paid', color: '#2ECC71', icon: '✓' },
+                { text: 'Order #2848 - Gordon Food Svc', status: 'Picked', color: '#818cf8', icon: '◉' },
+                { text: 'Quote #Q5522 - Fresh Direct', status: 'Sent', color: '#fbbf24', icon: '◐' },
+                { text: 'Route PHI-2 - 8 stops remaining', status: 'En Route', color: '#1B9AAA', icon: '●' },
+                { text: 'PO #8835 - Costco Wholesale', status: 'Confirmed', color: '#2ECC71', icon: '✓' },
+                { text: 'Alert: Low stock SKU-4412', status: 'Reorder', color: '#ef4444', icon: '!' },
+                { text: 'Order #2849 - Whole Foods NE', status: 'Shipped', color: '#2ECC71', icon: '✓' },
+                { text: 'Route DC-1 - Departed warehouse', status: 'En Route', color: '#1B9AAA', icon: '●' },
+                { text: 'Quote #Q5523 - Aramark Corp', status: 'Draft', color: '#6B7280', icon: '◐' },
+                { text: 'PO #8836 - Compass Group', status: 'Processing', color: '#818cf8', icon: '◉' },
+            ];
+
+            let feedIndex = 0;
+            const feedInner = document.getElementById('feedInner');
+
+            function renderFeedItems() {
+                let html = '';
+                for (let i = 0; i < 4; i++) {
+                    const item = activities[(feedIndex + i) % activities.length];
+                    html += '<div style="display:flex;justify-content:space-between;padding:4px 0;opacity:' + (i < 3 ? '1' : '0.4') + ';font-size:12px;">' +
+                        '<span style="color:#D1D5DB;">' + item.text + '</span>' +
+                        '<span style="color:' + item.color + ';">' + item.icon + ' ' + item.status + '</span></div>';
+                }
+                feedInner.innerHTML = html;
+            }
+
+            renderFeedItems();
+
+            setInterval(function() {
+                feedInner.style.transform = 'translateY(-24px)';
+                feedInner.style.opacity = '0.5';
+                setTimeout(function() {
+                    feedIndex = (feedIndex + 1) % activities.length;
+                    renderFeedItems();
+                    feedInner.style.transition = 'none';
+                    feedInner.style.transform = 'translateY(0)';
+                    feedInner.style.opacity = '1';
+                    setTimeout(function() { feedInner.style.transition = 'transform 0.5s ease, opacity 0.3s ease'; }, 50);
+                }, 400);
+            }, 3000);
+
+            // Live bar chart animation
+            setInterval(function() {
+                for (let i = 0; i < 8; i++) {
+                    const bar = document.getElementById('liveBar' + i);
+                    if (bar) bar.style.height = (15 + Math.random() * 45) + 'px';
+                }
+            }, 2000);
+
+            // Stat counter animations
+            let routes = 47;
+            let delivery = 96.2;
+            let revenue = 1.2;
+
+            setInterval(function() {
+                routes += Math.floor(Math.random() * 3) - 1;
+                if (routes < 38) routes = 38;
+                if (routes > 56) routes = 56;
+                document.getElementById('statRoutes').textContent = routes;
+
+                delivery += (Math.random() * 0.6) - 0.3;
+                if (delivery < 94.0) delivery = 94.0;
+                if (delivery > 99.1) delivery = 99.1;
+                document.getElementById('statDelivery').textContent = delivery.toFixed(1) + '%';
+
+                revenue += (Math.random() * 0.1) - 0.02;
+                if (revenue < 0.8) revenue = 0.8;
+                if (revenue > 2.4) revenue = 2.4;
+                document.getElementById('statRevenue').textContent = '$' + revenue.toFixed(1) + 'M';
+            }, 4000);
+
+            // Dashboard clock
+            function updateClock() {
+                var now = new Date();
+                var h = now.getHours();
+                var m = now.getMinutes();
+                var s = now.getSeconds();
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12 || 12;
+                var ts = h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s + ' ' + ampm;
+                var el = document.getElementById('dashClock');
+                if (el) el.textContent = ts;
+            }
+            updateClock();
+            setInterval(updateClock, 1000);
+        })();
     </script>
 </body>
 </html>< ! - -   d e p l o y e d   - - > 
