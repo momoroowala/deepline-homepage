@@ -4304,251 +4304,200 @@
         (function() {
             var routeMap = document.getElementById('routeMap');
             if (!routeMap) return;
-            
             var routeStarted = false;
-            var currentStateIndex = 0;
-            var routeInterval;
+            var stateIdx = 0;
+            var animId = null;
+            var cycleTimer = null;
 
-            // Define the 3 route scenarios
-            var routeStates = [
+            var states = [
                 {
                     title: "Route NJ-7 | North Jersey",
                     stops: [
-                        { name: "Newark Warehouse", x: 30, y: 140, type: "warehouse" },
-                        { name: "Paterson", label: "Metro Foods", x: 50, y: 80 },
-                        { name: "Hackensack", label: "Sysco NE", x: 80, y: 100 },
-                        { name: "Paramus", label: "Fresh Direct", x: 120, y: 60 },
-                        { name: "Wayne", label: "RestaurantDepot", x: 160, y: 120 },
-                        { name: "Morristown", label: "Gordon FSvc", x: 200, y: 90 },
-                        { name: "Edison", label: "US Foods", x: 280, y: 180 }
+                        { label: "Warehouse", x: 45, y: 150, wh: true },
+                        { label: "Metro Foods", x: 85, y: 85 },
+                        { label: "Sysco NE", x: 140, y: 110 },
+                        { label: "Fresh Direct", x: 195, y: 65 },
+                        { label: "RestaurantDepot", x: 245, y: 130 },
+                        { label: "Gordon FSvc", x: 300, y: 80 },
+                        { label: "US Foods", x: 355, y: 155 }
                     ],
-                    stats: { stops: 7, miles: "48.3 mi", time: "2.1h", gas: "31%", timeSaved: "38 min" },
-                    stateOutline: "M 20,40 L 350,40 L 350,200 L 80,220 L 20,180 Z"
+                    stats: ["7","48.3 mi","2.1h","31%","38 min"],
+                    outline: "M30,50 L100,35 L200,30 L350,45 L370,100 L360,180 L300,210 L120,220 L50,200 L25,140Z"
                 },
                 {
                     title: "Route TX-3 | Dallas-Fort Worth",
                     stops: [
-                        { name: "Irving Warehouse", x: 180, y: 140, type: "warehouse" },
-                        { name: "Arlington", label: "Sysco DFW", x: 200, y: 180 },
-                        { name: "Fort Worth", label: "Ben E. Keith", x: 120, y: 120 },
-                        { name: "Grapevine", label: "PFG", x: 220, y: 100 },
-                        { name: "Plano", label: "US Foods", x: 260, y: 60 },
-                        { name: "McKinney", label: "Gordon FSvc", x: 300, y: 80 },
-                        { name: "Denton", label: "Restaurant Depot", x: 160, y: 60 }
+                        { label: "Warehouse", x: 200, y: 130, wh: true },
+                        { label: "Sysco DFW", x: 140, y: 170 },
+                        { label: "Ben E. Keith", x: 70, y: 120 },
+                        { label: "PFG", x: 120, y: 70 },
+                        { label: "US Foods", x: 230, y: 55 },
+                        { label: "Gordon FSvc", x: 310, y: 90 },
+                        { label: "RestaurantDepot", x: 350, y: 160 }
                     ],
-                    stats: { stops: 7, miles: "62.7 mi", time: "2.8h", gas: "28%", timeSaved: "44 min" },
-                    stateOutline: "M 40,60 L 360,40 L 380,120 L 320,200 L 60,220 L 20,140 Z"
+                    stats: ["7","62.7 mi","2.8h","28%","44 min"],
+                    outline: "M20,30 L180,25 L370,40 L385,130 L360,210 L200,225 L60,215 L15,120Z"
                 },
                 {
                     title: "Route GA-1 | Metro Atlanta",
                     stops: [
-                        { name: "Norcross Warehouse", x: 240, y: 80, type: "warehouse" },
-                        { name: "Doraville", label: "Fresh Point", x: 260, y: 100 },
-                        { name: "Chamblee", label: "Sysco ATL", x: 200, y: 110 },
-                        { name: "Buckhead", label: "US Foods", x: 180, y: 140 },
-                        { name: "Midtown", label: "PFG Southeast", x: 160, y: 160 },
-                        { name: "Decatur", label: "Gordon FSvc", x: 220, y: 180 },
-                        { name: "Stone Mountain", label: "Ben E. Keith", x: 300, y: 150 }
+                        { label: "Warehouse", x: 300, y: 60, wh: true },
+                        { label: "Fresh Point", x: 250, y: 95 },
+                        { label: "Sysco ATL", x: 180, y: 75 },
+                        { label: "US Foods", x: 110, y: 120 },
+                        { label: "PFG Southeast", x: 80, y: 170 },
+                        { label: "Gordon FSvc", x: 170, y: 180 },
+                        { label: "Ben E. Keith", x: 300, y: 160 }
                     ],
-                    stats: { stops: 7, miles: "37.1 mi", time: "1.9h", gas: "36%", timeSaved: "35 min" },
-                    stateOutline: "M 100,80 L 320,60 L 360,140 L 340,200 L 140,220 L 80,160 Z"
+                    stats: ["7","37.1 mi","1.9h","36%","35 min"],
+                    outline: "M40,60 L160,30 L330,35 L380,80 L370,180 L300,220 L100,215 L30,160Z"
                 }
             ];
 
-            // Build road-like path with angular segments
-            function buildRoadPath(stops) {
-                if (stops.length < 2) return "";
-                
-                var path = "M " + stops[0].x + "," + stops[0].y;
-                
-                for (var i = 1; i < stops.length; i++) {
-                    var prev = stops[i-1];
-                    var curr = stops[i];
-                    var dx = curr.x - prev.x;
-                    var dy = curr.y - prev.y;
-                    
-                    // Add angular segments instead of smooth curves
-                    if (Math.abs(dx) > Math.abs(dy)) {
-                        // Horizontal then vertical
-                        var midX = prev.x + dx * 0.7;
-                        path += " L " + midX + "," + prev.y;
-                        path += " L " + midX + "," + curr.y;
-                        path += " L " + curr.x + "," + curr.y;
+            function roadPath(pts) {
+                var d = 'M' + pts[0].x + ',' + pts[0].y;
+                for (var i = 1; i < pts.length; i++) {
+                    var p = pts[i - 1], c = pts[i];
+                    var dx = c.x - p.x, dy = c.y - p.y;
+                    if (Math.abs(dx) >= Math.abs(dy)) {
+                        var mx = Math.round(p.x + dx * 0.65);
+                        d += ' L' + mx + ',' + p.y + ' L' + mx + ',' + c.y + ' L' + c.x + ',' + c.y;
                     } else {
-                        // Vertical then horizontal
-                        var midY = prev.y + dy * 0.7;
-                        path += " L " + prev.x + "," + midY;
-                        path += " L " + curr.x + "," + midY;
-                        path += " L " + curr.x + "," + curr.y;
+                        var my = Math.round(p.y + dy * 0.65);
+                        d += ' L' + p.x + ',' + my + ' L' + c.x + ',' + my + ' L' + c.x + ',' + c.y;
                     }
                 }
-                
-                return path;
+                return d;
             }
 
-            function createStateOutline(pathD) {
-                var stateOutline = document.getElementById('stateOutline');
-                stateOutline.innerHTML = '<svg viewBox="0 0 400 280"><path class="state-shape" d="' + pathD + '"></path></svg>';
+            function clearRoute() {
+                if (animId) { cancelAnimationFrame(animId); animId = null; }
+                if (cycleTimer) { clearTimeout(cycleTimer); cycleTimer = null; }
+                document.getElementById('routeSvg').innerHTML = '';
+                document.getElementById('routeStops').innerHTML = '';
+                document.getElementById('stateOutline').innerHTML = '';
+                document.getElementById('routeTruck').classList.remove('active');
             }
 
-            function createStops(stops) {
-                var stopsContainer = document.getElementById('routeStops');
-                stopsContainer.innerHTML = '';
-                
-                stops.forEach(function(stop, index) {
-                    var stopEl = document.createElement('div');
-                    stopEl.className = 'route-stop';
-                    stopEl.style.left = (stop.x / 400 * 100) + '%';
-                    stopEl.style.top = (stop.y / 280 * 100) + '%';
-                    stopEl.setAttribute('data-stop', index);
-                    
-                    var pinType = stop.type === 'warehouse' ? 'warehouse' : 'pending';
-                    stopEl.innerHTML = 
-                        '<div class="stop-pin ' + pinType + '"></div>' +
-                        '<span class="stop-label">' + (stop.label || stop.name) + '</span>';
-                    
-                    stopsContainer.appendChild(stopEl);
-                });
-            }
-
-            function updateStats(stats) {
-                document.getElementById('rStops').textContent = stats.stops;
-                document.getElementById('rMiles').textContent = stats.miles;
-                document.getElementById('rTime').textContent = stats.time;
-                document.getElementById('rGas').textContent = stats.gas;
-                document.getElementById('rTimeSaved').textContent = stats.timeSaved;
-            }
-
-            function animateRoute(state) {
+            function showRoute(s) {
+                clearRoute();
                 var svg = document.getElementById('routeSvg');
-                svg.innerHTML = '';
-                
-                // Create state outline
-                createStateOutline(state.stateOutline);
-                document.getElementById('stateOutline').classList.add('visible');
-                
-                // Create stops
-                createStops(state.stops);
-                
-                // Update title and show header
-                document.getElementById('routeTitle').textContent = state.title;
-                document.getElementById('routeBadge').textContent = 'Optimizing...';
-                
-                // Build road path
-                var pathD = buildRoadPath(state.stops);
-                
-                // Background path (dashed)
-                var bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                bgPath.setAttribute('d', pathD);
-                bgPath.setAttribute('class', 'route-path-bg');
-                svg.appendChild(bgPath);
-                
-                // Active path (animated)
-                var activePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                activePath.setAttribute('d', pathD);
-                activePath.setAttribute('class', 'route-path-active');
-                svg.appendChild(activePath);
-                
-                var totalLen = activePath.getTotalLength();
-                activePath.style.strokeDasharray = totalLen;
-                activePath.style.strokeDashoffset = totalLen;
-                
-                // Show warehouse stop immediately
-                var wareStop = document.querySelector('[data-stop="0"]');
-                if (wareStop) wareStop.classList.add('visible');
-                
-                setTimeout(function() {
-                    activePath.classList.add('drawing');
-                    document.getElementById('routeBadge').textContent = 'Routing...';
-                    document.querySelector('.route-header-bar').classList.add('visible');
-                    animateTruckAlongPath(activePath, state);
-                }, 300);
-            }
+                var stopsEl = document.getElementById('routeStops');
+                var outlineEl = document.getElementById('stateOutline');
 
-            function animateTruckAlongPath(path, state) {
-                var truck = document.getElementById('routeTruck');
-                var totalLen = path.getTotalLength();
-                truck.classList.add('active');
-                
-                var startTime = null;
-                var duration = 8000;
-                
-                function moveTruck(timestamp) {
-                    if (!startTime) startTime = timestamp;
-                    var progress = Math.min((timestamp - startTime) / duration, 1);
-                    
-                    // Ease-in-out function
-                    var easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-                    
-                    var point = path.getPointAtLength(easeProgress * totalLen);
-                    truck.style.left = (point.x / 400 * 100) + '%';
-                    truck.style.top = (point.y / 280 * 100) + '%';
-                    
-                    // Reveal stops as truck passes them
-                    var currentStopIndex = Math.floor(easeProgress * (state.stops.length - 1));
-                    for (var i = 1; i <= currentStopIndex + 1; i++) {
-                        var stopEl = document.querySelector('[data-stop="' + i + '"]');
-                        if (stopEl && !stopEl.classList.contains('visible')) {
-                            stopEl.classList.add('visible');
-                            var pin = stopEl.querySelector('.stop-pin');
-                            pin.classList.remove('pending');
-                            pin.classList.add('delivered');
+                // Title
+                document.getElementById('routeTitle').textContent = s.title;
+                document.getElementById('routeBadge').textContent = 'Optimizing...';
+
+                // State outline
+                outlineEl.innerHTML = '<svg viewBox="0 0 400 240" style="width:100%;height:100%;"><path d="' + s.outline + '" fill="none" stroke="rgba(148,163,184,0.08)" stroke-width="1.5"/></svg>';
+
+                // Create stop elements (positioned via same coordinate system)
+                s.stops.forEach(function(st, i) {
+                    var el = document.createElement('div');
+                    el.className = 'route-stop';
+                    el.style.left = (st.x / 400 * 100) + '%';
+                    el.style.top = (st.y / 240 * 100) + '%';
+                    el.innerHTML = '<div class="stop-pin ' + (st.wh ? 'warehouse' : 'pending') + '"></div><span class="stop-label">' + st.label + '</span>';
+                    el.setAttribute('data-si', i);
+                    stopsEl.appendChild(el);
+                });
+
+                // Build SVG path
+                var pd = roadPath(s.stops);
+                var bg = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                bg.setAttribute('d', pd); bg.setAttribute('class', 'route-path-bg');
+                svg.appendChild(bg);
+
+                var act = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                act.setAttribute('d', pd); act.setAttribute('class', 'route-path-active');
+                svg.appendChild(act);
+
+                var len = act.getTotalLength();
+                act.style.strokeDasharray = len;
+                act.style.strokeDashoffset = len;
+
+                // Show warehouse
+                var wh = stopsEl.querySelector('[data-si="0"] .stop-pin');
+                if (wh) wh.classList.add('visible');
+                var whLbl = stopsEl.querySelector('[data-si="0"] .stop-label');
+                if (whLbl) whLbl.style.opacity = '1';
+
+                // Start drawing after brief pause
+                setTimeout(function() {
+                    act.style.transition = 'stroke-dashoffset 7s linear';
+                    act.style.strokeDashoffset = '0';
+                    document.getElementById('routeBadge').textContent = 'Routing...';
+
+                    // Animate truck
+                    var truck = document.getElementById('routeTruck');
+                    truck.classList.add('active');
+                    var t0 = null;
+                    var dur = 7000;
+                    var nStops = s.stops.length;
+
+                    function tick(ts) {
+                        if (!t0) t0 = ts;
+                        var p = Math.min((ts - t0) / dur, 1);
+                        var pt = act.getPointAtLength(p * len);
+                        truck.style.left = (pt.x / 400 * 100) + '%';
+                        truck.style.top = (pt.y / 240 * 100) + '%';
+
+                        // Reveal stops
+                        var si = Math.floor(p * (nStops - 1)) + 1;
+                        for (var j = 1; j < Math.min(si + 1, nStops); j++) {
+                            var pin = stopsEl.querySelector('[data-si="' + j + '"] .stop-pin');
+                            if (pin && !pin.classList.contains('visible')) {
+                                pin.classList.add('visible');
+                                pin.classList.remove('pending');
+                                pin.classList.add('delivered');
+                                var lbl = stopsEl.querySelector('[data-si="' + j + '"] .stop-label');
+                                if (lbl) lbl.style.opacity = '1';
+                            }
+                        }
+
+                        // Update stats progressively
+                        document.getElementById('rStops').textContent = Math.min(si, nStops - 1);
+
+                        if (p < 1) {
+                            animId = requestAnimationFrame(tick);
+                        } else {
+                            // Done
+                            document.getElementById('routeBadge').textContent = 'Optimized';
+                            document.getElementById('rStops').textContent = s.stats[0];
+                            document.getElementById('rMiles').textContent = s.stats[1];
+                            document.getElementById('rTime').textContent = s.stats[2];
+                            document.getElementById('rGas').textContent = s.stats[3];
+                            document.getElementById('rTimeSaved').textContent = s.stats[4];
+
+                            // Cycle to next after 3s
+                            cycleTimer = setTimeout(function() {
+                                routeMap.style.opacity = '0.3';
+                                setTimeout(function() {
+                                    stateIdx = (stateIdx + 1) % states.length;
+                                    showRoute(states[stateIdx]);
+                                    routeMap.style.opacity = '1';
+                                }, 400);
+                            }, 3000);
                         }
                     }
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(moveTruck);
-                    } else {
-                        // Route completed
-                        document.getElementById('routeBadge').textContent = 'Optimized';
-                        updateStats(state.stats);
-                        document.querySelector('.route-stats-panel').classList.add('visible');
-                        
-                        // Wait 3 seconds before cycling to next state
-                        setTimeout(cycleToNextState, 3000);
-                    }
-                }
-                
-                requestAnimationFrame(moveTruck);
-            }
-
-            function cycleToNextState() {
-                // Fade out current state
-                document.getElementById('stateOutline').classList.remove('visible');
-                document.querySelector('.route-header-bar').classList.remove('visible');
-                document.querySelector('.route-stats-panel').classList.remove('visible');
-                document.getElementById('routeTruck').classList.remove('active');
-                
-                setTimeout(function() {
-                    // Move to next state
-                    currentStateIndex = (currentStateIndex + 1) % routeStates.length;
-                    animateRoute(routeStates[currentStateIndex]);
+                    animId = requestAnimationFrame(tick);
                 }, 500);
             }
 
-            function startRouteAnimation() {
-                if (routeStarted) return;
-                routeStarted = true;
-                
-                // Start with first state
-                animateRoute(routeStates[currentStateIndex]);
-                
-                // Set up cycling every 12 seconds (8s animation + 3s display + 1s transition)
-                routeInterval = setInterval(function() {
-                    cycleToNextState();
-                }, 12000);
-            }
+            // Use same viewBox for SVG and stop positioning
+            document.getElementById('routeSvg').setAttribute('viewBox', '0 0 400 240');
 
-            // Intersection observer to start animation when visible
-            var routeObserver = new IntersectionObserver(function(entries) {
+            var routeObs = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
-                    if (entry.isIntersecting) {
-                        startRouteAnimation();
+                    if (entry.isIntersecting && !routeStarted) {
+                        routeStarted = true;
+                        routeMap.style.transition = 'opacity 0.4s ease';
+                        showRoute(states[0]);
                     }
                 });
             }, { threshold: 0.3 });
-            
-            routeObserver.observe(routeMap);
+            routeObs.observe(routeMap);
         })();
 
         // ========== ORCHESTRATOR DIAGRAM ==========
