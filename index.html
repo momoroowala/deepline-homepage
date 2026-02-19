@@ -5444,9 +5444,30 @@
                 }
             }
 
+            // Force-clear all scenario UI elements
+            function hardClearScenario() {
+                clearFieldStates();
+                var r = document.getElementById('quoteResult');
+                if (r) { r.classList.remove('show'); r.style.display = 'none'; }
+                var w = document.getElementById('quoteWarning');
+                if (w) { w.style.display = 'none'; w.textContent = ''; }
+                var s = document.getElementById('quoteSubstitute');
+                if (s) { s.style.display = 'none'; s.innerHTML = ''; }
+                var inv = document.getElementById('quoteInventory');
+                if (inv) { inv.style.display = 'none'; inv.innerHTML = ''; }
+                var g = document.getElementById('quoteGenerating');
+                if (g) { g.style.display = 'none'; }
+                var c = document.getElementById('quoteCustomer');
+                if (c) c.textContent = '';
+                // Remove any lingering due-date elements
+                if (r) { var dd = r.querySelector('.quote-due-date'); if (dd) dd.remove(); }
+            }
+
             // Main animation sequence for each scenario
             async function animateScenario(scenario) {
-                if (currentAnimation === 'running') return;
+                // Stop any in-flight animation and force clear
+                currentAnimation = 'stopped';
+                await new Promise(resolve => setTimeout(resolve, 50));
                 currentAnimation = 'running';
 
                 const elements = {
@@ -5458,20 +5479,7 @@
                 };
 
                 // Hard reset everything from previous scenario
-                clearFieldStates();
-                if (elements.result) {
-                    elements.result.classList.remove('show');
-                    elements.result.style.display = 'none';
-                }
-                var prevWarning = document.getElementById('quoteWarning');
-                if (prevWarning) prevWarning.style.display = 'none';
-                var prevSub = document.getElementById('quoteSubstitute');
-                if (prevSub) prevSub.style.display = 'none';
-                var prevInv = document.getElementById('quoteInventory');
-                if (prevInv) prevInv.style.display = 'none';
-                var prevGen = document.getElementById('quoteGenerating');
-                if (prevGen) prevGen.style.display = 'none';
-                if (elements.customer) elements.customer.textContent = '';
+                hardClearScenario();
                 
                 // Update customer
                 if (elements.customer) {
@@ -5508,7 +5516,8 @@
 
             // Cycle to next scenario
             async function cycleToNext() {
-                if (isAnimating) return;
+                // Force stop previous animation
+                currentAnimation = 'stopped';
                 isAnimating = true;
 
                 // Fade out current
