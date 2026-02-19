@@ -94,53 +94,37 @@
 
         /* Background Patterns */
         .hero::before {
-            content: '';
-            position: absolute;
-            top: -20%;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse 600px 400px at 15% 50%, rgba(27, 154, 170, 0.25) 0%, transparent 70%),
-                radial-gradient(ellipse 500px 350px at 85% 20%, rgba(79, 70, 229, 0.2) 0%, transparent 70%),
-                radial-gradient(ellipse 400px 300px at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
-            animation: heroGlow 8s ease-in-out infinite alternate;
-            will-change: transform;
-        }
-
-        @keyframes heroGlow {
-            0% { transform: translateY(0) scale(1); opacity: 0.8; }
-            100% { transform: translateY(-15px) scale(1.03); opacity: 1; }
+            content: none;
         }
 
         .animated-grid {
             position: absolute;
-            top: -50%;
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            height: 150%;
-            opacity: 0.08;
+            height: 200%;
+            opacity: 0.06;
             background-image: 
-                linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 25s linear infinite;
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 20s linear infinite;
             will-change: transform;
         }
 
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
+            100% { transform: translate(30px, 30px); }
         }
 
         .floating-particles {
             position: absolute;
-            top: -20%;
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            height: 120%;
+            height: 200%;
             overflow: hidden;
             will-change: transform;
         }
@@ -152,13 +136,13 @@
         }
 
         .particle:nth-child(odd) {
-            background: rgba(27, 154, 170, 0.3);
-            box-shadow: 0 0 8px rgba(27, 154, 170, 0.4);
+            background: rgba(27, 154, 170, 0.6);
+            box-shadow: 0 0 12px rgba(27, 154, 170, 0.5), 0 0 24px rgba(27, 154, 170, 0.2);
         }
 
         .particle:nth-child(even) {
-            background: rgba(168, 85, 247, 0.25);
-            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
         @keyframes float {
@@ -3671,19 +3655,19 @@
     <section id="home" class="hero">
         <div class="animated-grid"></div>
         <div class="floating-particles">
-            <div class="particle" style="width: 4px; height: 4px; left: 10%; animation-delay: 0s; animation-duration: 15s;"></div>
-            <div class="particle" style="width: 6px; height: 6px; left: 20%; animation-delay: 2s; animation-duration: 18s;"></div>
-            <div class="particle" style="width: 3px; height: 3px; left: 30%; animation-delay: 4s; animation-duration: 22s;"></div>
-            <div class="particle" style="width: 5px; height: 5px; left: 40%; animation-delay: 1s; animation-duration: 16s;"></div>
-            <div class="particle" style="width: 4px; height: 4px; left: 60%; animation-delay: 3s; animation-duration: 20s;"></div>
-            <div class="particle" style="width: 7px; height: 7px; left: 70%; animation-delay: 5s; animation-duration: 17s;"></div>
-            <div class="particle" style="width: 3px; height: 3px; left: 80%; animation-delay: 2s; animation-duration: 19s;"></div>
-            <div class="particle" style="width: 5px; height: 5px; left: 90%; animation-delay: 4s; animation-duration: 21s;"></div>
-            <div class="particle" style="width: 8px; height: 8px; left: 15%; animation-delay: 6s; animation-duration: 14s;"></div>
-            <div class="particle" style="width: 4px; height: 4px; left: 50%; animation-delay: 7s; animation-duration: 23s;"></div>
-            <div class="particle" style="width: 6px; height: 6px; left: 75%; animation-delay: 1s; animation-duration: 13s;"></div>
-            <div class="particle" style="width: 3px; height: 3px; left: 35%; animation-delay: 8s; animation-duration: 25s;"></div>
-            <div class="particle" style="width: 5px; height: 5px; left: 55%; animation-delay: 3s; animation-duration: 16s;"></div>
+            <div class="particle" style="width: 8px; height: 8px; left: 10%; animation-delay: 0s; animation-duration: 15s;"></div>
+            <div class="particle" style="width: 10px; height: 10px; left: 20%; animation-delay: 2s; animation-duration: 18s;"></div>
+            <div class="particle" style="width: 6px; height: 6px; left: 30%; animation-delay: 4s; animation-duration: 22s;"></div>
+            <div class="particle" style="width: 9px; height: 9px; left: 40%; animation-delay: 1s; animation-duration: 16s;"></div>
+            <div class="particle" style="width: 7px; height: 7px; left: 60%; animation-delay: 3s; animation-duration: 20s;"></div>
+            <div class="particle" style="width: 12px; height: 12px; left: 70%; animation-delay: 5s; animation-duration: 17s;"></div>
+            <div class="particle" style="width: 6px; height: 6px; left: 80%; animation-delay: 2s; animation-duration: 19s;"></div>
+            <div class="particle" style="width: 8px; height: 8px; left: 90%; animation-delay: 4s; animation-duration: 21s;"></div>
+            <div class="particle" style="width: 14px; height: 14px; left: 15%; animation-delay: 6s; animation-duration: 14s;"></div>
+            <div class="particle" style="width: 7px; height: 7px; left: 50%; animation-delay: 7s; animation-duration: 23s;"></div>
+            <div class="particle" style="width: 10px; height: 10px; left: 75%; animation-delay: 1s; animation-duration: 13s;"></div>
+            <div class="particle" style="width: 5px; height: 5px; left: 35%; animation-delay: 8s; animation-duration: 25s;"></div>
+            <div class="particle" style="width: 9px; height: 9px; left: 55%; animation-delay: 3s; animation-duration: 16s;"></div>
         </div>
         <div class="container">
             <div class="hero-grid">
@@ -4556,11 +4540,11 @@
             } else {
                 nav.classList.remove('scrolled');
             }
-            // Parallax: layers move at different speeds
+            // Parallax: layers move at different speeds for depth
             var sy = window.scrollY;
-            if (sy < 900) {
-                if (heroGrid) heroGrid.style.transform = 'translate(' + (sy * 0.02) + 'px, ' + (sy * 0.3) + 'px)';
-                if (heroParticles) heroParticles.style.transform = 'translateY(' + (sy * 0.15) + 'px)';
+            if (sy < 1200) {
+                if (heroGrid) heroGrid.style.transform = 'translateY(' + (sy * 0.5) + 'px)';
+                if (heroParticles) heroParticles.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
             }
         });
 
