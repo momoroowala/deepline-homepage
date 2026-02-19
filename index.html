@@ -2211,6 +2211,114 @@
             margin-right: auto;
         }
 
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            background: var(--off-white);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-photo {
+            width: 280px;
+            min-width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--muted-indigo), var(--teal-accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: white;
+            font-weight: 700;
+        }
+
+        .about-text h2 {
+            font-size: 36px;
+            color: var(--dark-ink);
+            margin-bottom: 8px;
+        }
+
+        .about-text .about-role {
+            color: var(--muted-indigo);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .about-text p {
+            color: var(--medium-gray);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .about-credentials {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .credential-tag {
+            background: white;
+            border: 1px solid var(--light-gray);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--dark-ink);
+            font-weight: 500;
+        }
+
+        .about-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .about-links a {
+            color: var(--muted-indigo);
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.3s ease;
+        }
+
+        .about-links a:hover {
+            color: var(--teal-accent);
+        }
+
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .about-photo {
+                width: 180px;
+                min-width: 180px;
+                height: 180px;
+                font-size: 56px;
+            }
+
+            .about-credentials {
+                justify-content: center;
+            }
+
+            .about-links {
+                justify-content: center;
+            }
+        }
+
         /* Footer */
         footer {
             background: var(--deep-purple-navy);
@@ -2692,7 +2800,7 @@
     </section>
 
     <!-- Results Section -->
-    <section class="results">
+    <section id="case-studies" class="results">
         <div class="container">
             <!-- Industry Data Visualization Section -->
             <div class="data-visualization-section">
@@ -3054,6 +3162,33 @@
                     <h4>Reorder Calculator</h4>
                     <p>Optimize your inventory levels and reduce carrying costs while avoiding stockouts.</p>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-photo">MR</div>
+                <div class="about-text">
+                    <h2>Mo Roowala</h2>
+                    <div class="about-role">Founder, DeepLine Operations</div>
+                    <p>I spent 6 years as a firmware and robotics engineer building automation systems from the ground up. Embedded controls, sensor integration, production line optimization. I've seen firsthand how the right automation turns a 20-minute manual process into a 2-minute automated one.</p>
+                    <p>After working directly with distributors on their e-commerce and fulfillment operations, I realized the same automation principles I used in engineering apply to distribution ops. The difference is that most automation vendors try to sell you a massive software overhaul. I don't. I build lightweight systems on top of what you already use.</p>
+                    <p>NYU Tandon M.S. in Robotics and Mechatronics. Based in New Jersey. I work with distributors doing $5M-$100M who want to move faster without ripping out their existing systems.</p>
+                    <div class="about-credentials">
+                        <span class="credential-tag">M.S. Robotics, NYU Tandon</span>
+                        <span class="credential-tag">6+ Years Automation Engineering</span>
+                        <span class="credential-tag">Distribution Operations</span>
+                        <span class="credential-tag">E-Commerce Fulfillment</span>
+                        <span class="credential-tag">Process Optimization</span>
+                    </div>
+                    <div class="about-links">
+                        <a href="https://www.youtube.com/@DeeplineOperations" target="_blank">&#9654; YouTube</a>
+                        <a href="https://www.linkedin.com/in/mohammedali-roowala" target="_blank">&#128279; LinkedIn</a>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
