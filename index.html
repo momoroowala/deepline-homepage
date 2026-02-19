@@ -893,10 +893,12 @@
 
         .quote-warning {
             margin: 8px 0;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .quote-warning.warning-yellow {
@@ -939,14 +941,25 @@
 
         .quote-inventory {
             margin-top: 8px;
-            font-size: 11px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 600;
         }
 
         .inventory-level {
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .inventory-level::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
         }
 
         .inventory-green {
@@ -955,10 +968,18 @@
             border: 1px solid #22c55e;
         }
 
+        .inventory-green::before {
+            background: #22c55e;
+        }
+
         .inventory-yellow {
             background: #fef3c7;
             color: #ca8a04;
             border: 1px solid #eab308;
+        }
+
+        .inventory-yellow::before {
+            background: #eab308;
         }
 
         .inventory-red {
@@ -967,14 +988,35 @@
             border: 1px solid #ef4444;
         }
 
+        .inventory-red::before {
+            background: #ef4444;
+        }
+
         .quote-substitute {
             margin-top: 8px;
-            padding: 8px 12px;
+            padding: 10px;
             background: #ecfeff;
             border: 1px solid #06b6d4;
-            border-radius: 4px;
-            font-size: 11px;
+            border-radius: 6px;
+            font-size: 12px;
             color: #0e7490;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .quote-due-date {
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark-ink);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .quote-due-date::before {
+            content: '📅';
+            font-size: 10px;
         }
 
         .quote-substitute-title {
@@ -1666,6 +1708,9 @@
         
         .form-field.typing {
             position: relative;
+            background: #f0fdfa;
+            border-color: var(--teal-accent);
+            box-shadow: 0 0 0 2px rgba(27, 154, 170, 0.1);
         }
         
         .form-field.typing::after {
@@ -1674,10 +1719,44 @@
             right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            width: 1px;
+            width: 2px;
             height: 14px;
             background: var(--teal-accent);
-            animation: blink 1s infinite;
+            animation: blink 0.8s infinite;
+        }
+
+        .form-field.typed {
+            background: #ecfdf5;
+            border-color: var(--signal-green);
+            transition: all 0.3s ease;
+        }
+
+        .quote-generating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            margin: 8px 0;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--medium-gray);
+        }
+
+        .quote-generating::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--teal-accent);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         @keyframes blink {
@@ -3373,23 +3452,22 @@
                         <div class="quoting-interface" id="quotingCycler">
                             <div class="quote-customer-header" id="quoteCustomer">Customer: Sysco Northeast</div>
                             <div class="quote-form" id="quoteForm">
-                                <input type="text" class="form-field" id="quoteProd" value="Organic Black Beans 25lb (SKU-4412)" readonly>
-                                <input type="text" class="form-field" id="quoteQty" value="Quantity: 500" readonly>
-                                <input type="text" class="form-field" id="quoteTerms" value="Terms: NET30" readonly>
-                                <input type="text" class="form-field" id="quoteDue" value="Due: Mar 21, 2026" readonly>
+                                <input type="text" class="form-field" id="quoteProd" placeholder="Product/SKU..." readonly>
+                                <input type="text" class="form-field" id="quoteQty" placeholder="Quantity..." readonly>
+                                <input type="text" class="form-field" id="quoteTerms" placeholder="Terms..." readonly>
                             </div>
                             <div class="quote-warning" id="quoteWarning" style="display: none;"></div>
-                            <div class="quote-result" id="quoteResult">
+                            <div class="quote-result" id="quoteResult" style="display: none;">
                                 <div>
                                     <div class="quote-price" id="quotePrice">$12,847.50</div>
-                                    <div style="font-size: 11px; color: #6b7280;" id="quoteMargin">Margin: 32.4%</div>
+                                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;" id="quoteMargin">Margin: 32.4%</div>
                                 </div>
                                 <div class="quote-status">
                                     <div class="quote-checkmark">✓</div>
-                                    <span id="quoteStatus">Generated in 12 seconds</span>
+                                    <span id="quoteStatus">Quote generated</span>
                                 </div>
                             </div>
-                            <div class="quote-inventory" id="quoteInventory">
+                            <div class="quote-inventory" id="quoteInventory" style="display: none;">
                                 <div class="inventory-level inventory-green">2,340 units in stock</div>
                             </div>
                             <div class="quote-substitute" id="quoteSubstitute" style="display: none;"></div>
@@ -5155,32 +5233,32 @@
             new ServiceCardAnimator();
         });
 
-        // ========== CYCLING QUOTE SCENARIOS ==========
+        // ========== ENHANCED QUOTING AUTOMATION WITH TYPING ==========
         (function() {
             const quoteScenarios = [
                 {
                     customer: "Sysco Northeast",
                     product: "Organic Black Beans 25lb (SKU-4412)",
-                    quantity: "Quantity: 500",
-                    terms: "Terms: NET30",
-                    due: "Due: Mar 21, 2026",
+                    quantity: "500",
+                    terms: "NET30",
+                    dueDate: "Mar 21, 2026",
                     price: "$12,847.50",
-                    margin: "Margin: 32.4%",
-                    status: "Generated in 12 seconds",
-                    inventory: "2,340 units in stock",
+                    margin: "32.4%",
+                    marginColor: "green",
+                    inventory: "2,340 in stock",
                     inventoryLevel: "green",
                     type: "normal"
                 },
                 {
                     customer: "Gordon Food Service",
                     product: "IQF Rice Pilaf 10lb (SKU-2891)",
-                    quantity: "Quantity: 800",
-                    terms: "Terms: NET45",
-                    due: "Due: Apr 5, 2026",
+                    quantity: "800",
+                    terms: "NET45",
+                    dueDate: "Apr 5, 2026",
                     price: "$19,440.00",
-                    margin: "Margin: 28.1%",
-                    status: "Generated in 8 seconds",
-                    inventory: "127 units remaining",
+                    margin: "28.1%",
+                    marginColor: "green",
+                    inventory: "127 units - LOW STOCK",
                     inventoryLevel: "yellow",
                     warning: "Low Stock Alert: Only 127 units. Partial fill available.",
                     warningType: "yellow",
@@ -5189,40 +5267,41 @@
                 {
                     customer: "Restaurant Depot",
                     product: "Frozen Edamame 5lb (SKU-1055)",
-                    quantity: "Quantity: 1,200",
-                    terms: "Terms: NET30",
-                    due: "Due: Apr 5, 2026",
-                    price: "N/A",
+                    quantity: "1,200",
+                    terms: "NET30",
+                    dueDate: "Apr 5, 2026",
+                    price: "STOCKOUT",
                     margin: "",
-                    status: "STOCKOUT",
-                    inventory: "0 units",
+                    inventory: "STOCKOUT",
                     inventoryLevel: "red",
-                    substitute: "Recommended: Frozen Sugar Snap Peas 5lb (SKU-1062), 3,100 in stock, $8.42/unit",
+                    warning: "Stockout: Frozen Sugar Snap Peas available as substitute",
+                    warningType: "red",
+                    substitute: "Substitute Available: Frozen Sugar Snap Peas 5lb (SKU-1062), 3,100 in stock, $8.42/unit",
                     type: "stockout"
                 },
                 {
                     customer: "US Foods",
                     product: "All-Purpose Flour 50lb (SKU-3301)",
-                    quantity: "Quantity: 2,500",
-                    terms: "Terms: NET60",
-                    due: "Due: Apr 20, 2026",
+                    quantity: "2,500",
+                    terms: "NET60",
+                    dueDate: "Apr 20, 2026",
                     price: "$31,250.00",
-                    margin: "Margin: 22.7% (volume discount applied)",
-                    status: "Generated in 15 seconds",
-                    inventory: "8,900 units in stock",
+                    margin: "22.7%",
+                    marginColor: "green",
+                    inventory: "8,900 in stock",
                     inventoryLevel: "green",
                     type: "volume-discount"
                 },
                 {
                     customer: "Fresh Direct",
                     product: "Frozen Mango Chunks 2lb (SKU-7744)",
-                    quantity: "Quantity: 300",
-                    terms: "Terms: COD",
-                    due: "Due: Immediate (COD)",
-                    price: "$5,670.00 (includes 8% rush surcharge)",
-                    margin: "Margin: 35.2%",
-                    status: "Generated in 6 seconds",
-                    inventory: "1,450 units in stock",
+                    quantity: "300",
+                    terms: "COD",
+                    dueDate: "Immediate (COD)",
+                    price: "$5,670.00",
+                    margin: "35.2%",
+                    marginColor: "green",
+                    inventory: "1,450 in stock",
                     inventoryLevel: "green",
                     warning: "Rush Order: 8% surcharge applied",
                     warningType: "orange",
@@ -5231,13 +5310,13 @@
                 {
                     customer: "Costco Wholesale",
                     product: "White Rice 50lb (SKU-2200)",
-                    quantity: "Quantity: 5,000",
-                    terms: "Terms: NET90",
-                    due: "Due: May 20, 2026",
+                    quantity: "5,000",
+                    terms: "NET90",
+                    dueDate: "May 20, 2026",
                     price: "$42,500.00",
-                    margin: "Margin: 11.3%",
-                    status: "Generated in 18 seconds",
-                    inventory: "12,400 units in stock",
+                    margin: "11.3%",
+                    marginColor: "red",
+                    inventory: "12,400 in stock",
                     inventoryLevel: "green",
                     warning: "Margin Alert: Below 15% threshold. Manager approval required.",
                     warningType: "red",
@@ -5246,15 +5325,16 @@
                 {
                     customer: "Aramark Corp",
                     product: "Quinoa Blend 10lb (SKU-5590)",
-                    quantity: "Quantity: 600",
-                    terms: "Terms: NET30",
-                    due: "Due: Apr 20, 2026",
-                    price: "N/A",
+                    quantity: "600",
+                    terms: "NET30",
+                    dueDate: "Apr 20, 2026",
+                    price: "STOCKOUT",
                     margin: "",
-                    status: "STOCKOUT",
-                    inventory: "0 units",
+                    inventory: "STOCKOUT",
                     inventoryLevel: "red",
-                    substitute: "Recommended: Ancient Grain Blend 10lb (SKU-5595), 890 in stock, $14.20/unit",
+                    warning: "Stockout: Ancient Grain Blend available as substitute",
+                    warningType: "red",
+                    substitute: "Substitute Available: Ancient Grain Blend 10lb (SKU-5595), 890 in stock, $14.20/unit",
                     type: "stockout"
                 }
             ];
@@ -5262,53 +5342,113 @@
             let currentScenario = 0;
             let isAnimating = false;
             let cycleInterval = null;
+            let currentAnimation = null;
 
-            function updateQuoteDisplay(scenario) {
+            // Utility function for typing effect
+            async function typeText(element, text, speed = 60) {
+                element.value = '';
+                element.classList.add('typing');
+                
+                for (let i = 0; i <= text.length; i++) {
+                    if (currentAnimation !== 'running') return; // Allow interruption
+                    element.value = text.substring(0, i);
+                    await new Promise(resolve => setTimeout(resolve, speed));
+                }
+                
+                element.classList.remove('typing');
+                element.classList.add('typed');
+                await new Promise(resolve => setTimeout(resolve, 150));
+                element.classList.remove('typed');
+            }
+
+            // Clear all field states
+            function clearFieldStates() {
+                const fields = document.querySelectorAll('.form-field');
+                fields.forEach(field => {
+                    field.classList.remove('typing', 'typed');
+                    field.value = '';
+                });
+            }
+
+            // Show generating state
+            function showGeneratingState() {
+                const result = document.getElementById('quoteResult');
+                const warning = document.getElementById('quoteWarning');
+                const substitute = document.getElementById('quoteSubstitute');
+                const inventory = document.getElementById('quoteInventory');
+                
+                // Hide previous results
+                if (result) result.style.display = 'none';
+                if (warning) warning.style.display = 'none';
+                if (substitute) substitute.style.display = 'none';
+                if (inventory) inventory.style.display = 'none';
+
+                // Show generating state
+                let generatingEl = document.getElementById('quoteGenerating');
+                if (!generatingEl) {
+                    generatingEl = document.createElement('div');
+                    generatingEl.id = 'quoteGenerating';
+                    generatingEl.className = 'quote-generating';
+                    result.parentNode.insertBefore(generatingEl, result);
+                }
+                generatingEl.textContent = 'Generating quote...';
+                generatingEl.style.display = 'flex';
+            }
+
+            // Hide generating state
+            function hideGeneratingState() {
+                const generatingEl = document.getElementById('quoteGenerating');
+                if (generatingEl) {
+                    generatingEl.style.display = 'none';
+                }
+            }
+
+            // Animate quote results
+            async function animateResults(scenario) {
                 const elements = {
-                    customer: document.getElementById('quoteCustomer'),
-                    product: document.getElementById('quoteProd'),
-                    quantity: document.getElementById('quoteQty'),
-                    terms: document.getElementById('quoteTerms'),
-                    due: document.getElementById('quoteDue'),
+                    result: document.getElementById('quoteResult'),
                     price: document.getElementById('quotePrice'),
                     margin: document.getElementById('quoteMargin'),
                     status: document.getElementById('quoteStatus'),
                     inventory: document.getElementById('quoteInventory'),
                     warning: document.getElementById('quoteWarning'),
-                    substitute: document.getElementById('quoteSubstitute'),
-                    result: document.getElementById('quoteResult')
+                    substitute: document.getElementById('quoteSubstitute')
                 };
 
-                // Update basic info
-                if (elements.customer) elements.customer.textContent = `Customer: ${scenario.customer}`;
-                if (elements.product) elements.product.value = scenario.product;
-                if (elements.quantity) elements.quantity.value = scenario.quantity;
-                if (elements.terms) elements.terms.value = scenario.terms;
-                if (elements.due) elements.due.value = scenario.due;
-                if (elements.price) elements.price.textContent = scenario.price;
-                if (elements.margin) elements.margin.textContent = scenario.margin;
-                if (elements.status) elements.status.textContent = scenario.status;
+                hideGeneratingState();
 
-                // Update inventory
-                if (elements.inventory) {
-                    elements.inventory.innerHTML = `<div class="inventory-level inventory-${scenario.inventoryLevel}">${scenario.inventory}</div>`;
+                // Update price and margin
+                if (elements.price) {
+                    elements.price.textContent = scenario.price;
+                    if (scenario.price === 'STOCKOUT') {
+                        elements.price.classList.add('price-na');
+                    } else {
+                        elements.price.classList.remove('price-na');
+                    }
                 }
 
-                // Handle warnings
-                if (scenario.warning && elements.warning) {
-                    elements.warning.textContent = scenario.warning;
-                    elements.warning.className = `quote-warning warning-${scenario.warningType}`;
-                    elements.warning.style.display = 'block';
-                } else if (elements.warning) {
-                    elements.warning.style.display = 'none';
+                if (elements.margin && scenario.margin) {
+                    const marginText = `Margin: ${scenario.margin}`;
+                    elements.margin.textContent = marginText;
+                    elements.margin.style.color = scenario.marginColor === 'green' ? '#16a34a' : 
+                                                   scenario.marginColor === 'red' ? '#dc2626' : '#ca8a04';
+                } else if (elements.margin) {
+                    elements.margin.textContent = '';
                 }
 
-                // Handle substitutes
-                if (scenario.substitute && elements.substitute) {
-                    elements.substitute.innerHTML = `<div class="quote-substitute-title">Substitute Available:</div>${scenario.substitute}`;
-                    elements.substitute.style.display = 'block';
-                } else if (elements.substitute) {
-                    elements.substitute.style.display = 'none';
+                // Update due date
+                const dueDateEl = elements.result.querySelector('.quote-due-date');
+                if (dueDateEl) dueDateEl.remove();
+                
+                const newDueDateEl = document.createElement('div');
+                newDueDateEl.className = 'quote-due-date';
+                newDueDateEl.textContent = `Due: ${scenario.dueDate}`;
+                elements.result.appendChild(newDueDateEl);
+
+                // Update status
+                if (elements.status) {
+                    const statusText = scenario.type === 'stockout' ? 'STOCKOUT' : 'Quote generated';
+                    elements.status.textContent = statusText;
                 }
 
                 // Update result styling
@@ -5323,53 +5463,136 @@
                     }
                 }
 
-                // Update price styling
-                if (elements.price) {
-                    if (scenario.price === 'N/A') {
-                        elements.price.classList.add('price-na');
-                    } else {
-                        elements.price.classList.remove('price-na');
-                    }
+                // Show results with slide animation
+                elements.result.style.display = 'flex';
+                elements.result.classList.add('show');
+
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                // Show inventory
+                if (elements.inventory) {
+                    elements.inventory.innerHTML = `<div class="inventory-level inventory-${scenario.inventoryLevel}">${scenario.inventory}</div>`;
+                    elements.inventory.style.display = 'block';
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 150));
+
+                // Show warnings
+                if (scenario.warning && elements.warning) {
+                    elements.warning.textContent = scenario.warning;
+                    elements.warning.className = `quote-warning warning-${scenario.warningType}`;
+                    elements.warning.style.display = 'block';
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 150));
+
+                // Show substitutes
+                if (scenario.substitute && elements.substitute) {
+                    elements.substitute.innerHTML = `<div class="quote-substitute-title">Substitute Available:</div>${scenario.substitute}`;
+                    elements.substitute.style.display = 'block';
                 }
             }
 
-            function cycleToNext() {
-                if (isAnimating) return;
+            // Main animation sequence for each scenario
+            async function animateScenario(scenario) {
+                if (currentAnimation === 'running') return;
+                currentAnimation = 'running';
+
+                const elements = {
+                    customer: document.getElementById('quoteCustomer'),
+                    product: document.getElementById('quoteProd'),
+                    quantity: document.getElementById('quoteQty'),
+                    terms: document.getElementById('quoteTerms'),
+                    result: document.getElementById('quoteResult')
+                };
+
+                // Clear previous state
+                clearFieldStates();
+                if (elements.result) {
+                    elements.result.classList.remove('show');
+                    elements.result.style.display = 'none';
+                }
                 
-                const quotingInterface = document.getElementById('quotingCycler');
-                if (!quotingInterface) return;
+                // Update customer
+                if (elements.customer) {
+                    elements.customer.textContent = `Customer: ${scenario.customer}`;
+                }
 
-                isAnimating = true;
-                quotingInterface.classList.add('cycling');
+                // Step 1: Type in fields one by one (2 seconds total)
+                await typeText(elements.product, scenario.product, 50);
+                if (currentAnimation !== 'running') return;
+                
+                await typeText(elements.quantity, `Quantity: ${scenario.quantity}`, 60);
+                if (currentAnimation !== 'running') return;
+                
+                await typeText(elements.terms, `Terms: ${scenario.terms}`, 70);
+                if (currentAnimation !== 'running') return;
 
+                // Step 2: Generating state (0.5 seconds)
+                showGeneratingState();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                if (currentAnimation !== 'running') return;
+
+                // Step 3: Show results (3-4 seconds visible before next cycle)
+                await animateResults(scenario);
+                
+                currentAnimation = 'complete';
+                
+                // Wait for display time before allowing next cycle
                 setTimeout(() => {
-                    currentScenario = (currentScenario + 1) % quoteScenarios.length;
-                    updateQuoteDisplay(quoteScenarios[currentScenario]);
-                    
-                    quotingInterface.classList.add('visible');
-                    setTimeout(() => {
-                        quotingInterface.classList.remove('cycling');
-                        isAnimating = false;
-                    }, 100);
-                }, 250);
+                    if (currentAnimation === 'complete') {
+                        currentAnimation = null;
+                    }
+                }, 3500);
             }
 
+            // Cycle to next scenario
+            async function cycleToNext() {
+                if (isAnimating) return;
+                isAnimating = true;
+
+                // Fade out current
+                const quotingInterface = document.getElementById('quotingCycler');
+                if (quotingInterface) {
+                    quotingInterface.style.opacity = '0.7';
+                    quotingInterface.style.transform = 'translateY(-10px)';
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 300));
+
+                // Move to next scenario
+                currentScenario = (currentScenario + 1) % quoteScenarios.length;
+
+                // Fade back in and start animation
+                if (quotingInterface) {
+                    quotingInterface.style.opacity = '1';
+                    quotingInterface.style.transform = 'translateY(0)';
+                }
+
+                await animateScenario(quoteScenarios[currentScenario]);
+                isAnimating = false;
+            }
+
+            // Start cycling
             function startCycling() {
-                // Initialize with first scenario
-                updateQuoteDisplay(quoteScenarios[currentScenario]);
+                // Start with first scenario
+                animateScenario(quoteScenarios[currentScenario]);
                 
-                // Start cycling every 5 seconds
-                cycleInterval = setInterval(cycleToNext, 5000);
+                // Set up cycling every 6.5 seconds (6-7 second total cycle time)
+                cycleInterval = setInterval(cycleToNext, 6500);
             }
 
+            // Stop cycling
             function stopCycling() {
                 if (cycleInterval) {
                     clearInterval(cycleInterval);
                     cycleInterval = null;
                 }
+                currentAnimation = null;
+                isAnimating = false;
             }
 
-            // Set up intersection observer to start/stop cycling
+            // Set up intersection observer
             const quotingObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -5380,10 +5603,12 @@
                 });
             }, { threshold: 0.3 });
 
-            // Start observing when DOM is ready
+            // Initialize
             document.addEventListener('DOMContentLoaded', () => {
                 const quotingCycler = document.getElementById('quotingCycler');
                 if (quotingCycler) {
+                    // Add smooth transitions
+                    quotingCycler.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                     quotingObserver.observe(quotingCycler);
                 }
             });
