@@ -96,54 +96,76 @@
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: -20%;
             left: 0;
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(27, 154, 170, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
-                linear-gradient(135deg, transparent 0%, rgba(27, 154, 170, 0.05) 100%);
+                radial-gradient(ellipse 600px 400px at 15% 50%, rgba(27, 154, 170, 0.25) 0%, transparent 70%),
+                radial-gradient(ellipse 500px 350px at 85% 20%, rgba(79, 70, 229, 0.2) 0%, transparent 70%),
+                radial-gradient(ellipse 400px 300px at 50% 80%, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
+            animation: heroGlow 8s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        @keyframes heroGlow {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-15px) scale(1.03); opacity: 1; }
         }
 
         .animated-grid {
             position: absolute;
-            top: 0;
+            top: -50%;
             left: 0;
             right: 0;
             bottom: 0;
-            opacity: 0.1;
+            height: 150%;
+            opacity: 0.08;
             background-image: 
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 30px 30px;
-            animation: gridMove 20s linear infinite;
+                linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridMove 25s linear infinite;
+            will-change: transform;
         }
 
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
-            100% { transform: translate(30px, 30px); }
+            100% { transform: translate(40px, 40px); }
         }
 
         .floating-particles {
             position: absolute;
-            top: 0;
+            top: -20%;
             left: 0;
             right: 0;
             bottom: 0;
+            height: 120%;
             overflow: hidden;
+            will-change: transform;
         }
 
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
             animation: float 20s infinite linear;
         }
 
+        .particle:nth-child(odd) {
+            background: rgba(27, 154, 170, 0.3);
+            box-shadow: 0 0 8px rgba(27, 154, 170, 0.4);
+        }
+
+        .particle:nth-child(even) {
+            background: rgba(168, 85, 247, 0.25);
+            box-shadow: 0 0 8px rgba(168, 85, 247, 0.3);
+        }
+
         @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); }
-            100% { transform: translateY(-100px) rotate(360deg); }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
         }
 
         /* Navigation */
@@ -2350,10 +2372,24 @@
         }
 
         .case-visual {
-            height: 80px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Source links */
+        .source-link {
+            color: var(--teal-accent);
+            text-decoration: none;
+            font-size: 14px;
+            margin-left: 4px;
+        }
+
+        .source-link:hover {
+            color: var(--dark-ink);
         }
 
         /* Mini Bar Comparison */
@@ -3319,6 +3355,11 @@
             <div class="particle" style="width: 7px; height: 7px; left: 70%; animation-delay: 5s; animation-duration: 17s;"></div>
             <div class="particle" style="width: 3px; height: 3px; left: 80%; animation-delay: 2s; animation-duration: 19s;"></div>
             <div class="particle" style="width: 5px; height: 5px; left: 90%; animation-delay: 4s; animation-duration: 21s;"></div>
+            <div class="particle" style="width: 8px; height: 8px; left: 15%; animation-delay: 6s; animation-duration: 14s;"></div>
+            <div class="particle" style="width: 4px; height: 4px; left: 50%; animation-delay: 7s; animation-duration: 23s;"></div>
+            <div class="particle" style="width: 6px; height: 6px; left: 75%; animation-delay: 1s; animation-duration: 13s;"></div>
+            <div class="particle" style="width: 3px; height: 3px; left: 35%; animation-delay: 8s; animation-duration: 25s;"></div>
+            <div class="particle" style="width: 5px; height: 5px; left: 55%; animation-delay: 3s; animation-duration: 16s;"></div>
         </div>
         <div class="container">
             <div class="hero-grid">
@@ -3841,57 +3882,74 @@
                 <div class="case-studies-grid">
                     <div class="case-study-card" data-delay="0">
                         <div class="case-tag">Quoting Automation</div>
-                        <h4>The 150-Employee Food Distributor</h4>
-                        <p>A regional food distributor processing 400+ orders daily was spending 45 minutes per quote manually. After automating their quoting workflow with existing ERP data, turnaround dropped to 4 minutes. <strong>Projected annual savings: $120K in labor costs alone.</strong></p>
-                        <div class="case-visual">
-                            <div class="mini-bar-comparison">
-                                <div class="before-bar">
-                                    <div class="bar-fill before-fill"></div>
-                                    <span class="bar-label">45 min</span>
+                        <h4>Sysco Corporation <a href="https://www.blueprism.com/resources/case-studies/sysco-maintains-team-excellence-while-rapidly-scaling-a-digital-workforce/" class="source-link" target="_blank" rel="noopener">↗</a></h4>
+                        <p>The world's largest food distributor scaled their automation program to 60 digital workers processing 6.2 million transactions annually. Through process automation, they returned over <strong>250,000 work hours to the business</strong> while maintaining operational excellence.</p>
+                        <div class="case-visual quote-automation-visual">
+                            <div class="automation-timeline">
+                                <div class="timeline-step">
+                                    <div class="step-icon manual">M</div>
+                                    <div class="step-label">Manual</div>
+                                    <div class="step-time">45 min</div>
                                 </div>
-                                <div class="arrow">→</div>
-                                <div class="after-bar">
-                                    <div class="bar-fill after-fill"></div>
-                                    <span class="bar-label">4 min</span>
+                                <div class="timeline-arrow">
+                                    <div class="arrow-shaft"></div>
+                                    <div class="arrow-head"></div>
                                 </div>
+                                <div class="timeline-step">
+                                    <div class="step-icon automated">A</div>
+                                    <div class="step-label">Automated</div>
+                                    <div class="step-time">4 min</div>
+                                </div>
+                            </div>
+                            <div class="savings-display">
+                                <div class="savings-metric">250K+ hours saved</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="case-study-card" data-delay="200">
                         <div class="case-tag">Systems Integration</div>
-                        <h4>The Industrial Supply Company</h4>
-                        <p>An industrial distributor with 3 warehouses had zero real-time inventory visibility. Each location ran its own spreadsheet. After connecting their systems, stockouts dropped 34% and customer inquiries got answered in seconds instead of hours.</p>
-                        <div class="case-visual">
-                            <div class="connected-nodes">
-                                <div class="node-system">ERP</div>
-                                <div class="node-system">WMS</div>
-                                <div class="node-system">CRM</div>
-                                <div class="connection-line line-1"></div>
-                                <div class="connection-line line-2"></div>
-                                <div class="connection-line line-3"></div>
-                                <div class="central-hub">HUB</div>
+                        <h4>US Health Food Distributor <a href="https://www.cleverdevsoftware.com/case-studies/warehouse-inventory-tracking-software" class="source-link" target="_blank" rel="noopener">↗</a></h4>
+                        <p>A multi-warehouse health food distributor running on paper processes and spreadsheets integrated their systems with RFID and automation. Results: <strong>95% inventory accuracy and 75% reduction in stockouts</strong> across their temperature-controlled distribution network.</p>
+                        <div class="case-visual systems-integration-visual">
+                            <div class="integration-network">
+                                <div class="system-node erp">ERP</div>
+                                <div class="system-node wms">WMS</div>
+                                <div class="system-node crm">CRM</div>
+                                <div class="system-node rfid">RFID</div>
+                                <div class="pulse-line line-1"></div>
+                                <div class="pulse-line line-2"></div>
+                                <div class="pulse-line line-3"></div>
+                                <div class="pulse-line line-4"></div>
+                                <div class="central-processor">SYNC</div>
+                            </div>
+                            <div class="integration-stats">
+                                <div class="stat-item">95% accuracy</div>
+                                <div class="stat-item">75% fewer stockouts</div>
                             </div>
                         </div>
                     </div>
 
                     <div class="case-study-card" data-delay="400">
                         <div class="case-tag">Route Optimization</div>
-                        <h4>The Regional 3PL Operator</h4>
-                        <p>A 3PL running 12 trucks across 3 states was planning routes manually each morning. Automated routing cut fuel costs 28% and added 2 extra stops per truck per day without extending hours.</p>
-                        <div class="case-visual">
-                            <div class="route-map-mini">
-                                <div class="route-point" style="top: 20%; left: 25%;"></div>
-                                <div class="route-point" style="top: 40%; left: 60%;"></div>
-                                <div class="route-point" style="top: 65%; left: 30%;"></div>
-                                <div class="route-point" style="top: 80%; left: 70%;"></div>
-                                <div class="route-line-mini line-1"></div>
-                                <div class="route-line-mini line-2"></div>
-                                <div class="route-line-mini line-3"></div>
-                                <div class="route-stats">
-                                    <div>-28% fuel costs</div>
-                                    <div>+2 stops/truck</div>
+                        <h4>UPS (ORION System) <a href="https://www.bestpractice.ai/ai-case-study-best-practice/ups_saves_over_10_million_gallons_of_fuel_and_up_to_$400m_in_costs_annually_with_advanced_telematics_and_analysis" class="source-link" target="_blank" rel="noopener">↗</a></h4>
+                        <p>UPS deployed AI-powered ORION route optimization across 55,000 delivery routes. The system analyzes 200+ vehicle data points and millions of address combinations to optimize daily routes. <strong>Results: 10 million gallons of fuel saved annually plus $300-400M in cost avoidance.</strong></p>
+                        <div class="case-visual route-optimization-visual">
+                            <div class="route-map">
+                                <div class="map-background"></div>
+                                <div class="route-points">
+                                    <div class="route-point start" style="top: 20%; left: 25%;"></div>
+                                    <div class="route-point" style="top: 35%; left: 60%;"></div>
+                                    <div class="route-point" style="top: 55%; left: 45%;"></div>
+                                    <div class="route-point" style="top: 75%; left: 70%;"></div>
+                                    <div class="route-point end" style="top: 85%; left: 30%;"></div>
                                 </div>
+                                <div class="animated-path">
+                                    <svg class="path-svg" viewBox="0 0 200 100">
+                                        <path class="route-path" d="M50,20 Q100,30 120,35 Q90,45 110,75 Q70,80 60,85"></path>
+                                    </svg>
+                                </div>
+                                <div class="fuel-savings">10M gal saved</div>
                             </div>
                         </div>
                     </div>
@@ -4163,13 +4221,22 @@
             counterObserver.observe(counter);
         });
 
-        // Nav scroll shadow effect
+        // Nav scroll shadow + hero parallax
+        const heroGrid = document.querySelector('.hero .animated-grid');
+        const heroParticles = document.querySelector('.hero .floating-particles');
+        const heroBefore = document.querySelector('.hero');
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 20) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
+            }
+            // Parallax: layers move at different speeds
+            var sy = window.scrollY;
+            if (sy < 900) {
+                if (heroGrid) heroGrid.style.transform = 'translate(' + (sy * 0.02) + 'px, ' + (sy * 0.3) + 'px)';
+                if (heroParticles) heroParticles.style.transform = 'translateY(' + (sy * 0.15) + 'px)';
             }
         });
 
