@@ -1464,6 +1464,29 @@
             background-size: 30px 30px;
         }
 
+        .state-outline {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .state-outline.visible {
+            opacity: 1;
+        }
+
+        .state-outline svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .state-shape {
+            fill: none;
+            stroke: rgba(255,255,255,0.08);
+            stroke-width: 1;
+        }
+
         .route-svg {
             position: absolute;
             top: 0; left: 0;
@@ -1482,15 +1505,16 @@
         .route-path-active {
             fill: none;
             stroke: var(--teal-accent);
-            stroke-width: 2.5;
+            stroke-width: 3;
             stroke-linecap: round;
+            stroke-linejoin: round;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
             filter: drop-shadow(0 0 4px rgba(27,154,170,0.6));
         }
 
         .route-path-active.drawing {
-            transition: stroke-dashoffset 6s ease-in-out;
+            transition: stroke-dashoffset 8s ease-in-out;
             stroke-dashoffset: 0;
         }
 
@@ -1500,6 +1524,14 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .route-stop.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .stop-pin {
@@ -1507,14 +1539,6 @@
             height: 14px;
             border-radius: 50%;
             border: 2px solid white;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .stop-pin.visible {
-            opacity: 1;
-            transform: scale(1);
         }
 
         .stop-pin.warehouse {
@@ -1536,12 +1560,7 @@
             color: #94a3b8;
             margin-top: 3px;
             white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.4s ease 0.2s;
-        }
-
-        .stop-pin.visible + .stop-label {
-            opacity: 1;
+            text-align: center;
         }
 
         .route-truck {
@@ -1551,9 +1570,12 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             filter: drop-shadow(0 0 6px rgba(27,154,170,0.8));
+            transform: scaleX(-1);
         }
 
-        .route-truck.active { opacity: 1; }
+        .route-truck.active { 
+            opacity: 1; 
+        }
 
         .route-stats-panel {
             position: absolute;
@@ -1566,6 +1588,14 @@
             justify-content: space-around;
             padding: 8px 12px;
             z-index: 6;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .route-stats-panel.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .route-stat {
@@ -1602,6 +1632,14 @@
             align-items: center;
             z-index: 6;
             font-size: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.5s ease;
+        }
+
+        .route-header-bar.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .route-header-bar .route-title {
@@ -3529,25 +3567,20 @@
                     <div class="service-preview">
                         <div class="route-map" id="routeMap">
                             <div class="route-map-grid"></div>
+                            <div class="state-outline" id="stateOutline"></div>
                             <div class="route-header-bar">
-                                <span class="route-title">Route NYC-7 | Tue Feb 19</span>
+                                <span class="route-title" id="routeTitle">Route NJ-7 | North Jersey</span>
                                 <span class="route-badge" id="routeBadge">Optimizing...</span>
                             </div>
                             <svg class="route-svg" id="routeSvg" viewBox="0 0 400 280"></svg>
-                            <div class="route-stop" style="left:8%;top:35%;" data-stop="0"><div class="stop-pin warehouse"></div><span class="stop-label">Warehouse</span></div>
-                            <div class="route-stop" style="left:22%;top:22%;" data-stop="1"><div class="stop-pin pending"></div><span class="stop-label">Metro Foods</span></div>
-                            <div class="route-stop" style="left:38%;top:42%;" data-stop="2"><div class="stop-pin pending"></div><span class="stop-label">Sysco NE</span></div>
-                            <div class="route-stop" style="left:50%;top:18%;" data-stop="3"><div class="stop-pin pending"></div><span class="stop-label">Fresh Direct</span></div>
-                            <div class="route-stop" style="left:62%;top:45%;" data-stop="4"><div class="stop-pin pending"></div><span class="stop-label">RestaurantDepot</span></div>
-                            <div class="route-stop" style="left:75%;top:25%;" data-stop="5"><div class="stop-pin pending"></div><span class="stop-label">Gordon FSvc</span></div>
-                            <div class="route-stop" style="left:88%;top:38%;" data-stop="6"><div class="stop-pin pending"></div><span class="stop-label">US Foods</span></div>
-                            <div class="route-truck" id="routeTruck">&#128666;</div>
+                            <div id="routeStops"></div>
+                            <div class="route-truck" id="routeTruck">🚛</div>
                             <div class="route-stats-panel">
-                                <div class="route-stat"><div class="route-stat-val" id="rStops">0</div><div class="route-stat-lbl">Stops</div></div>
-                                <div class="route-stat"><div class="route-stat-val" id="rMiles">0 mi</div><div class="route-stat-lbl">Total</div></div>
-                                <div class="route-stat"><div class="route-stat-val" id="rTime">0h</div><div class="route-stat-lbl">Est. Time</div></div>
-                                <div class="route-stat"><div class="route-stat-val savings" id="rGas">0%</div><div class="route-stat-lbl">Gas Saved</div></div>
-                                <div class="route-stat"><div class="route-stat-val savings" id="rTimeSaved">0 min</div><div class="route-stat-lbl">vs Manual</div></div>
+                                <div class="route-stat"><div class="route-stat-val" id="rStops">7</div><div class="route-stat-lbl">Stops</div></div>
+                                <div class="route-stat"><div class="route-stat-val" id="rMiles">48.3 mi</div><div class="route-stat-lbl">Total</div></div>
+                                <div class="route-stat"><div class="route-stat-val" id="rTime">2.1h</div><div class="route-stat-lbl">Est. Time</div></div>
+                                <div class="route-stat"><div class="route-stat-val savings" id="rGas">31%</div><div class="route-stat-lbl">Gas Saved</div></div>
+                                <div class="route-stat"><div class="route-stat-val savings" id="rTimeSaved">38 min</div><div class="route-stat-lbl">vs Manual</div></div>
                             </div>
                         </div>
                     </div>
@@ -4193,136 +4226,251 @@
         (function() {
             var routeMap = document.getElementById('routeMap');
             if (!routeMap) return;
+            
             var routeStarted = false;
+            var currentStateIndex = 0;
+            var routeInterval;
 
-            // Stop positions as % converted to SVG coords (viewBox 400x280)
-            var stops = [
-                { x: 40, y: 98 },    // Warehouse
-                { x: 96, y: 62 },    // Metro Foods
-                { x: 160, y: 118 },  // Sysco NE
-                { x: 208, y: 50 },   // Fresh Direct
-                { x: 256, y: 126 },  // RestaurantDepot
-                { x: 308, y: 70 },   // Gordon FSvc
-                { x: 360, y: 106 },  // US Foods
+            // Define the 3 route scenarios
+            var routeStates = [
+                {
+                    title: "Route NJ-7 | North Jersey",
+                    stops: [
+                        { name: "Newark Warehouse", x: 30, y: 140, type: "warehouse" },
+                        { name: "Paterson", label: "Metro Foods", x: 50, y: 80 },
+                        { name: "Hackensack", label: "Sysco NE", x: 80, y: 100 },
+                        { name: "Paramus", label: "Fresh Direct", x: 120, y: 60 },
+                        { name: "Wayne", label: "RestaurantDepot", x: 160, y: 120 },
+                        { name: "Morristown", label: "Gordon FSvc", x: 200, y: 90 },
+                        { name: "Edison", label: "US Foods", x: 280, y: 180 }
+                    ],
+                    stats: { stops: 7, miles: "48.3 mi", time: "2.1h", gas: "31%", timeSaved: "38 min" },
+                    stateOutline: "M 20,40 L 350,40 L 350,200 L 80,220 L 20,180 Z"
+                },
+                {
+                    title: "Route TX-3 | Dallas-Fort Worth",
+                    stops: [
+                        { name: "Irving Warehouse", x: 180, y: 140, type: "warehouse" },
+                        { name: "Arlington", label: "Sysco DFW", x: 200, y: 180 },
+                        { name: "Fort Worth", label: "Ben E. Keith", x: 120, y: 120 },
+                        { name: "Grapevine", label: "PFG", x: 220, y: 100 },
+                        { name: "Plano", label: "US Foods", x: 260, y: 60 },
+                        { name: "McKinney", label: "Gordon FSvc", x: 300, y: 80 },
+                        { name: "Denton", label: "Restaurant Depot", x: 160, y: 60 }
+                    ],
+                    stats: { stops: 7, miles: "62.7 mi", time: "2.8h", gas: "28%", timeSaved: "44 min" },
+                    stateOutline: "M 40,60 L 360,40 L 380,120 L 320,200 L 60,220 L 20,140 Z"
+                },
+                {
+                    title: "Route GA-1 | Metro Atlanta",
+                    stops: [
+                        { name: "Norcross Warehouse", x: 240, y: 80, type: "warehouse" },
+                        { name: "Doraville", label: "Fresh Point", x: 260, y: 100 },
+                        { name: "Chamblee", label: "Sysco ATL", x: 200, y: 110 },
+                        { name: "Buckhead", label: "US Foods", x: 180, y: 140 },
+                        { name: "Midtown", label: "PFG Southeast", x: 160, y: 160 },
+                        { name: "Decatur", label: "Gordon FSvc", x: 220, y: 180 },
+                        { name: "Stone Mountain", label: "Ben E. Keith", x: 300, y: 150 }
+                    ],
+                    stats: { stops: 7, miles: "37.1 mi", time: "1.9h", gas: "36%", timeSaved: "35 min" },
+                    stateOutline: "M 100,80 L 320,60 L 360,140 L 340,200 L 140,220 L 80,160 Z"
+                }
             ];
 
-            function buildPath(pts) {
-                var d = 'M ' + pts[0].x + ' ' + pts[0].y;
-                for (var i = 1; i < pts.length; i++) {
-                    var prev = pts[i - 1];
-                    var cur = pts[i];
-                    var cpx1 = prev.x + (cur.x - prev.x) * 0.4;
-                    var cpy1 = prev.y;
-                    var cpx2 = prev.x + (cur.x - prev.x) * 0.6;
-                    var cpy2 = cur.y;
-                    d += ' C ' + cpx1 + ' ' + cpy1 + ', ' + cpx2 + ' ' + cpy2 + ', ' + cur.x + ' ' + cur.y;
+            // Build road-like path with angular segments
+            function buildRoadPath(stops) {
+                if (stops.length < 2) return "";
+                
+                var path = "M " + stops[0].x + "," + stops[0].y;
+                
+                for (var i = 1; i < stops.length; i++) {
+                    var prev = stops[i-1];
+                    var curr = stops[i];
+                    var dx = curr.x - prev.x;
+                    var dy = curr.y - prev.y;
+                    
+                    // Add angular segments instead of smooth curves
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        // Horizontal then vertical
+                        var midX = prev.x + dx * 0.7;
+                        path += " L " + midX + "," + prev.y;
+                        path += " L " + midX + "," + curr.y;
+                        path += " L " + curr.x + "," + curr.y;
+                    } else {
+                        // Vertical then horizontal
+                        var midY = prev.y + dy * 0.7;
+                        path += " L " + prev.x + "," + midY;
+                        path += " L " + curr.x + "," + midY;
+                        path += " L " + curr.x + "," + curr.y;
+                    }
                 }
-                return d;
+                
+                return path;
             }
 
-            function runRoute() {
-                var svg = document.getElementById('routeSvg');
-                var pathD = buildPath(stops);
+            function createStateOutline(pathD) {
+                var stateOutline = document.getElementById('stateOutline');
+                stateOutline.innerHTML = '<svg viewBox="0 0 400 280"><path class="state-shape" d="' + pathD + '"></path></svg>';
+            }
 
+            function createStops(stops) {
+                var stopsContainer = document.getElementById('routeStops');
+                stopsContainer.innerHTML = '';
+                
+                stops.forEach(function(stop, index) {
+                    var stopEl = document.createElement('div');
+                    stopEl.className = 'route-stop';
+                    stopEl.style.left = (stop.x / 400 * 100) + '%';
+                    stopEl.style.top = (stop.y / 280 * 100) + '%';
+                    stopEl.setAttribute('data-stop', index);
+                    
+                    var pinType = stop.type === 'warehouse' ? 'warehouse' : 'pending';
+                    stopEl.innerHTML = 
+                        '<div class="stop-pin ' + pinType + '"></div>' +
+                        '<span class="stop-label">' + (stop.label || stop.name) + '</span>';
+                    
+                    stopsContainer.appendChild(stopEl);
+                });
+            }
+
+            function updateStats(stats) {
+                document.getElementById('rStops').textContent = stats.stops;
+                document.getElementById('rMiles').textContent = stats.miles;
+                document.getElementById('rTime').textContent = stats.time;
+                document.getElementById('rGas').textContent = stats.gas;
+                document.getElementById('rTimeSaved').textContent = stats.timeSaved;
+            }
+
+            function animateRoute(state) {
+                var svg = document.getElementById('routeSvg');
+                svg.innerHTML = '';
+                
+                // Create state outline
+                createStateOutline(state.stateOutline);
+                document.getElementById('stateOutline').classList.add('visible');
+                
+                // Create stops
+                createStops(state.stops);
+                
+                // Update title and show header
+                document.getElementById('routeTitle').textContent = state.title;
+                document.getElementById('routeBadge').textContent = 'Optimizing...';
+                
+                // Build road path
+                var pathD = buildRoadPath(state.stops);
+                
                 // Background path (dashed)
                 var bgPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 bgPath.setAttribute('d', pathD);
                 bgPath.setAttribute('class', 'route-path-bg');
                 svg.appendChild(bgPath);
-
-                // Active path (draws itself)
+                
+                // Active path (animated)
                 var activePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 activePath.setAttribute('d', pathD);
                 activePath.setAttribute('class', 'route-path-active');
                 svg.appendChild(activePath);
-
+                
                 var totalLen = activePath.getTotalLength();
                 activePath.style.strokeDasharray = totalLen;
                 activePath.style.strokeDashoffset = totalLen;
-
-                // Show warehouse pin immediately
-                var allPins = routeMap.querySelectorAll('.stop-pin');
-                allPins[0].classList.add('visible');
-
+                
+                // Show warehouse stop immediately
+                var wareStop = document.querySelector('[data-stop="0"]');
+                if (wareStop) wareStop.classList.add('visible');
+                
                 setTimeout(function() {
-                    activePath.style.transition = 'stroke-dashoffset 8s ease-in-out';
-                    activePath.style.strokeDashoffset = '0';
+                    activePath.classList.add('drawing');
                     document.getElementById('routeBadge').textContent = 'Routing...';
+                    document.querySelector('.route-header-bar').classList.add('visible');
+                    animateTruckAlongPath(activePath, state);
                 }, 300);
+            }
 
-                // Animate truck along path
+            function animateTruckAlongPath(path, state) {
                 var truck = document.getElementById('routeTruck');
+                var totalLen = path.getTotalLength();
                 truck.classList.add('active');
+                
                 var startTime = null;
                 var duration = 8000;
-
-                function moveTruck(ts) {
-                    if (!startTime) startTime = ts;
-                    var progress = Math.min((ts - startTime) / duration, 1);
-                    var ease = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
-                    var point = activePath.getPointAtLength(ease * totalLen);
+                
+                function moveTruck(timestamp) {
+                    if (!startTime) startTime = timestamp;
+                    var progress = Math.min((timestamp - startTime) / duration, 1);
+                    
+                    // Ease-in-out function
+                    var easeProgress = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                    
+                    var point = path.getPointAtLength(easeProgress * totalLen);
                     truck.style.left = (point.x / 400 * 100) + '%';
                     truck.style.top = (point.y / 280 * 100) + '%';
-
+                    
                     // Reveal stops as truck passes them
-                    for (var i = 1; i < stops.length; i++) {
-                        var stopProgress = i / (stops.length - 1);
-                        if (ease >= stopProgress - 0.05 && !allPins[i].classList.contains('visible')) {
-                            allPins[i].classList.add('visible');
-                            allPins[i].classList.remove('pending');
-                            allPins[i].classList.add('delivered');
-                            updateStats(i);
+                    var currentStopIndex = Math.floor(easeProgress * (state.stops.length - 1));
+                    for (var i = 1; i <= currentStopIndex + 1; i++) {
+                        var stopEl = document.querySelector('[data-stop="' + i + '"]');
+                        if (stopEl && !stopEl.classList.contains('visible')) {
+                            stopEl.classList.add('visible');
+                            var pin = stopEl.querySelector('.stop-pin');
+                            pin.classList.remove('pending');
+                            pin.classList.add('delivered');
                         }
                     }
-
+                    
                     if (progress < 1) {
                         requestAnimationFrame(moveTruck);
                     } else {
+                        // Route completed
                         document.getElementById('routeBadge').textContent = 'Optimized';
-                        // Reset after pause
-                        setTimeout(resetRoute, 4000);
+                        updateStats(state.stats);
+                        document.querySelector('.route-stats-panel').classList.add('visible');
+                        
+                        // Wait 3 seconds before cycling to next state
+                        setTimeout(cycleToNextState, 3000);
                     }
                 }
-                setTimeout(function() { requestAnimationFrame(moveTruck); }, 300);
+                
+                requestAnimationFrame(moveTruck);
             }
 
-            function updateStats(stopNum) {
-                var milesPerStop = [0, 4.2, 7.8, 12.1, 18.3, 24.6, 31.4];
-                var timePerStop = [0, 0.3, 0.6, 1.0, 1.4, 1.9, 2.3];
-                var gasPerStop = [0, 5, 11, 16, 22, 28, 34];
-                var timeSaved = [0, 4, 9, 16, 24, 33, 42];
-
-                document.getElementById('rStops').textContent = stopNum;
-                document.getElementById('rMiles').textContent = milesPerStop[stopNum] + ' mi';
-                document.getElementById('rTime').textContent = timePerStop[stopNum] + 'h';
-                document.getElementById('rGas').textContent = gasPerStop[stopNum] + '%';
-                document.getElementById('rTimeSaved').textContent = timeSaved[stopNum] + ' min';
-            }
-
-            function resetRoute() {
-                var svg = document.getElementById('routeSvg');
-                svg.innerHTML = '';
-                var pins = routeMap.querySelectorAll('.stop-pin');
-                pins.forEach(function(p) { p.classList.remove('visible', 'delivered'); p.classList.add('pending'); });
+            function cycleToNextState() {
+                // Fade out current state
+                document.getElementById('stateOutline').classList.remove('visible');
+                document.querySelector('.route-header-bar').classList.remove('visible');
+                document.querySelector('.route-stats-panel').classList.remove('visible');
                 document.getElementById('routeTruck').classList.remove('active');
-                document.getElementById('routeBadge').textContent = 'Optimizing...';
-                document.getElementById('rStops').textContent = '0';
-                document.getElementById('rMiles').textContent = '0 mi';
-                document.getElementById('rTime').textContent = '0h';
-                document.getElementById('rGas').textContent = '0%';
-                document.getElementById('rTimeSaved').textContent = '0 min';
-                setTimeout(runRoute, 1000);
+                
+                setTimeout(function() {
+                    // Move to next state
+                    currentStateIndex = (currentStateIndex + 1) % routeStates.length;
+                    animateRoute(routeStates[currentStateIndex]);
+                }, 500);
             }
 
-            var routeObs = new IntersectionObserver(function(entries) {
+            function startRouteAnimation() {
+                if (routeStarted) return;
+                routeStarted = true;
+                
+                // Start with first state
+                animateRoute(routeStates[currentStateIndex]);
+                
+                // Set up cycling every 12 seconds (8s animation + 3s display + 1s transition)
+                routeInterval = setInterval(function() {
+                    cycleToNextState();
+                }, 12000);
+            }
+
+            // Intersection observer to start animation when visible
+            var routeObserver = new IntersectionObserver(function(entries) {
                 entries.forEach(function(entry) {
-                    if (entry.isIntersecting && !routeStarted) {
-                        routeStarted = true;
-                        runRoute();
+                    if (entry.isIntersecting) {
+                        startRouteAnimation();
                     }
                 });
             }, { threshold: 0.3 });
-            routeObs.observe(routeMap);
+            
+            routeObserver.observe(routeMap);
         })();
 
         // ========== ORCHESTRATOR DIAGRAM ==========
