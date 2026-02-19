@@ -894,43 +894,160 @@
 
         /* Systems Integration Diagram */
         .integration-diagram {
-            padding: 20px;
-            background: #1e293b;
+            padding: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             position: relative;
-            height: 120px;
+            height: 220px;
+            overflow: hidden;
         }
 
-        .system-box {
+        .orch-svg {
             position: absolute;
-            background: #475569;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .orch-line {
+            stroke: #334155;
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .orch-line-glow {
+            stroke-width: 2;
+            fill: none;
+            opacity: 0;
+        }
+
+        .orch-line-glow.active {
+            animation: lineGlow 2s ease-in-out;
+        }
+
+        @keyframes lineGlow {
+            0% { opacity: 0; stroke-dashoffset: 100; }
+            30% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; stroke-dashoffset: 0; }
+        }
+
+        .orch-node {
+            position: absolute;
+            background: #1e293b;
             color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 10px;
-            font-weight: 500;
-            border: 2px solid transparent;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 2px solid;
+            text-align: center;
+            transition: all 0.4s ease;
+            z-index: 2;
         }
 
-        .system-box.erp { top: 20px; left: 20px; border-color: #ef4444; }
-        .system-box.hub { top: 35px; left: 50%; transform: translateX(-50%); background: var(--teal-accent); border-color: var(--teal-accent); }
-        .system-box.tms { top: 10px; right: 60px; border-color: #f59e0b; }
-        .system-box.wms { top: 40px; right: 20px; border-color: #10b981; }
-        .system-box.crm { bottom: 20px; right: 40px; border-color: #8b5cf6; }
+        .orch-node .node-sub {
+            font-size: 8px;
+            font-weight: 400;
+            color: #94a3b8;
+            display: block;
+            margin-top: 2px;
+        }
 
-        .data-flow {
+        .orch-node.active {
+            transform: scale(1.08);
+            box-shadow: 0 0 20px var(--node-color);
+        }
+
+        .orch-node.n-erp { top: 16px; left: 8%; border-color: #ef4444; --node-color: #ef4444; }
+        .orch-node.n-tms { bottom: 16px; left: 8%; border-color: #f59e0b; --node-color: #f59e0b; }
+        .orch-node.n-wms { top: 16px; right: 8%; border-color: #10b981; --node-color: #10b981; }
+        .orch-node.n-crm { bottom: 16px; right: 8%; border-color: #8b5cf6; --node-color: #8b5cf6; }
+
+        .orch-hub {
             position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--teal-accent), transparent);
-            animation: flowData 3s infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--teal-accent) 0%, #0f4c5c 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            z-index: 3;
+            box-shadow: 0 0 30px rgba(27, 154, 170, 0.4);
         }
 
-        .flow-1 { top: 35px; left: 80px; width: 60px; animation-delay: 0s; }
-        .flow-2 { top: 25px; right: 120px; width: 50px; animation-delay: 0.5s; }
-        .flow-3 { bottom: 35px; right: 80px; width: 45px; transform: rotate(30deg); animation-delay: 1s; }
+        .orch-hub .hub-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
 
-        @keyframes flowData {
-            0%, 100% { opacity: 0; transform: scaleX(0); }
-            50% { opacity: 1; transform: scaleX(1); }
+        .orch-hub-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 1px solid rgba(27, 154, 170, 0.3);
+            z-index: 2;
+            animation: hubRing 3s ease-in-out infinite;
+        }
+
+        .orch-hub-ring2 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 1px solid rgba(27, 154, 170, 0.15);
+            z-index: 1;
+            animation: hubRing 3s ease-in-out infinite 0.5s;
+        }
+
+        @keyframes hubRing {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
+
+        .orch-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            z-index: 4;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .orch-dot.moving {
+            opacity: 1;
+            transition: none;
+        }
+
+        .orch-status {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: #64748b;
+            z-index: 5;
+            white-space: nowrap;
+        }
+
+        .orch-status span {
+            color: var(--teal-accent);
         }
 
         /* Operations Dashboard Mockup */
@@ -1105,63 +1222,7 @@
             transform: none;
         }
         
-        /* Systems Integration Enhanced Animations */
-        .integration-diagram.animated {
-            background: linear-gradient(135deg, #1e293b 0%, #0f1419 100%);
-        }
-        
-        .system-box.pulse {
-            animation: systemPulse 0.6s ease-out;
-        }
-        
-        @keyframes systemPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(27, 154, 170, 0.7); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); box-shadow: 0 0 0 20px rgba(27, 154, 170, 0); }
-        }
-        
-        .data-packet {
-            position: absolute;
-            width: 6px;
-            height: 6px;
-            background: var(--teal-accent);
-            border-radius: 50%;
-            opacity: 0;
-            box-shadow: 0 0 8px var(--teal-accent);
-        }
-        
-        .data-packet.flowing {
-            animation: dataFlow 2s ease-in-out;
-        }
-        
-        @keyframes dataFlow {
-            0% { opacity: 0; transform: scale(0); }
-            20% { opacity: 1; transform: scale(1); }
-            80% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(0); }
-        }
-        
-        .hub-glow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 30px;
-            background: radial-gradient(ellipse at center, rgba(27, 154, 170, 0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .integration-diagram.animated .hub-glow {
-            opacity: 1;
-            animation: hubPulse 3s ease-in-out infinite;
-        }
-        
-        @keyframes hubPulse {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
-        }
+        /* (Old integration animations removed, replaced by orchestrator) */
         
         /* Operations Dashboard Enhanced Animations */
         .kpi-value.counting {
@@ -2863,15 +2924,16 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="integration-diagram">
-                            <div class="system-box erp">ERP</div>
-                            <div class="system-box hub">DeepLine</div>
-                            <div class="system-box tms">TMS</div>
-                            <div class="system-box wms">WMS</div>
-                            <div class="system-box crm">CRM</div>
-                            <div class="data-flow flow-1"></div>
-                            <div class="data-flow flow-2"></div>
-                            <div class="data-flow flow-3"></div>
+                        <div class="integration-diagram" id="orchDiagram">
+                            <svg class="orch-svg" id="orchSvg"></svg>
+                            <div class="orch-node n-erp" data-node="erp">ERP<span class="node-sub">Orders, Inventory</span></div>
+                            <div class="orch-node n-tms" data-node="tms">TMS<span class="node-sub">Routes, Tracking</span></div>
+                            <div class="orch-node n-wms" data-node="wms">WMS<span class="node-sub">Stock, Picking</span></div>
+                            <div class="orch-node n-crm" data-node="crm">CRM<span class="node-sub">Customers, Quotes</span></div>
+                            <div class="orch-hub-ring2"></div>
+                            <div class="orch-hub-ring"></div>
+                            <div class="orch-hub"><span class="hub-icon">&#9670;</span>DeepLine</div>
+                            <div class="orch-status">Syncing <span id="orchSyncCount">0</span> records/sec across <span>4 systems</span></div>
                         </div>
                     </div>
                     <a href="#contact" class="service-link">Learn More →</a>
@@ -3604,6 +3666,112 @@
         // Initialize ticker on load and resize
         initTicker();
         window.addEventListener('resize', initTicker);
+
+        // ========== ORCHESTRATOR DIAGRAM ==========
+        (function() {
+            const diagram = document.getElementById('orchDiagram');
+            if (!diagram) return;
+            const svg = document.getElementById('orchSvg');
+            const colors = { erp: '#ef4444', tms: '#f59e0b', wms: '#10b981', crm: '#8b5cf6' };
+            let syncCount = 0;
+            let animRunning = false;
+
+            function getCenter(el) {
+                const dr = diagram.getBoundingClientRect();
+                const er = el.getBoundingClientRect();
+                return { x: er.left - dr.left + er.width / 2, y: er.top - dr.top + er.height / 2 };
+            }
+
+            function drawLines() {
+                svg.innerHTML = '';
+                const hub = diagram.querySelector('.orch-hub');
+                const hc = getCenter(hub);
+                const nodes = diagram.querySelectorAll('.orch-node');
+                nodes.forEach(function(node) {
+                    const nc = getCenter(node);
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', nc.x); line.setAttribute('y1', nc.y);
+                    line.setAttribute('x2', hc.x); line.setAttribute('y2', hc.y);
+                    line.setAttribute('class', 'orch-line');
+                    line.setAttribute('data-node', node.dataset.node);
+                    svg.appendChild(line);
+                });
+            }
+
+            function animateDot(nodeKey, toHub) {
+                var node = diagram.querySelector('.orch-node.n-' + nodeKey);
+                var hub = diagram.querySelector('.orch-hub');
+                if (!node || !hub) return;
+                var nc = getCenter(node);
+                var hc = getCenter(hub);
+                var startX = toHub ? nc.x : hc.x;
+                var startY = toHub ? nc.y : hc.y;
+                var endX = toHub ? hc.x : nc.x;
+                var endY = toHub ? hc.y : nc.y;
+
+                var dot = document.createElement('div');
+                dot.className = 'orch-dot moving';
+                dot.style.background = colors[nodeKey];
+                dot.style.boxShadow = '0 0 12px ' + colors[nodeKey];
+                dot.style.left = startX - 4 + 'px';
+                dot.style.top = startY - 4 + 'px';
+                diagram.appendChild(dot);
+
+                var start = null;
+                var duration = 1200;
+                function step(ts) {
+                    if (!start) start = ts;
+                    var progress = Math.min((ts - start) / duration, 1);
+                    var ease = progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+                    var cx = startX + (endX - startX) * ease;
+                    var cy = startY + (endY - startY) * ease;
+                    dot.style.left = cx - 4 + 'px';
+                    dot.style.top = cy - 4 + 'px';
+                    if (progress < 1) {
+                        requestAnimationFrame(step);
+                    } else {
+                        dot.remove();
+                        if (toHub) {
+                            syncCount += Math.floor(Math.random() * 30) + 10;
+                            var el = document.getElementById('orchSyncCount');
+                            if (el) el.textContent = syncCount;
+                        }
+                        var target = toHub ? hub : node;
+                        target.style.boxShadow = '0 0 20px ' + colors[nodeKey];
+                        node.classList.add('active');
+                        setTimeout(function() {
+                            target.style.boxShadow = '';
+                            node.classList.remove('active');
+                        }, 400);
+                    }
+                }
+                requestAnimationFrame(step);
+            }
+
+            function runCycle() {
+                if (!animRunning) return;
+                var keys = Object.keys(colors);
+                var key = keys[Math.floor(Math.random() * keys.length)];
+                var toHub = Math.random() > 0.3;
+                animateDot(key, toHub);
+                setTimeout(function() { runCycle(); }, 600 + Math.random() * 800);
+            }
+
+            var orchObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting && !animRunning) {
+                        animRunning = true;
+                        drawLines();
+                        runCycle();
+                    } else if (!entry.isIntersecting) {
+                        animRunning = false;
+                    }
+                });
+            }, { threshold: 0.3 });
+            orchObserver.observe(diagram);
+
+            window.addEventListener('resize', function() { if (animRunning) drawLines(); });
+        })();
 
         // ========== LIVE DASHBOARD ==========
         (function() {
