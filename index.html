@@ -2868,53 +2868,71 @@
         }
 
         /* Trust Badges */
-        .trust-badges-section {
-            background: white;
-            padding: 60px 0 80px;
+        .trust-guarantees {
+            background: var(--deep-purple-navy);
+            padding: 80px 0;
+            position: relative;
         }
 
         .trust-badges-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 24px;
-            margin-top: 48px;
         }
 
         .trust-badge {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 16px;
-            padding: 24px;
-            background: var(--off-white);
-            border: 1px solid var(--light-gray);
-            border-radius: 8px;
+            text-align: center;
+            gap: 14px;
+            padding: 32px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(27, 154, 170, 0.25);
+            border-radius: 12px;
             transition: all 0.3s ease;
         }
 
         .trust-badge:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(27, 154, 170, 0.2);
             border-color: var(--teal-accent);
+            background: rgba(27, 154, 170, 0.08);
+        }
+
+        .badge-icon-wrap {
+            width: 56px;
+            height: 56px;
+            background: rgba(27, 154, 170, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .badge-icon {
-            font-size: 24px;
+            font-size: 28px;
         }
 
-        .badge-text strong {
-            color: var(--dark-ink);
+        .trust-badge strong {
+            color: white;
+            font-size: 17px;
             display: block;
-            margin-bottom: 4px;
         }
 
-        .badge-desc,
-        .erp-list {
-            color: var(--medium-gray);
+        .badge-desc {
+            color: #94a3b8;
             font-size: 14px;
+            line-height: 1.4;
         }
 
         /* Mobile Responsive for New Elements */
         @media (max-width: 768px) {
+            .trust-badges-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
             .chart-container {
                 margin-bottom: 60px;
             }
@@ -4022,6 +4040,35 @@
         </div>
     </section>
 
+    <!-- Trust Guarantees -->
+    <section class="trust-guarantees">
+        <div class="container">
+            <h2 style="text-align: center; color: white; margin-bottom: 48px; font-size: 28px;">Why Distributors Trust Us</h2>
+            <div class="trust-badges-grid">
+                <div class="trust-badge">
+                    <div class="badge-icon-wrap"><span class="badge-icon">🔗</span></div>
+                    <strong>Works with your existing ERP</strong>
+                    <div class="badge-desc">NetSuite • SAP • Sage • QuickBooks</div>
+                </div>
+                <div class="trust-badge">
+                    <div class="badge-icon-wrap"><span class="badge-icon">📈</span></div>
+                    <strong>90-Day ROI Guarantee</strong>
+                    <div class="badge-desc">See returns or we keep working</div>
+                </div>
+                <div class="trust-badge">
+                    <div class="badge-icon-wrap"><span class="badge-icon">🤝</span></div>
+                    <strong>No Long-Term Contracts</strong>
+                    <div class="badge-desc">Month-to-month flexibility</div>
+                </div>
+                <div class="trust-badge">
+                    <div class="badge-icon-wrap"><span class="badge-icon">👥</span></div>
+                    <strong>Dedicated Implementation Team</strong>
+                    <div class="badge-desc">Your success is our focus</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Results Section -->
     <section id="case-studies" class="results">
         <div class="container">
@@ -4264,39 +4311,6 @@
                 </div>
             </div>
 
-            <!-- Trust Badges -->
-            <div class="trust-badges-section">
-                <div class="trust-badges-grid">
-                    <div class="trust-badge">
-                        <div class="badge-icon">🔗</div>
-                        <div class="badge-text">
-                            <strong>Works with your existing ERP</strong>
-                            <div class="erp-list">NetSuite • SAP • Sage • QuickBooks</div>
-                        </div>
-                    </div>
-                    <div class="trust-badge">
-                        <div class="badge-icon">📈</div>
-                        <div class="badge-text">
-                            <strong>90-Day ROI Guarantee</strong>
-                            <div class="badge-desc">See returns or we keep working</div>
-                        </div>
-                    </div>
-                    <div class="trust-badge">
-                        <div class="badge-icon">🤝</div>
-                        <div class="badge-text">
-                            <strong>No Long-Term Contracts</strong>
-                            <div class="badge-desc">Month-to-month flexibility</div>
-                        </div>
-                    </div>
-                    <div class="trust-badge">
-                        <div class="badge-icon">👥</div>
-                        <div class="badge-text">
-                            <strong>Dedicated Implementation Team</strong>
-                            <div class="badge-desc">Your success is our focus</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
