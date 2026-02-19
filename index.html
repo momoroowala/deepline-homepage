@@ -1,0 +1,3292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepLine Operations - Custom Automation for Distributors</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Adapted Purple/Indigo Color Palette */
+            --deep-purple-navy: #0F0B2E;
+            --muted-indigo: #4F46E5;
+            --teal-accent: #1B9AAA;
+            --signal-green: #2ECC71;
+            --dark-ink: #1A1A2E;
+            --medium-gray: #6B7280;
+            --light-gray: #D1D5DB;
+            --off-white: #F5F6F8;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-ink);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            max-width: 65ch;
+        }
+
+        .large-text {
+            font-size: 18px;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        section {
+            padding: 80px 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Background Patterns */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(27, 154, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(79, 70, 229, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, transparent 0%, rgba(27, 154, 170, 0.05) 100%);
+        }
+
+        .animated-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.1;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(30px, 30px); }
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: var(--deep-purple-navy);
+            z-index: 1000;
+            transition: box-shadow 0.3s ease;
+        }
+
+        nav.scrolled {
+            box-shadow: 0 2px 20px rgba(15, 11, 46, 0.2);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .logo-section img {
+            height: 32px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--teal-accent);
+        }
+
+        .nav-cta {
+            background: var(--teal-accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta:hover {
+            background: #148994;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-cta:hover::before {
+            left: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--deep-purple-navy);
+            color: white;
+            padding: 120px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #D1D5DB;
+            margin-bottom: 48px;
+            max-width: 600px;
+        }
+
+        .hero-cta {
+            background: var(--teal-accent);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-cta:hover {
+            background: #148994;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(27, 154, 170, 0.3);
+        }
+
+        .hero-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .hero-cta:hover::before {
+            left: 100%;
+        }
+
+        /* Hero Dashboard */
+        .hero-dashboard {
+            position: relative;
+            z-index: 2;
+        }
+
+        .dashboard-mockup {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal-accent), var(--signal-green), var(--teal-accent));
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--signal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .stat-number {
+            color: var(--teal-accent);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: #D1D5DB;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* Mini Chart */
+        .mini-chart {
+            height: 60px;
+            display: flex;
+            align-items: end;
+            gap: 4px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+        }
+
+        .chart-bar {
+            background: linear-gradient(to top, var(--teal-accent), var(--signal-green));
+            border-radius: 2px;
+            min-width: 8px;
+            animation: barGrow 2s ease-out;
+        }
+
+        @keyframes barGrow {
+            from { height: 0; }
+            to { height: var(--height); }
+        }
+
+        .chart-bar:nth-child(1) { --height: 20px; animation-delay: 0.1s; }
+        .chart-bar:nth-child(2) { --height: 35px; animation-delay: 0.2s; }
+        .chart-bar:nth-child(3) { --height: 25px; animation-delay: 0.3s; }
+        .chart-bar:nth-child(4) { --height: 45px; animation-delay: 0.4s; }
+        .chart-bar:nth-child(5) { --height: 30px; animation-delay: 0.5s; }
+        .chart-bar:nth-child(6) { --height: 40px; animation-delay: 0.6s; }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideIn 1s ease-out;
+        }
+
+        .data-row:nth-child(1) { animation-delay: 0.8s; }
+        .data-row:nth-child(2) { animation-delay: 1s; }
+        .data-row:nth-child(3) { animation-delay: 1.2s; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Problems Section */
+        .problems {
+            background: white;
+            position: relative;
+        }
+
+        .problems::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(15, 11, 46, 0.03) 1px, transparent 0);
+            background-size: 40px 40px;
+            opacity: 0.5;
+        }
+
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+            position: relative;
+        }
+
+        .problem-card {
+            text-align: center;
+            padding: 32px 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            border: 1px solid rgba(15, 11, 46, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--muted-indigo);
+        }
+
+        .problem-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #ff4757, #ff6b7d);
+        }
+
+        .problem-visual {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Clock for "Quoting Takes Hours" */
+        .clock-visual {
+            position: relative;
+        }
+
+        .clock-face {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #ff4757;
+            border-radius: 50%;
+            position: relative;
+            animation: urgentPulse 2s infinite;
+        }
+
+        @keyframes urgentPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .clock-hand {
+            position: absolute;
+            background: #ff4757;
+            border-radius: 2px;
+            transform-origin: bottom center;
+            top: 15px;
+            left: 50%;
+            margin-left: -1px;
+        }
+
+        .hour-hand {
+            width: 2px;
+            height: 20px;
+            animation: tickHour 4s linear infinite;
+        }
+
+        .minute-hand {
+            width: 1px;
+            height: 25px;
+            animation: tickMinute 2s linear infinite;
+        }
+
+        @keyframes tickHour {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes tickMinute {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .papers-stack {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+        }
+
+        .paper {
+            width: 20px;
+            height: 24px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            position: absolute;
+            animation: stackPaper 3s infinite;
+        }
+
+        .paper:nth-child(1) { animation-delay: 0s; z-index: 3; }
+        .paper:nth-child(2) { animation-delay: 1s; z-index: 2; }
+        .paper:nth-child(3) { animation-delay: 2s; z-index: 1; }
+
+        @keyframes stackPaper {
+            0%, 66% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            33% { transform: translateY(-5px) rotate(5deg); opacity: 1; }
+            100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+        }
+
+        /* Disconnected Nodes for "Systems Don't Talk" */
+        .nodes-visual {
+            position: relative;
+        }
+
+        .node {
+            width: 16px;
+            height: 16px;
+            background: #ff4757;
+            border-radius: 50%;
+            position: absolute;
+            animation: disconnectedPulse 2s infinite;
+        }
+
+        .node:nth-child(1) { top: 0; left: 10px; animation-delay: 0s; }
+        .node:nth-child(2) { top: 20px; left: 40px; animation-delay: 0.3s; }
+        .node:nth-child(3) { bottom: 10px; left: 5px; animation-delay: 0.6s; }
+        .node:nth-child(4) { bottom: 5px; right: 15px; animation-delay: 0.9s; }
+
+        @keyframes disconnectedPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Broken connection lines */
+        .broken-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #ff4757 40%, transparent 40%, transparent 60%, #ff4757 60%);
+            opacity: 0.7;
+        }
+
+        .broken-line:nth-child(5) {
+            top: 25px;
+            left: 15px;
+            width: 30px;
+            transform: rotate(45deg);
+        }
+
+        .broken-line:nth-child(6) {
+            bottom: 20px;
+            left: 20px;
+            width: 25px;
+            transform: rotate(-30deg);
+        }
+
+        /* Dimmed Dashboard for "Flying Blind" */
+        .blind-visual {
+            position: relative;
+        }
+
+        .blind-dashboard {
+            width: 70px;
+            height: 50px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            position: relative;
+            opacity: 0.6;
+        }
+
+        .blind-bar {
+            position: absolute;
+            background: #ccc;
+            border-radius: 1px;
+        }
+
+        .blind-bar:nth-child(1) { bottom: 5px; left: 8px; width: 8px; height: 15px; }
+        .blind-bar:nth-child(2) { bottom: 5px; left: 20px; width: 8px; height: 25px; }
+        .blind-bar:nth-child(3) { bottom: 5px; left: 32px; width: 8px; height: 10px; }
+        .blind-bar:nth-child(4) { bottom: 5px; left: 44px; width: 8px; height: 20px; }
+
+        .question-mark {
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            width: 20px;
+            height: 20px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .problem-card h3 {
+            color: var(--dark-ink);
+            margin-bottom: 16px;
+        }
+
+        .problem-card p {
+            color: var(--medium-gray);
+            margin: 0 auto;
+        }
+
+        /* Services Section */
+        .services {
+            background: var(--off-white);
+            position: relative;
+        }
+
+        .services::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(45deg, rgba(15, 11, 46, 0.02) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(15, 11, 46, 0.02) 25%, transparent 25%);
+            background-size: 60px 60px;
+            opacity: 0.3;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            margin-top: 48px;
+            position: relative;
+        }
+
+        .service-card {
+            background: white;
+            padding: 0;
+            border-radius: 12px;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            border-color: var(--muted-indigo);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--muted-indigo), var(--teal-accent));
+        }
+
+        .service-header {
+            padding: 24px 32px 16px;
+        }
+
+        .service-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--muted-indigo);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: var(--teal-accent);
+        }
+
+        .service-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: white;
+            stroke-width: 2px;
+            fill: none;
+        }
+
+        .service-card h3 {
+            color: var(--dark-ink);
+            margin-bottom: 12px;
+        }
+
+        .service-description {
+            color: var(--medium-gray);
+            margin-bottom: 20px;
+        }
+
+        .service-features {
+            list-style: none;
+            margin-bottom: 0;
+        }
+
+        .service-features li {
+            color: var(--medium-gray);
+            padding: 4px 0;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        .service-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--signal-green);
+            font-weight: 600;
+        }
+
+        /* Product Preview Mockups */
+        .service-preview {
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        /* Quoting Interface */
+        .quoting-interface {
+            padding: 16px;
+            background: white;
+        }
+
+        .quote-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-field {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #374151;
+        }
+
+        .quote-result {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quote-price {
+            font-weight: 600;
+            color: #059669;
+            font-size: 16px;
+        }
+
+        .quote-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #059669;
+            font-size: 11px;
+        }
+
+        .quote-checkmark {
+            width: 12px;
+            height: 12px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 8px;
+        }
+
+        .generate-btn {
+            background: var(--teal-accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin: 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            background: #148994;
+            transform: translateY(-1px);
+        }
+
+        /* Systems Integration Diagram */
+        .integration-diagram {
+            padding: 20px;
+            background: #1e293b;
+            position: relative;
+            height: 120px;
+        }
+
+        .system-box {
+            position: absolute;
+            background: #475569;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 500;
+            border: 2px solid transparent;
+        }
+
+        .system-box.erp { top: 20px; left: 20px; border-color: #ef4444; }
+        .system-box.hub { top: 35px; left: 50%; transform: translateX(-50%); background: var(--teal-accent); border-color: var(--teal-accent); }
+        .system-box.tms { top: 10px; right: 60px; border-color: #f59e0b; }
+        .system-box.wms { top: 40px; right: 20px; border-color: #10b981; }
+        .system-box.crm { bottom: 20px; right: 40px; border-color: #8b5cf6; }
+
+        .data-flow {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--teal-accent), transparent);
+            animation: flowData 3s infinite;
+        }
+
+        .flow-1 { top: 35px; left: 80px; width: 60px; animation-delay: 0s; }
+        .flow-2 { top: 25px; right: 120px; width: 50px; animation-delay: 0.5s; }
+        .flow-3 { bottom: 35px; right: 80px; width: 45px; transform: rotate(30deg); animation-delay: 1s; }
+
+        @keyframes flowData {
+            0%, 100% { opacity: 0; transform: scaleX(0); }
+            50% { opacity: 1; transform: scaleX(1); }
+        }
+
+        /* Operations Dashboard Mockup */
+        .dashboard-preview {
+            background: #0f172a;
+            color: white;
+            padding: 16px;
+            height: 140px;
+            position: relative;
+        }
+
+        .dashboard-header-mini {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #cbd5e1;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .kpi-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .kpi-value {
+            color: var(--teal-accent);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .kpi-label {
+            color: #94a3b8;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .mini-chart-container {
+            height: 40px;
+            display: flex;
+            align-items: end;
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 4px;
+            padding: 4px;
+        }
+
+        .dashboard-bar {
+            background: linear-gradient(to top, var(--teal-accent), var(--signal-green));
+            border-radius: 1px;
+            width: 8px;
+            animation: dashboardGrow 2s ease-out;
+        }
+
+        @keyframes dashboardGrow {
+            from { height: 0; }
+            to { height: var(--bar-height); }
+        }
+
+        .dashboard-bar:nth-child(1) { --bar-height: 15px; animation-delay: 0.1s; }
+        .dashboard-bar:nth-child(2) { --bar-height: 25px; animation-delay: 0.2s; }
+        .dashboard-bar:nth-child(3) { --bar-height: 20px; animation-delay: 0.3s; }
+        .dashboard-bar:nth-child(4) { --bar-height: 30px; animation-delay: 0.4s; }
+        .dashboard-bar:nth-child(5) { --bar-height: 18px; animation-delay: 0.5s; }
+
+        /* Route Optimization Map */
+        .route-map {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            height: 130px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .delivery-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--signal-green);
+            border-radius: 50%;
+            animation: deliveryPulse 2s infinite;
+        }
+
+        @keyframes deliveryPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.3); }
+        }
+
+        .delivery-point:nth-child(1) { top: 20px; left: 30px; animation-delay: 0s; }
+        .delivery-point:nth-child(2) { top: 40px; left: 60px; animation-delay: 0.2s; }
+        .delivery-point:nth-child(3) { top: 60px; left: 40px; animation-delay: 0.4s; }
+        .delivery-point:nth-child(4) { bottom: 30px; left: 70px; animation-delay: 0.6s; }
+        .delivery-point:nth-child(5) { bottom: 20px; right: 50px; animation-delay: 0.8s; }
+
+        .route-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--teal-accent), transparent);
+            border-radius: 1px;
+            animation: routeTrace 4s infinite;
+        }
+
+        .route-line:nth-child(6) { top: 25px; left: 35px; width: 30px; transform: rotate(25deg); animation-delay: 0s; }
+        .route-line:nth-child(7) { top: 45px; left: 45px; width: 25px; transform: rotate(-45deg); animation-delay: 1s; }
+        .route-line:nth-child(8) { bottom: 45px; left: 50px; width: 35px; transform: rotate(30deg); animation-delay: 2s; }
+
+        @keyframes routeTrace {
+            0%, 100% { opacity: 0; transform: scaleX(0) var(--rotation); }
+            50% { opacity: 1; transform: scaleX(1) var(--rotation); }
+        }
+
+        .route-stats {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            line-height: 1.2;
+        }
+
+        .service-link {
+            color: var(--teal-accent);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 16px 32px;
+            display: block;
+            border-top: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+        }
+
+        .service-link:hover {
+            background: var(--off-white);
+            color: var(--dark-ink);
+        }
+
+        /* Social Proof / Results */
+        .results {
+            background: white;
+            position: relative;
+            padding: 80px 0 0;
+        }
+
+        .results::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(27, 154, 170, 0.1) 1px, transparent 0);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+
+        /* Data Visualization Section */
+        .data-visualization-section {
+            background: white;
+            padding: 0 0 60px;
+        }
+
+        .chart-container {
+            margin-bottom: 80px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .chart-container.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chart-title {
+            color: var(--dark-ink);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .chart-source {
+            color: #6B7280;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 24px;
+            font-style: italic;
+        }
+
+        /* Horizontal Bar Chart */
+        .horizontal-bar-chart {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .chart-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .chart-label {
+            min-width: 200px;
+            text-align: right;
+            font-size: 14px;
+            color: var(--dark-ink);
+            font-weight: 500;
+        }
+
+        .chart-bar-bg {
+            flex: 1;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--muted-indigo), var(--teal-accent));
+            border-radius: 6px;
+            width: 0%;
+            transition: width 1.5s ease-out;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+        }
+
+        .chart-bar-fill.animate {
+            width: var(--target-width);
+        }
+
+        .bar-value {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Donut Chart */
+        .donut-chart-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .donut-chart {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .donut-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .donut-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 12;
+        }
+
+        .donut-fill {
+            fill: none;
+            stroke: var(--teal-accent);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 0 188.5;
+            transition: stroke-dasharray 2s ease-out;
+        }
+
+        .donut-fill.animate {
+            stroke-dasharray: 173.4 188.5;
+        }
+
+        .donut-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .donut-percentage {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--teal-accent);
+            line-height: 1;
+        }
+
+        .donut-label {
+            color: var(--medium-gray);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .donut-text {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .donut-text p {
+            font-size: 18px;
+            color: var(--dark-ink);
+            line-height: 1.6;
+        }
+
+        /* Stats Ticker */
+        .stats-ticker {
+            background: var(--off-white);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            margin: 60px 0;
+            overflow: hidden;
+            position: relative;
+            height: 60px;
+        }
+
+        .ticker-content {
+            display: flex;
+            animation: tickerScroll 60s linear infinite;
+            white-space: nowrap;
+            align-items: center;
+            height: 100%;
+        }
+
+        .ticker-item {
+            padding: 0 40px;
+            font-size: 16px;
+            color: var(--dark-ink);
+            font-weight: 500;
+            border-right: 1px solid var(--light-gray);
+            flex-shrink: 0;
+        }
+
+        @keyframes tickerScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Before/After Comparison */
+        .comparison-grid {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .comparison-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 20px;
+            background: var(--deep-purple-navy);
+            color: white;
+            padding: 20px;
+            font-weight: 600;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            gap: 20px;
+            padding: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.6s ease;
+            align-items: center;
+        }
+
+        .comparison-row.animate {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .comparison-row:nth-child(even) {
+            background: #f9fafb;
+        }
+
+        .col-metric {
+            font-weight: 500;
+            color: var(--dark-ink);
+        }
+
+        .col-before {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .col-after {
+            color: var(--signal-green);
+            font-weight: 600;
+        }
+
+        .col-improvement {
+            color: var(--signal-green);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        /* ROI Timeline */
+        .roi-timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-track {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, #6b7280, var(--teal-accent), var(--signal-green), #22c55e);
+            border-radius: 2px;
+        }
+
+        .timeline-segment {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .timeline-dot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            position: relative;
+            z-index: 2;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-dot.animate {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .investment .timeline-dot {
+            background: #6b7280;
+            color: white;
+        }
+
+        .break-even .timeline-dot {
+            background: var(--teal-accent);
+            color: white;
+        }
+
+        .positive .timeline-dot {
+            background: var(--signal-green);
+            color: white;
+        }
+
+        .strong .timeline-dot {
+            background: #22c55e;
+            color: white;
+        }
+
+        .timeline-label {
+            font-weight: 600;
+            color: var(--dark-ink);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .timeline-desc {
+            color: var(--medium-gray);
+            font-size: 12px;
+        }
+
+        .roi-curve {
+            height: 100px;
+            margin-top: 20px;
+        }
+
+        .curve-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .roi-path {
+            fill: none;
+            stroke: var(--signal-green);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-dasharray: 600;
+            stroke-dashoffset: 600;
+            transition: stroke-dashoffset 3s ease-out;
+        }
+
+        .roi-path.animate {
+            stroke-dashoffset: 0;
+        }
+
+        .roi-text {
+            text-align: center;
+            font-size: 18px;
+            color: var(--dark-ink);
+            margin-top: 24px;
+            font-weight: 500;
+        }
+
+        /* Case Studies Section */
+        .case-studies-section {
+            background: var(--off-white);
+            padding: 80px 0;
+            margin-top: 60px;
+        }
+
+        .case-studies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .case-study-card {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .case-study-card.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .case-study-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .case-tag {
+            background: var(--teal-accent);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+
+        .case-study-card h4 {
+            color: var(--dark-ink);
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .case-study-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .case-visual {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mini Bar Comparison */
+        .mini-bar-comparison {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .before-bar,
+        .after-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar-fill {
+            width: 60px;
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .before-fill {
+            background: #ef4444;
+            animation: beforeFill 2s ease-out;
+        }
+
+        .after-fill {
+            background: var(--signal-green);
+            animation: afterFill 2s ease-out 0.5s both;
+        }
+
+        .arrow {
+            font-size: 24px;
+            color: var(--teal-accent);
+            font-weight: bold;
+        }
+
+        .bar-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--dark-ink);
+        }
+
+        @keyframes beforeFill {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        @keyframes afterFill {
+            from { width: 0; }
+            to { width: 60px; }
+        }
+
+        /* Connected Nodes */
+        .connected-nodes {
+            position: relative;
+            width: 200px;
+            height: 80px;
+        }
+
+        .node-system {
+            position: absolute;
+            background: var(--muted-indigo);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .node-system:nth-child(1) { top: 0; left: 0; }
+        .node-system:nth-child(2) { top: 0; right: 0; }
+        .node-system:nth-child(3) { bottom: 0; left: 0; }
+
+        .central-hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--teal-accent);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .connection-line {
+            position: absolute;
+            height: 2px;
+            background: var(--teal-accent);
+            animation: connectionPulse 2s infinite;
+        }
+
+        .line-1 { top: 15px; left: 50px; width: 50px; transform: rotate(25deg); animation-delay: 0s; }
+        .line-2 { top: 15px; right: 50px; width: 50px; transform: rotate(-25deg); animation-delay: 0.3s; }
+        .line-3 { bottom: 15px; left: 50px; width: 50px; transform: rotate(-25deg); animation-delay: 0.6s; }
+
+        @keyframes connectionPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Route Map Mini */
+        .route-map-mini {
+            position: relative;
+            width: 200px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .route-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--signal-green);
+            border-radius: 50%;
+            animation: routePulse 2s infinite;
+        }
+
+        .route-point:nth-child(1) { animation-delay: 0s; }
+        .route-point:nth-child(2) { animation-delay: 0.2s; }
+        .route-point:nth-child(3) { animation-delay: 0.4s; }
+        .route-point:nth-child(4) { animation-delay: 0.6s; }
+
+        @keyframes routePulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .route-line-mini {
+            position: absolute;
+            height: 2px;
+            background: var(--teal-accent);
+            border-radius: 1px;
+            animation: routeFlow 3s infinite;
+        }
+
+        .line-1 { top: 25%; left: 30%; width: 30px; transform: rotate(30deg); animation-delay: 0s; }
+        .line-2 { top: 45%; left: 45%; width: 25px; transform: rotate(-20deg); animation-delay: 1s; }
+        .line-3 { top: 65%; left: 35%; width: 35px; transform: rotate(45deg); animation-delay: 2s; }
+
+        @keyframes routeFlow {
+            0%, 100% { opacity: 0; transform: scaleX(0) var(--rotation); }
+            50% { opacity: 1; transform: scaleX(1) var(--rotation); }
+        }
+
+        .route-stats {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            font-size: 8px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 6px;
+            border-radius: 4px;
+            line-height: 1.2;
+        }
+
+        /* Trust Badges */
+        .trust-badges-section {
+            background: white;
+            padding: 60px 0 80px;
+        }
+
+        .trust-badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 24px;
+            background: var(--off-white);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .trust-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--teal-accent);
+        }
+
+        .badge-icon {
+            font-size: 24px;
+        }
+
+        .badge-text strong {
+            color: var(--dark-ink);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .badge-desc,
+        .erp-list {
+            color: var(--medium-gray);
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive for New Elements */
+        @media (max-width: 768px) {
+            .chart-container {
+                margin-bottom: 60px;
+            }
+
+            .chart-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .chart-label {
+                min-width: auto;
+                text-align: left;
+                margin-bottom: 8px;
+            }
+
+            .donut-chart-container {
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            .comparison-header,
+            .comparison-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .comparison-header {
+                display: none;
+            }
+
+            .comparison-row::before {
+                content: attr(data-metric);
+                font-weight: 600;
+                margin-bottom: 8px;
+            }
+
+            .timeline-track {
+                flex-direction: column;
+                gap: 32px;
+            }
+
+            .timeline-track::before {
+                display: none;
+            }
+
+            .case-studies-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-badges-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-ticker {
+                height: auto;
+                padding: 20px 0;
+            }
+
+            .ticker-content {
+                flex-direction: column;
+                animation: none;
+                gap: 16px;
+            }
+
+            .ticker-item {
+                padding: 0 20px;
+                border-right: none;
+                border-bottom: 1px solid var(--light-gray);
+                padding-bottom: 16px;
+                text-align: center;
+            }
+
+            .ticker-item:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+
+        /* Legacy styles maintained for compatibility */
+        .stats-container {
+            display: none;
+        }
+
+        .stat-item {
+            display: none;
+        }
+
+        .case-study-teaser {
+            display: none;
+        }
+
+        /* How We Work */
+        .how-we-work {
+            background: var(--off-white);
+            position: relative;
+        }
+
+        .how-we-work::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(45deg, transparent 49%, rgba(79, 70, 229, 0.02) 49%, rgba(79, 70, 229, 0.02) 51%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(27, 154, 170, 0.02) 49%, rgba(27, 154, 170, 0.02) 51%, transparent 51%);
+            background-size: 80px 80px;
+        }
+
+        .process-timeline {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 48px;
+            margin-top: 48px;
+            position: relative;
+        }
+
+        .process-timeline::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 16.66%;
+            right: 16.66%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--muted-indigo), var(--teal-accent), var(--signal-green));
+            z-index: 1;
+        }
+
+        .process-step {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--muted-indigo);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto 24px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--muted-indigo), var(--teal-accent)) border-box;
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: subtract;
+            animation: stepGlow 3s infinite;
+        }
+
+        @keyframes stepGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .process-step:hover .step-number {
+            transform: scale(1.1);
+            background: var(--teal-accent);
+        }
+
+        .step-visual {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .magnifying-glass {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--teal-accent);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .magnifying-glass::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            right: -6px;
+            width: 8px;
+            height: 2px;
+            background: var(--teal-accent);
+            transform: rotate(45deg);
+        }
+
+        .gears {
+            position: relative;
+        }
+
+        .gear {
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--teal-accent);
+            border-radius: 2px;
+            position: absolute;
+            animation: spin 4s linear infinite;
+        }
+
+        .gear:nth-child(1) { top: 0; left: 0; animation-direction: normal; }
+        .gear:nth-child(2) { top: 5px; left: 8px; animation-direction: reverse; }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .trend-chart {
+            width: 20px;
+            height: 15px;
+            position: relative;
+        }
+
+        .trend-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal-accent), var(--signal-green));
+            clip-path: polygon(0 100%, 30% 70%, 60% 40%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .process-step h3 {
+            color: var(--dark-ink);
+            margin-bottom: 16px;
+        }
+
+        .process-step p {
+            color: var(--medium-gray);
+            margin: 0 auto;
+        }
+
+        /* Free Tools Section */
+        .free-tools {
+            background: white;
+            position: relative;
+        }
+
+        .free-tools::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(79, 70, 229, 0.01) 35px, rgba(79, 70, 229, 0.01) 70px);
+            opacity: 0.5;
+        }
+
+        .tools-intro {
+            text-align: center;
+            color: var(--medium-gray);
+            margin-bottom: 48px;
+            position: relative;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+            position: relative;
+        }
+
+        .tool-card {
+            background: var(--off-white);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--light-gray);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: var(--teal-accent);
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--signal-green), var(--teal-accent));
+        }
+
+        .tool-preview {
+            width: 40px;
+            height: 40px;
+            background: var(--muted-indigo);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover .tool-preview {
+            background: var(--teal-accent);
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        .tool-icon {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .free-badge {
+            background: var(--signal-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .free-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: badgeShine 3s infinite;
+        }
+
+        @keyframes badgeShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        .tool-card h4 {
+            color: var(--dark-ink);
+            margin-bottom: 12px;
+        }
+
+        .tool-card p {
+            color: var(--medium-gray);
+            font-size: 14px;
+        }
+
+        /* Final CTA */
+        .final-cta {
+            background: var(--deep-purple-navy);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(27, 154, 170, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(79, 70, 229, 0.1) 0%, transparent 50%);
+        }
+
+        .final-cta h2 {
+            color: white;
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .final-cta-btn {
+            background: var(--teal-accent);
+            color: white;
+            padding: 18px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .final-cta-btn:hover {
+            background: #148994;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(27, 154, 170, 0.3);
+        }
+
+        .final-cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .final-cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .trust-line {
+            color: #D1D5DB;
+            font-size: 16px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--deep-purple-navy);
+            color: white;
+            padding: 48px 0 24px;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+        }
+
+        .footer-logo img {
+            height: 32px;
+            margin-right: 12px;
+        }
+
+        .footer-nav {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+        }
+
+        .footer-nav a {
+            color: #D1D5DB;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: var(--teal-accent);
+        }
+
+        .copyright {
+            text-align: center;
+            color: #6B7280;
+            font-size: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 24px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-dashboard {
+                order: -1;
+            }
+
+            .problems-grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 32px;
+            }
+
+            .process-timeline {
+                grid-template-columns: 1fr;
+                gap: 48px;
+            }
+
+            .process-timeline::before {
+                display: none;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 24px;
+                text-align: center;
+            }
+
+            .footer-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            section {
+                padding: 60px 0;
+            }
+
+            .hero {
+                padding: 80px 0 60px;
+            }
+
+            .dashboard-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .nav-container {
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .big-stat {
+                font-size: 48px;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo-section">
+                <img src="logo.png" alt="DeepLine Operations">
+                <span class="logo-text">DeepLine Operations</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#case-studies">Case Studies</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact" class="nav-cta">Contact</a></li>
+            </ul>
+            <button class="mobile-menu">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="animated-grid"></div>
+        <div class="floating-particles">
+            <div class="particle" style="width: 4px; height: 4px; left: 10%; animation-delay: 0s; animation-duration: 15s;"></div>
+            <div class="particle" style="width: 6px; height: 6px; left: 20%; animation-delay: 2s; animation-duration: 18s;"></div>
+            <div class="particle" style="width: 3px; height: 3px; left: 30%; animation-delay: 4s; animation-duration: 22s;"></div>
+            <div class="particle" style="width: 5px; height: 5px; left: 40%; animation-delay: 1s; animation-duration: 16s;"></div>
+            <div class="particle" style="width: 4px; height: 4px; left: 60%; animation-delay: 3s; animation-duration: 20s;"></div>
+            <div class="particle" style="width: 7px; height: 7px; left: 70%; animation-delay: 5s; animation-duration: 17s;"></div>
+            <div class="particle" style="width: 3px; height: 3px; left: 80%; animation-delay: 2s; animation-duration: 19s;"></div>
+            <div class="particle" style="width: 5px; height: 5px; left: 90%; animation-delay: 4s; animation-duration: 21s;"></div>
+        </div>
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <h1>Your Operations Run on Manual Processes. They Don't Have To.</h1>
+                    <p class="hero-subtitle">We build custom automation for distributors and logistics companies. Quoting, routing, dashboards, and system integrations that actually work with your existing stack.</p>
+                    <a href="#contact" class="hero-cta">Book a Discovery Call</a>
+                </div>
+                
+                <div class="hero-dashboard">
+                    <div class="dashboard-mockup">
+                        <div class="dashboard-header">
+                            <div style="color: white; font-weight: 600;">Operations Dashboard</div>
+                            <div class="status-indicator">
+                                <div class="status-dot"></div>
+                                <span style="color: #D1D5DB; font-size: 14px;">Live</span>
+                            </div>
+                        </div>
+                        <div class="dashboard-stats">
+                            <div class="stat-card">
+                                <div class="stat-number">47</div>
+                                <div class="stat-label">Active Routes</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">96.2%</div>
+                                <div class="stat-label">On-Time Delivery</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-number">$1.2M</div>
+                                <div class="stat-label">Revenue Today</div>
+                            </div>
+                        </div>
+                        <div class="mini-chart">
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                            <div class="chart-bar"></div>
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <div class="data-row">
+                                <span style="color: #D1D5DB; font-size: 12px;">Order #2847</span>
+                                <span style="color: var(--signal-green); font-size: 12px;">✓ Delivered</span>
+                            </div>
+                            <div class="data-row">
+                                <span style="color: #D1D5DB; font-size: 12px;">Route NYC-1</span>
+                                <span style="color: var(--teal-accent); font-size: 12px;">● En Route</span>
+                            </div>
+                            <div class="data-row">
+                                <span style="color: #D1D5DB; font-size: 12px;">Quote #Q5521</span>
+                                <span style="color: #fbbf24; font-size: 12px;">◐ Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section id="problems" class="problems">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--dark-ink);">The Problems Crushing Your Growth</h2>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <div class="problem-visual">
+                        <div class="clock-visual">
+                            <div class="clock-face">
+                                <div class="clock-hand hour-hand"></div>
+                                <div class="clock-hand minute-hand"></div>
+                            </div>
+                            <div class="papers-stack">
+                                <div class="paper"></div>
+                                <div class="paper"></div>
+                                <div class="paper"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Quoting Takes Hours, Not Minutes</h3>
+                    <p>Manual spreadsheet quoting, pricing errors, slow turnaround losing deals. Your competitors are moving faster while you're still calculating margins by hand.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-visual">
+                        <div class="nodes-visual">
+                            <div class="node"></div>
+                            <div class="node"></div>
+                            <div class="node"></div>
+                            <div class="node"></div>
+                            <div class="broken-line"></div>
+                            <div class="broken-line"></div>
+                        </div>
+                    </div>
+                    <h3>Your Systems Don't Talk to Each Other</h3>
+                    <p>ERP, TMS, WMS, CRM all siloed, double data entry, no single source of truth. Information gets lost between systems and decisions get delayed.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-visual">
+                        <div class="blind-visual">
+                            <div class="blind-dashboard">
+                                <div class="blind-bar"></div>
+                                <div class="blind-bar"></div>
+                                <div class="blind-bar"></div>
+                                <div class="blind-bar"></div>
+                            </div>
+                            <div class="question-mark">?</div>
+                        </div>
+                    </div>
+                    <h3>You're Flying Blind on Operations</h3>
+                    <p>No real-time visibility, reactive instead of proactive, reporting is a manual nightmare. You find out about problems after they've already cost you money.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--dark-ink);">What We Automate</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
+                        </div>
+                        <h3>Quoting Automation</h3>
+                        <p class="service-description">Automated quote generation with real-time pricing, margin calculation, and approval workflows.</p>
+                        <ul class="service-features">
+                            <li>Dynamic pricing based on customer tier and volume</li>
+                            <li>Automatic margin protection and alerts</li>
+                            <li>Integration with inventory and supplier systems</li>
+                            <li>Quote-to-order conversion tracking</li>
+                        </ul>
+                    </div>
+                    <div class="service-preview">
+                        <div class="quoting-interface">
+                            <div class="quote-form">
+                                <input type="text" class="form-field" placeholder="Customer: ACME Corp" readonly>
+                                <input type="text" class="form-field" placeholder="Product: Widget Pro" readonly>
+                                <input type="text" class="form-field" placeholder="Quantity: 500" readonly>
+                                <input type="text" class="form-field" placeholder="Terms: NET30" readonly>
+                            </div>
+                            <button class="generate-btn">Generate Quote</button>
+                            <div class="quote-result">
+                                <div>
+                                    <div class="quote-price">$12,847.50</div>
+                                    <div style="font-size: 11px; color: #6b7280;">Margin: 32.4%</div>
+                                </div>
+                                <div class="quote-status">
+                                    <div class="quote-checkmark">✓</div>
+                                    Generated in 12 seconds
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#contact" class="service-link">Learn More →</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="m8 12 2 2 4-4"/>
+                                <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+                                <path d="M8 3v4"/>
+                                <path d="M16 3v4"/>
+                            </svg>
+                        </div>
+                        <h3>Systems Integration</h3>
+                        <p class="service-description">Connect your ERP, TMS, WMS, and CRM so they work as one unified system.</p>
+                        <ul class="service-features">
+                            <li>Bi-directional data sync across platforms</li>
+                            <li>Automated order processing workflows</li>
+                            <li>Unified customer and inventory management</li>
+                            <li>Single dashboard for all operations</li>
+                        </ul>
+                    </div>
+                    <div class="service-preview">
+                        <div class="integration-diagram">
+                            <div class="system-box erp">ERP</div>
+                            <div class="system-box hub">DeepLine</div>
+                            <div class="system-box tms">TMS</div>
+                            <div class="system-box wms">WMS</div>
+                            <div class="system-box crm">CRM</div>
+                            <div class="data-flow flow-1"></div>
+                            <div class="data-flow flow-2"></div>
+                            <div class="data-flow flow-3"></div>
+                        </div>
+                    </div>
+                    <a href="#contact" class="service-link">Learn More →</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                                <path d="M8 14h.01"/>
+                                <path d="M12 14h.01"/>
+                                <path d="M16 14h.01"/>
+                                <path d="M8 18h.01"/>
+                                <path d="M12 18h.01"/>
+                            </svg>
+                        </div>
+                        <h3>Operations Dashboards</h3>
+                        <p class="service-description">Real-time visibility into KPIs, performance metrics, and operational health.</p>
+                        <ul class="service-features">
+                            <li>Live performance monitoring and alerts</li>
+                            <li>Executive summary dashboards</li>
+                            <li>Predictive analytics and forecasting</li>
+                            <li>Mobile-responsive for on-the-go access</li>
+                        </ul>
+                    </div>
+                    <div class="service-preview">
+                        <div class="dashboard-preview">
+                            <div class="dashboard-header-mini">
+                                <span>Executive Dashboard</span>
+                                <span>Live Updates</span>
+                            </div>
+                            <div class="kpi-grid">
+                                <div class="kpi-card">
+                                    <div class="kpi-value">847</div>
+                                    <div class="kpi-label">Orders Today</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">96.2%</div>
+                                    <div class="kpi-label">On-Time Rate</div>
+                                </div>
+                                <div class="kpi-card">
+                                    <div class="kpi-value">$1.2M</div>
+                                    <div class="kpi-label">Revenue</div>
+                                </div>
+                            </div>
+                            <div class="mini-chart-container">
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-bar"></div>
+                                <div class="dashboard-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#contact" class="service-link">Learn More →</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                        </div>
+                        <h3>Route Optimization</h3>
+                        <p class="service-description">AI-powered routing that reduces fuel costs and improves delivery efficiency.</p>
+                        <ul class="service-features">
+                            <li>Dynamic route optimization with traffic data</li>
+                            <li>Driver performance tracking and coaching</li>
+                            <li>Automated customer delivery notifications</li>
+                            <li>Fuel efficiency and cost reporting</li>
+                        </ul>
+                    </div>
+                    <div class="service-preview">
+                        <div class="route-map">
+                            <div class="delivery-point"></div>
+                            <div class="delivery-point"></div>
+                            <div class="delivery-point"></div>
+                            <div class="delivery-point"></div>
+                            <div class="delivery-point"></div>
+                            <div class="route-line" style="--rotation: rotate(25deg);"></div>
+                            <div class="route-line" style="--rotation: rotate(-45deg);"></div>
+                            <div class="route-line" style="--rotation: rotate(30deg);"></div>
+                            <div class="route-stats">
+                                <div>12 stops</div>
+                                <div>47 miles</div>
+                                <div>2.3 hrs</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#contact" class="service-link">Learn More →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results">
+        <div class="container">
+            <!-- Industry Data Visualization Section -->
+            <div class="data-visualization-section">
+                <h2 style="text-align: center; color: var(--dark-ink); margin-bottom: 64px;">The Distribution Industry Is Changing. Here's the Data.</h2>
+                
+                <!-- Chart 1: Time Waste Bar Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">Where Distributors Lose Time Every Week</h3>
+                    <div class="horizontal-bar-chart" id="timeWasteChart">
+                        <div class="chart-item">
+                            <div class="chart-label">Manual quoting and pricing</div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" data-value="8.5" style="--target-width: 85%;">
+                                    <span class="bar-value">8.5 hrs/week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-label">Double data entry across systems</div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" data-value="6.2" style="--target-width: 62%;">
+                                    <span class="bar-value">6.2 hrs/week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-label">Manual route planning</div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" data-value="4.8" style="--target-width: 48%;">
+                                    <span class="bar-value">4.8 hrs/week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-label">Reporting and dashboards</div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" data-value="3.5" style="--target-width: 35%;">
+                                    <span class="bar-value">3.5 hrs/week</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-item">
+                            <div class="chart-label">Order status inquiries</div>
+                            <div class="chart-bar-bg">
+                                <div class="chart-bar-fill" data-value="2.8" style="--target-width: 28%;">
+                                    <span class="bar-value">2.8 hrs/week</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-source">Industry averages from NAW and MHI distribution operations surveys, 2025</div>
+                </div>
+
+                <!-- Chart 2: Donut Chart -->
+                <div class="chart-container">
+                    <h3 class="chart-title">92% of distributors use ERP software. But most still run critical processes manually.</h3>
+                    <div class="donut-chart-container">
+                        <div class="donut-chart" id="erpChart">
+                            <svg viewBox="0 0 100 100" class="donut-svg">
+                                <circle cx="50" cy="50" r="30" class="donut-bg"></circle>
+                                <circle cx="50" cy="50" r="30" class="donut-fill" id="donutFill"></circle>
+                            </svg>
+                            <div class="donut-center">
+                                <div class="donut-percentage">92%</div>
+                                <div class="donut-label">Use ERP</div>
+                            </div>
+                        </div>
+                        <div class="donut-text">
+                            <p>The gap between having software and actually automating workflows is where <strong>$75K-$180K in annual savings</strong> hides.</p>
+                        </div>
+                    </div>
+                    <div class="chart-source">BluLink ERP Industry Report, 2025; Anchor Group Wholesale Distribution Analysis</div>
+                </div>
+
+                <!-- Industry Stats Ticker -->
+                <div class="stats-ticker">
+                    <div class="ticker-content">
+                        <div class="ticker-item">$75K-$180K annual savings for a $50M distributor (Anchor Group)</div>
+                        <div class="ticker-item">47% of ERP projects exceed timelines (why custom automation beats big ERP)</div>
+                        <div class="ticker-item">70-90% of research done before contacting sales (validates the website's importance)</div>
+                        <div class="ticker-item">42% five-year OPEX reduction vs manual processes (Mordor Intelligence)</div>
+                        <div class="ticker-item">67% cite inventory capabilities as #1 ERP need (shows what matters)</div>
+                    </div>
+                </div>
+
+                <!-- Chart 3: Before/After Comparison -->
+                <div class="chart-container">
+                    <h3 class="chart-title">What Automation Actually Changes</h3>
+                    <div class="comparison-grid">
+                        <div class="comparison-header">
+                            <div class="col-metric">Metric</div>
+                            <div class="col-before">Before</div>
+                            <div class="col-after">After</div>
+                            <div class="col-improvement">Improvement</div>
+                        </div>
+                        <div class="comparison-row" data-delay="0">
+                            <div class="col-metric">Quote turnaround</div>
+                            <div class="col-before">45 min</div>
+                            <div class="col-after">4 min</div>
+                            <div class="col-improvement">91% faster</div>
+                        </div>
+                        <div class="comparison-row" data-delay="200">
+                            <div class="col-metric">Data entry errors</div>
+                            <div class="col-before">12-15%</div>
+                            <div class="col-after">&lt;1%</div>
+                            <div class="col-improvement">93% reduction</div>
+                        </div>
+                        <div class="comparison-row" data-delay="400">
+                            <div class="col-metric">Route efficiency</div>
+                            <div class="col-before">68%</div>
+                            <div class="col-after">94%</div>
+                            <div class="col-improvement">38% improvement</div>
+                        </div>
+                        <div class="comparison-row" data-delay="600">
+                            <div class="col-metric">Reporting time</div>
+                            <div class="col-before">4 hrs/week</div>
+                            <div class="col-after">15 min/week</div>
+                            <div class="col-improvement">94% reduction</div>
+                        </div>
+                    </div>
+                    <div class="chart-source">Industry benchmarks from automation implementations, compiled 2025</div>
+                </div>
+
+                <!-- Chart 4: ROI Timeline -->
+                <div class="chart-container">
+                    <h3 class="chart-title">When Companies See Returns</h3>
+                    <div class="roi-timeline" id="roiTimeline">
+                        <div class="timeline-track">
+                            <div class="timeline-segment investment">
+                                <div class="timeline-dot" data-month="1-2"></div>
+                                <div class="timeline-label">Month 1-2: Discovery + Build</div>
+                                <div class="timeline-desc">Investment phase</div>
+                            </div>
+                            <div class="timeline-segment break-even">
+                                <div class="timeline-dot" data-month="3"></div>
+                                <div class="timeline-label">Month 3: First automations live</div>
+                                <div class="timeline-desc">Break-even point</div>
+                            </div>
+                            <div class="timeline-segment positive">
+                                <div class="timeline-dot" data-month="4-6"></div>
+                                <div class="timeline-label">Month 4-6: ROI positive</div>
+                                <div class="timeline-desc">Returns exceed investment</div>
+                            </div>
+                            <div class="timeline-segment strong">
+                                <div class="timeline-dot" data-month="6-12"></div>
+                                <div class="timeline-label">Month 6-12: 2-3x return</div>
+                                <div class="timeline-desc">Strong ROI realized</div>
+                            </div>
+                        </div>
+                        <div class="roi-curve">
+                            <svg viewBox="0 0 400 100" class="curve-svg">
+                                <path d="M0,80 Q100,85 150,60 Q250,30 400,20" class="roi-path" id="roiPath"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    <p class="roi-text">Companies investing in process automation report average ROI of <strong>171% within 12 months</strong>.</p>
+                    <div class="chart-source">Arcade.dev Enterprise Automation ROI Survey, 2025</div>
+                </div>
+            </div>
+
+            <!-- Case Study Teasers -->
+            <div class="case-studies-section">
+                <h2 style="text-align: center; color: var(--dark-ink); margin-bottom: 48px;">What This Looks Like In Practice</h2>
+                <div class="case-studies-grid">
+                    <div class="case-study-card" data-delay="0">
+                        <div class="case-tag">Quoting Automation</div>
+                        <h4>The 150-Employee Food Distributor</h4>
+                        <p>A regional food distributor processing 400+ orders daily was spending 45 minutes per quote manually. After automating their quoting workflow with existing ERP data, turnaround dropped to 4 minutes. <strong>Projected annual savings: $120K in labor costs alone.</strong></p>
+                        <div class="case-visual">
+                            <div class="mini-bar-comparison">
+                                <div class="before-bar">
+                                    <div class="bar-fill before-fill"></div>
+                                    <span class="bar-label">45 min</span>
+                                </div>
+                                <div class="arrow">→</div>
+                                <div class="after-bar">
+                                    <div class="bar-fill after-fill"></div>
+                                    <span class="bar-label">4 min</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="case-study-card" data-delay="200">
+                        <div class="case-tag">Systems Integration</div>
+                        <h4>The Industrial Supply Company</h4>
+                        <p>An industrial distributor with 3 warehouses had zero real-time inventory visibility. Each location ran its own spreadsheet. After connecting their systems, stockouts dropped 34% and customer inquiries got answered in seconds instead of hours.</p>
+                        <div class="case-visual">
+                            <div class="connected-nodes">
+                                <div class="node-system">ERP</div>
+                                <div class="node-system">WMS</div>
+                                <div class="node-system">CRM</div>
+                                <div class="connection-line line-1"></div>
+                                <div class="connection-line line-2"></div>
+                                <div class="connection-line line-3"></div>
+                                <div class="central-hub">HUB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="case-study-card" data-delay="400">
+                        <div class="case-tag">Route Optimization</div>
+                        <h4>The Regional 3PL Operator</h4>
+                        <p>A 3PL running 12 trucks across 3 states was planning routes manually each morning. Automated routing cut fuel costs 28% and added 2 extra stops per truck per day without extending hours.</p>
+                        <div class="case-visual">
+                            <div class="route-map-mini">
+                                <div class="route-point" style="top: 20%; left: 25%;"></div>
+                                <div class="route-point" style="top: 40%; left: 60%;"></div>
+                                <div class="route-point" style="top: 65%; left: 30%;"></div>
+                                <div class="route-point" style="top: 80%; left: 70%;"></div>
+                                <div class="route-line-mini line-1"></div>
+                                <div class="route-line-mini line-2"></div>
+                                <div class="route-line-mini line-3"></div>
+                                <div class="route-stats">
+                                    <div>-28% fuel costs</div>
+                                    <div>+2 stops/truck</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="trust-badges-section">
+                <div class="trust-badges-grid">
+                    <div class="trust-badge">
+                        <div class="badge-icon">🔗</div>
+                        <div class="badge-text">
+                            <strong>Works with your existing ERP</strong>
+                            <div class="erp-list">NetSuite • SAP • Sage • QuickBooks</div>
+                        </div>
+                    </div>
+                    <div class="trust-badge">
+                        <div class="badge-icon">📈</div>
+                        <div class="badge-text">
+                            <strong>90-Day ROI Guarantee</strong>
+                            <div class="badge-desc">See returns or we keep working</div>
+                        </div>
+                    </div>
+                    <div class="trust-badge">
+                        <div class="badge-icon">🤝</div>
+                        <div class="badge-text">
+                            <strong>No Long-Term Contracts</strong>
+                            <div class="badge-desc">Month-to-month flexibility</div>
+                        </div>
+                    </div>
+                    <div class="trust-badge">
+                        <div class="badge-icon">👥</div>
+                        <div class="badge-text">
+                            <strong>Dedicated Implementation Team</strong>
+                            <div class="badge-desc">Your success is our focus</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Work -->
+    <section class="how-we-work">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--dark-ink);">How We Work</h2>
+            <div class="process-timeline">
+                <div class="process-step">
+                    <div class="step-number">
+                        1
+                        <div class="step-visual">
+                            <div class="magnifying-glass"></div>
+                        </div>
+                    </div>
+                    <h3>Discovery</h3>
+                    <p>We audit your current workflows, systems, and pain points. No generic questionnaire. We actually learn your operation.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">
+                        2
+                        <div class="step-visual">
+                            <div class="gears">
+                                <div class="gear"></div>
+                                <div class="gear"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Build</h3>
+                    <p>We design and implement automation that plugs into your existing systems. No rip-and-replace. No 12-month timelines.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">
+                        3
+                        <div class="step-visual">
+                            <div class="trend-chart">
+                                <div class="trend-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h3>Optimize</h3>
+                    <p>We monitor, measure, and iterate. You see ROI within 90 days or we keep working until you do.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Tools -->
+    <section class="free-tools">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--dark-ink);">Free Diagnostic Tools</h2>
+            <p class="tools-intro">Start here. These tools show you exactly where you're losing time and money. Takes 5-10 minutes each.</p>
+            <div class="tools-grid">
+                <a href="https://tools.deeplineop.ai/business-dependency-score.html" class="tool-card">
+                    <div class="tool-preview">
+                        <svg class="tool-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div class="free-badge">FREE</div>
+                    <h4>Business Dependency Score</h4>
+                    <p>How dependent is your business on you personally? Find out what breaks when you're not there.</p>
+                </a>
+                <a href="https://tools.deeplineop.ai/ceo-time-audit.html" class="tool-card">
+                    <div class="tool-preview">
+                        <svg class="tool-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/>
+                        </svg>
+                    </div>
+                    <div class="free-badge">FREE</div>
+                    <h4>CEO Time Audit</h4>
+                    <p>Track where your time really goes. See how much you're spending on tasks others could handle.</p>
+                </a>
+                <a href="https://tools.deeplineop.ai/profit-leak-diagnostic.html" class="tool-card">
+                    <div class="tool-preview">
+                        <svg class="tool-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M7 4V2C7 1.45 7.45 1 8 1H16C16.55 1 17 1.45 17 2V4H20C20.55 4 21 4.45 21 5S20.55 6 20 6H19V19C19 20.1 18.1 21 17 21H7C5.9 21 5 20.1 5 19V6H4C3.45 6 3 5.55 3 5S3.45 4 4 4H7ZM9 3V4H15V3H9ZM7 6V19H17V6H7Z"/>
+                            <path d="M9 8V17H11V8H9ZM13 8V17H15V8H13Z"/>
+                        </svg>
+                    </div>
+                    <div class="free-badge">FREE</div>
+                    <h4>Profit Leak Diagnostic</h4>
+                    <p>Find the hidden costs of manual processes. Calculate exactly how much inefficiency is costing you.</p>
+                </a>
+                <a href="https://tools.deeplineop.ai/process-quality-audit.html" class="tool-card">
+                    <div class="tool-preview">
+                        <svg class="tool-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19Z"/>
+                            <path d="M7 7H17V9H7V7ZM7 11H17V13H7V11ZM7 15H17V17H7V15Z"/>
+                        </svg>
+                    </div>
+                    <div class="free-badge">FREE</div>
+                    <h4>Process Quality Audit</h4>
+                    <p>Score your current processes and identify the biggest automation opportunities.</p>
+                </a>
+                <a href="https://tools.deeplineop.ai/reorder-calculator.html" class="tool-card">
+                    <div class="tool-preview">
+                        <svg class="tool-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M3 6L5 6L5 8L3 8V6ZM3 10L5 10L5 12L3 12V10ZM3 14L5 14L5 16L3 16V14ZM3 18L5 18L5 20L3 20V18ZM7 6L21 6V8L7 8V6ZM7 10L21 10V12L7 12V10ZM7 14L21 14V16L7 16V14ZM7 18L21 18V20L7 20V18Z"/>
+                        </svg>
+                    </div>
+                    <div class="free-badge">FREE</div>
+                    <h4>Reorder Calculator</h4>
+                    <p>Optimize your inventory levels and reduce carrying costs while avoiding stockouts.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="contact" class="final-cta">
+        <div class="container">
+            <h2>Stop Losing Margin to Manual Processes</h2>
+            <a href="#" class="final-cta-btn">Book Your Free Operations Audit</a>
+            <p class="trust-line">No contracts. No pressure. Just a 30-minute conversation about what's slowing you down.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <a href="#" class="footer-logo">
+                    <img src="logo.png" alt="DeepLine Operations">
+                    <span>DeepLine Operations</span>
+                </a>
+                <ul class="footer-nav">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#case-studies">Case Studies</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="copyright">
+                © 2026 DeepLine Operations
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Animated Counter for Stats
+        const animateCounter = (element, target) => {
+            let current = 0;
+            const increment = target / 60; // 60 frames for 1 second at 60fps
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 1000 / 60);
+        };
+
+        // Counter animation observer
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseInt(counter.dataset.count);
+                    animateCounter(counter, target);
+                    counterObserver.unobserve(counter); // Only animate once
+                }
+            });
+        }, { threshold: 0.5 });
+
+        // Observe stat counters
+        document.querySelectorAll('.big-stat[data-count]').forEach(counter => {
+            counterObserver.observe(counter);
+        });
+
+        // Nav scroll shadow effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Initialize hero as visible immediately
+        document.querySelector('.hero').classList.add('visible');
+
+        // Staggered animation for cards
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Apply staggered animation to problem cards, service cards, tool cards
+        document.querySelectorAll('.problem-card, .service-card, .tool-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            staggerObserver.observe(card);
+        });
+
+        // Chart Animation Observer
+        const chartObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const container = entry.target;
+                    container.classList.add('animate');
+                    
+                    // Animate horizontal bar chart
+                    if (container.querySelector('.horizontal-bar-chart')) {
+                        const bars = container.querySelectorAll('.chart-bar-fill');
+                        bars.forEach((bar, index) => {
+                            setTimeout(() => {
+                                bar.classList.add('animate');
+                            }, index * 200);
+                        });
+                    }
+                    
+                    // Animate donut chart
+                    if (container.querySelector('.donut-chart')) {
+                        const donutFill = container.querySelector('.donut-fill');
+                        setTimeout(() => {
+                            donutFill.classList.add('animate');
+                        }, 500);
+                    }
+                    
+                    // Animate comparison rows
+                    if (container.querySelector('.comparison-grid')) {
+                        const rows = container.querySelectorAll('.comparison-row');
+                        rows.forEach((row, index) => {
+                            const delay = row.dataset.delay || index * 200;
+                            setTimeout(() => {
+                                row.classList.add('animate');
+                            }, delay);
+                        });
+                    }
+                    
+                    // Animate ROI timeline
+                    if (container.querySelector('.roi-timeline')) {
+                        const dots = container.querySelectorAll('.timeline-dot');
+                        const path = container.querySelector('.roi-path');
+                        
+                        dots.forEach((dot, index) => {
+                            setTimeout(() => {
+                                dot.classList.add('animate');
+                            }, index * 300);
+                        });
+                        
+                        setTimeout(() => {
+                            if (path) path.classList.add('animate');
+                        }, 800);
+                    }
+                    
+                    chartObserver.unobserve(container);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // Observe all chart containers
+        document.querySelectorAll('.chart-container').forEach(container => {
+            chartObserver.observe(container);
+        });
+
+        // Case Studies Animation
+        const caseStudyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const cards = entry.target.querySelectorAll('.case-study-card');
+                    cards.forEach((card, index) => {
+                        const delay = card.dataset.delay || index * 200;
+                        setTimeout(() => {
+                            card.classList.add('animate');
+                        }, delay);
+                    });
+                    caseStudyObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        // Observe case studies section
+        const caseStudiesSection = document.querySelector('.case-studies-section');
+        if (caseStudiesSection) {
+            caseStudyObserver.observe(caseStudiesSection);
+        }
+
+        // Add dynamic content to timeline dots
+        document.addEventListener('DOMContentLoaded', function() {
+            const dots = document.querySelectorAll('.timeline-dot');
+            if (dots.length >= 4) {
+                dots[0].textContent = '1-2';
+                dots[1].textContent = '3';
+                dots[2].textContent = '4-6';
+                dots[3].textContent = '6-12';
+            }
+        });
+
+        // Enhanced ticker animation for mobile
+        function initTicker() {
+            const ticker = document.querySelector('.ticker-content');
+            if (ticker && window.innerWidth > 768) {
+                // Clone ticker items for seamless loop
+                const items = ticker.innerHTML;
+                ticker.innerHTML = items + items;
+            }
+        }
+
+        // Initialize ticker on load and resize
+        initTicker();
+        window.addEventListener('resize', initTicker);
+    </script>
+</body>
+</html>
