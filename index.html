@@ -1049,6 +1049,186 @@
             50% { opacity: 1; transform: scaleX(1) var(--rotation); }
         }
 
+        /* Interactive Animations for Service Cards */
+        
+        /* Quoting Automation Animations */
+        .quoting-interface.animating .form-field {
+            border-color: var(--teal-accent);
+            background: #f0fdfa;
+        }
+        
+        .form-field.typing {
+            position: relative;
+        }
+        
+        .form-field.typing::after {
+            content: '';
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 14px;
+            background: var(--teal-accent);
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        .quote-result {
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .quote-result.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .quote-price.calculating {
+            animation: spinNumbers 0.8s ease-in-out;
+        }
+        
+        @keyframes spinNumbers {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(180deg); opacity: 0; }
+            100% { transform: rotateY(360deg); opacity: 1; }
+        }
+        
+        .generate-btn.processing {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Systems Integration Enhanced Animations */
+        .integration-diagram.animated {
+            background: linear-gradient(135deg, #1e293b 0%, #0f1419 100%);
+        }
+        
+        .system-box.pulse {
+            animation: systemPulse 0.6s ease-out;
+        }
+        
+        @keyframes systemPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(27, 154, 170, 0.7); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); box-shadow: 0 0 0 20px rgba(27, 154, 170, 0); }
+        }
+        
+        .data-packet {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--teal-accent);
+            border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 8px var(--teal-accent);
+        }
+        
+        .data-packet.flowing {
+            animation: dataFlow 2s ease-in-out;
+        }
+        
+        @keyframes dataFlow {
+            0% { opacity: 0; transform: scale(0); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0); }
+        }
+        
+        .hub-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 30px;
+            background: radial-gradient(ellipse at center, rgba(27, 154, 170, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .integration-diagram.animated .hub-glow {
+            opacity: 1;
+            animation: hubPulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes hubPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.6; }
+        }
+        
+        /* Operations Dashboard Enhanced Animations */
+        .kpi-value.counting {
+            animation: countUp 1.5s ease-out;
+        }
+        
+        @keyframes countUp {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .dashboard-bar.growing {
+            height: 0 !important;
+            animation: growBar 1s ease-out forwards;
+        }
+        
+        @keyframes growBar {
+            to { height: var(--bar-height) !important; }
+        }
+        
+        .live-chart {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            right: 4px;
+            height: 20px;
+            overflow: hidden;
+        }
+        
+        .line-chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .chart-line {
+            fill: none;
+            stroke: var(--signal-green);
+            stroke-width: 1.5;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            opacity: 0.8;
+        }
+        
+        .chart-line.drawing {
+            animation: drawLine 2s ease-in-out forwards;
+        }
+        
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        .chart-dots {
+            fill: var(--signal-green);
+            opacity: 0;
+        }
+        
+        .chart-dots.show {
+            animation: showDots 0.5s ease-out 1.8s forwards;
+        }
+        
+        @keyframes showDots {
+            to { opacity: 1; }
+        }
+
         .route-stats {
             position: absolute;
             bottom: 8px;
@@ -3519,6 +3699,323 @@
             updateClock();
             setInterval(updateClock, 1000);
         })();
+
+        // ========== INTERACTIVE SERVICE CARDS ==========
+        
+        // Service Card Animation Controller
+        class ServiceCardAnimator {
+            constructor() {
+                this.isAnimating = false;
+                this.init();
+            }
+            
+            init() {
+                // Create intersection observer for service cards
+                const serviceObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const card = entry.target;
+                            this.triggerCardAnimation(card);
+                        }
+                    });
+                }, { threshold: 0.6 });
+                
+                // Observe all service cards
+                document.querySelectorAll('.service-card').forEach((card, index) => {
+                    // Only animate the first 3 cards as requested
+                    if (index < 3) {
+                        serviceObserver.observe(card);
+                        this.setupCardInteractions(card, index);
+                    }
+                });
+            }
+            
+            setupCardInteractions(card, index) {
+                if (index === 0) {
+                    // Quoting Automation
+                    const generateBtn = card.querySelector('.generate-btn');
+                    if (generateBtn) {
+                        generateBtn.addEventListener('click', () => {
+                            this.animateQuotingCard(card);
+                        });
+                    }
+                } else if (index === 1) {
+                    // Systems Integration - no click interaction needed, just hover enhancement
+                    const diagram = card.querySelector('.integration-diagram');
+                    if (diagram && !diagram.querySelector('.hub-glow')) {
+                        const glow = document.createElement('div');
+                        glow.className = 'hub-glow';
+                        diagram.appendChild(glow);
+                    }
+                }
+            }
+            
+            triggerCardAnimation(card) {
+                const cardIndex = Array.from(document.querySelectorAll('.service-card')).indexOf(card);
+                
+                if (cardIndex === 0) {
+                    // Quoting Automation - auto-play animation
+                    setTimeout(() => this.animateQuotingCard(card), 500);
+                } else if (cardIndex === 1) {
+                    // Systems Integration
+                    setTimeout(() => this.animateIntegrationCard(card), 800);
+                } else if (cardIndex === 2) {
+                    // Operations Dashboard
+                    setTimeout(() => this.animateDashboardCard(card), 1100);
+                }
+            }
+            
+            async animateQuotingCard(card) {
+                if (this.isAnimating) return;
+                this.isAnimating = true;
+                
+                const form = card.querySelector('.quoting-interface');
+                const fields = card.querySelectorAll('.form-field');
+                const button = card.querySelector('.generate-btn');
+                const result = card.querySelector('.quote-result');
+                const price = card.querySelector('.quote-price');
+                
+                // Reset state
+                form.classList.add('animating');
+                button.classList.add('processing');
+                button.textContent = 'Generating...';
+                result.classList.remove('show');
+                
+                // Type in fields one by one
+                const fieldValues = [
+                    'Customer: ACME Corp',
+                    'Product: Widget Pro', 
+                    'Quantity: 500',
+                    'Terms: NET30'
+                ];
+                
+                for (let i = 0; i < fields.length; i++) {
+                    fields[i].classList.add('typing');
+                    await this.typeText(fields[i], fieldValues[i]);
+                    fields[i].classList.remove('typing');
+                    await this.delay(200);
+                }
+                
+                await this.delay(300);
+                
+                // Animate price calculation
+                button.textContent = 'Calculating...';
+                price.classList.add('calculating');
+                
+                await this.delay(800);
+                
+                // Show result
+                price.classList.remove('calculating');
+                result.classList.add('show');
+                button.textContent = 'Quote Generated ✓';
+                button.classList.remove('processing');
+                
+                // Reset after 5 seconds
+                setTimeout(() => {
+                    this.resetQuotingCard(card);
+                    this.isAnimating = false;
+                }, 5000);
+            }
+            
+            resetQuotingCard(card) {
+                const form = card.querySelector('.quoting-interface');
+                const button = card.querySelector('.generate-btn');
+                const result = card.querySelector('.quote-result');
+                
+                form.classList.remove('animating');
+                button.textContent = 'Generate Quote';
+                result.classList.remove('show');
+            }
+            
+            animateIntegrationCard(card) {
+                const diagram = card.querySelector('.integration-diagram');
+                const systems = card.querySelectorAll('.system-box:not(.hub)');
+                const hub = card.querySelector('.system-box.hub');
+                
+                diagram.classList.add('animated');
+                
+                // Create and animate data packets
+                const packetPaths = [
+                    { from: 'erp', to: 'hub', delay: 0 },
+                    { from: 'tms', to: 'hub', delay: 500 },
+                    { from: 'wms', to: 'hub', delay: 1000 },
+                    { from: 'crm', to: 'hub', delay: 1500 },
+                    { from: 'hub', to: 'erp', delay: 2000 },
+                    { from: 'hub', to: 'tms', delay: 2200 },
+                    { from: 'hub', to: 'wms', delay: 2400 },
+                    { from: 'hub', to: 'crm', delay: 2600 }
+                ];
+                
+                packetPaths.forEach(path => {
+                    setTimeout(() => {
+                        this.createDataPacket(diagram, path.from, path.to);
+                    }, path.delay);
+                });
+                
+                // Continuous animation loop
+                setInterval(() => {
+                    if (diagram.classList.contains('animated')) {
+                        const randomSystem = systems[Math.floor(Math.random() * systems.length)];
+                        randomSystem.classList.add('pulse');
+                        setTimeout(() => randomSystem.classList.remove('pulse'), 600);
+                    }
+                }, 3000);
+            }
+            
+            createDataPacket(diagram, fromClass, toClass) {
+                const fromElement = diagram.querySelector(`.system-box.${fromClass}`);
+                const toElement = diagram.querySelector(`.system-box.${toClass}`);
+                
+                if (!fromElement || !toElement) return;
+                
+                const packet = document.createElement('div');
+                packet.className = 'data-packet flowing';
+                
+                const fromRect = fromElement.getBoundingClientRect();
+                const toRect = toElement.getBoundingClientRect();
+                const diagramRect = diagram.getBoundingClientRect();
+                
+                const startX = fromElement.offsetLeft + fromElement.offsetWidth / 2;
+                const startY = fromElement.offsetTop + fromElement.offsetHeight / 2;
+                const endX = toElement.offsetLeft + toElement.offsetWidth / 2;
+                const endY = toElement.offsetTop + toElement.offsetHeight / 2;
+                
+                packet.style.left = startX + 'px';
+                packet.style.top = startY + 'px';
+                
+                diagram.appendChild(packet);
+                
+                // Animate packet movement
+                const deltaX = endX - startX;
+                const deltaY = endY - startY;
+                
+                packet.style.setProperty('--deltaX', deltaX + 'px');
+                packet.style.setProperty('--deltaY', deltaY + 'px');
+                packet.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                packet.style.transition = 'transform 1.5s ease-in-out';
+                
+                // Pulse destination system
+                setTimeout(() => {
+                    toElement.classList.add('pulse');
+                    setTimeout(() => toElement.classList.remove('pulse'), 600);
+                }, 1500);
+                
+                // Remove packet after animation
+                setTimeout(() => {
+                    if (packet.parentNode) {
+                        packet.parentNode.removeChild(packet);
+                    }
+                }, 2000);
+            }
+            
+            animateDashboardCard(card) {
+                const kpiValues = card.querySelectorAll('.kpi-value');
+                const bars = card.querySelectorAll('.dashboard-bar');
+                const chartContainer = card.querySelector('.mini-chart-container');
+                
+                // Animate KPI counting
+                kpiValues.forEach((kpi, index) => {
+                    setTimeout(() => {
+                        kpi.classList.add('counting');
+                        this.animateKPIValue(kpi);
+                    }, index * 200);
+                });
+                
+                // Animate bars growing
+                bars.forEach((bar, index) => {
+                    setTimeout(() => {
+                        bar.classList.add('growing');
+                    }, 500 + index * 100);
+                });
+                
+                // Add line chart
+                setTimeout(() => {
+                    this.addLineChart(chartContainer);
+                }, 1200);
+            }
+            
+            animateKPIValue(kpiElement) {
+                const text = kpiElement.textContent;
+                const isPercentage = text.includes('%');
+                const isCurrency = text.includes('$');
+                const originalValue = parseFloat(text.replace(/[$%,]/g, ''));
+                
+                let currentValue = 0;
+                const duration = 1000;
+                const steps = 60;
+                const increment = originalValue / steps;
+                const stepTime = duration / steps;
+                
+                const counter = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= originalValue) {
+                        currentValue = originalValue;
+                        clearInterval(counter);
+                    }
+                    
+                    let displayValue;
+                    if (isCurrency) {
+                        displayValue = '$' + currentValue.toFixed(1) + 'M';
+                    } else if (isPercentage) {
+                        displayValue = currentValue.toFixed(1) + '%';
+                    } else {
+                        displayValue = Math.floor(currentValue).toString();
+                    }
+                    
+                    kpiElement.textContent = displayValue;
+                }, stepTime);
+            }
+            
+            addLineChart(container) {
+                if (container.querySelector('.live-chart')) return;
+                
+                const liveChart = document.createElement('div');
+                liveChart.className = 'live-chart';
+                
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.classList.add('line-chart-svg');
+                svg.setAttribute('viewBox', '0 0 100 20');
+                
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.classList.add('chart-line', 'drawing');
+                path.setAttribute('d', 'M 5,15 Q 15,12 25,10 T 45,8 T 65,6 T 85,4');
+                
+                const dots = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                dots.classList.add('chart-dots', 'show');
+                
+                // Add data points
+                const points = [[25, 10], [45, 8], [65, 6], [85, 4]];
+                points.forEach(([x, y]) => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', '0.8');
+                    dots.appendChild(circle);
+                });
+                
+                svg.appendChild(path);
+                svg.appendChild(dots);
+                liveChart.appendChild(svg);
+                container.appendChild(liveChart);
+            }
+            
+            delay(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            
+            async typeText(element, text) {
+                element.value = '';
+                for (let i = 0; i <= text.length; i++) {
+                    element.value = text.substring(0, i);
+                    await this.delay(50);
+                }
+            }
+        }
+        
+        // Initialize service card animations when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ServiceCardAnimator();
+        });
     </script>
 </body>
 </html>< ! - -   d e p l o y e d   - - > 
