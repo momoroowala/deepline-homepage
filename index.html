@@ -1061,8 +1061,9 @@
             background: #0f172a;
             color: white;
             padding: 16px;
-            height: 140px;
+            height: 320px;
             position: relative;
+            overflow: hidden;
         }
 
         .dashboard-header-mini {
@@ -1126,6 +1127,211 @@
         .dashboard-bar:nth-child(3) { --bar-height: 20px; animation-delay: 0.3s; }
         .dashboard-bar:nth-child(4) { --bar-height: 30px; animation-delay: 0.4s; }
         .dashboard-bar:nth-child(5) { --bar-height: 18px; animation-delay: 0.5s; }
+
+        /* Enhanced COO Dashboard Components */
+        .coo-dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .coo-left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .coo-kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .coo-kpi-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .coo-kpi-card.status-good { border-left-color: #22c55e; }
+        .coo-kpi-card.status-warning { border-left-color: #fbbf24; }
+        .coo-kpi-card.status-critical { border-left-color: #ef4444; }
+
+        .coo-kpi-value {
+            color: var(--teal-accent);
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .coo-kpi-label {
+            color: #94a3b8;
+            font-size: 9px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .coo-status-indicator {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .coo-kpi-card.status-good .coo-status-indicator { color: #22c55e; }
+        .coo-kpi-card.status-warning .coo-status-indicator { color: #fbbf24; }
+        .coo-kpi-card.status-critical .coo-status-indicator { color: #ef4444; }
+
+        .coo-trend-chart {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            padding: 8px;
+            position: relative;
+        }
+
+        .coo-trend-title {
+            color: #cbd5e1;
+            font-size: 10px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .coo-trend-line {
+            width: 100%;
+            height: 30px;
+        }
+
+        .coo-trend-path {
+            fill: none;
+            stroke: var(--signal-green);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.6));
+        }
+
+        .coo-trend-path.animate {
+            animation: drawTrendLine 2s ease-out forwards;
+        }
+
+        @keyframes drawTrendLine {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .coo-right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .coo-activity-feed {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+            padding: 8px;
+            overflow: hidden;
+        }
+
+        .coo-feed-title {
+            color: #cbd5e1;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .coo-feed-pulse {
+            width: 6px;
+            height: 6px;
+            background: var(--signal-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .coo-feed-items {
+            height: 140px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .coo-feed-scroll {
+            transition: transform 0.5s ease;
+        }
+
+        .coo-feed-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 9px;
+        }
+
+        .coo-feed-text {
+            color: #d1d5db;
+            flex: 1;
+            margin-right: 8px;
+        }
+
+        .coo-feed-status {
+            color: var(--signal-green);
+            font-weight: 600;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .coo-feed-icon {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        .coo-metric-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .coo-big-metric {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            border-left: 3px solid;
+        }
+
+        .coo-big-metric.status-good { border-left-color: #22c55e; }
+        .coo-big-metric.status-warning { border-left-color: #fbbf24; }
+
+        .coo-big-value {
+            color: var(--teal-accent);
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .coo-big-label {
+            color: #94a3b8;
+            font-size: 9px;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         /* Route Optimization Map */
         .route-map {
@@ -3097,31 +3303,88 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="dashboard-preview">
+                        <div class="dashboard-preview" id="cooDashboard">
                             <div class="dashboard-header-mini">
-                                <span>Executive Dashboard</span>
-                                <span>Live Updates</span>
+                                <span>COO Operations Dashboard</span>
+                                <span style="display: flex; align-items: center; gap: 6px;">
+                                    <div class="coo-feed-pulse"></div>
+                                    Live
+                                </span>
                             </div>
-                            <div class="kpi-grid">
-                                <div class="kpi-card">
-                                    <div class="kpi-value">847</div>
-                                    <div class="kpi-label">Orders Today</div>
+                            
+                            <div class="coo-dashboard-grid">
+                                <div class="coo-left-panel">
+                                    <!-- Top 4 Critical KPIs -->
+                                    <div class="coo-kpi-grid">
+                                        <div class="coo-kpi-card status-good" data-animate="96.2">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">96.2%</div>
+                                            <div class="coo-kpi-label">Fill Rate</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-good" data-animate="94.7">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">94.7%</div>
+                                            <div class="coo-kpi-label">On-Time Del</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-good" data-animate="8.3">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">8.3x</div>
+                                            <div class="coo-kpi-label">Inv Turns</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-good" data-animate="18.4">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">18.4%</div>
+                                            <div class="coo-kpi-label">Gross Margin</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Bottom 4 KPIs -->
+                                    <div class="coo-kpi-grid">
+                                        <div class="coo-kpi-card status-good" data-animate="34">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">34/40</div>
+                                            <div class="coo-kpi-label">Routes Active</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-good" data-animate="127">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">127</div>
+                                            <div class="coo-kpi-label">Stockouts</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-good" data-animate="89">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">89</div>
+                                            <div class="coo-kpi-label">Same-Day</div>
+                                        </div>
+                                        <div class="coo-kpi-card status-warning" data-animate="82">
+                                            <div class="coo-status-indicator"></div>
+                                            <div class="coo-kpi-value">82%</div>
+                                            <div class="coo-kpi-label">Warehouse Cap</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Order Volume Trend Chart -->
+                                    <div class="coo-trend-chart">
+                                        <div class="coo-trend-title">Order Volume (7-Day Trend)</div>
+                                        <svg class="coo-trend-line" viewBox="0 0 200 30">
+                                            <path class="coo-trend-path" d="M 10,25 Q 40,20 70,18 T 130,12 T 190,8"></path>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div class="kpi-card">
-                                    <div class="kpi-value">96.2%</div>
-                                    <div class="kpi-label">On-Time Rate</div>
+                                
+                                <div class="coo-right-panel">
+                                    <!-- Live Activity Feed -->
+                                    <div class="coo-activity-feed">
+                                        <div class="coo-feed-title">
+                                            <div class="coo-feed-pulse"></div>
+                                            Live Operations Feed
+                                        </div>
+                                        <div class="coo-feed-items">
+                                            <div class="coo-feed-scroll" id="cooFeedScroll">
+                                                <!-- Feed items will be populated by JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="kpi-card">
-                                    <div class="kpi-value">$1.2M</div>
-                                    <div class="kpi-label">Revenue</div>
-                                </div>
-                            </div>
-                            <div class="mini-chart-container">
-                                <div class="dashboard-bar"></div>
-                                <div class="dashboard-bar"></div>
-                                <div class="dashboard-bar"></div>
-                                <div class="dashboard-bar"></div>
-                                <div class="dashboard-bar"></div>
                             </div>
                         </div>
                     </div>
@@ -4050,7 +4313,164 @@
             window.addEventListener('resize', function() { if (animRunning) drawLines(); });
         })();
 
-        // ========== LIVE DASHBOARD ==========
+        // ========== COO OPERATIONS DASHBOARD ==========
+        (function() {
+            const cooActivities = [
+                { text: 'Route NYC-7 delayed 45min', status: 'Traffic', color: '#fbbf24', icon: '⚠' },
+                { text: 'Warehouse B hit 90% capacity', status: 'Alert', color: '#ef4444', icon: '!' },
+                { text: 'ACME Corp emergency order $14.2K', status: 'Rush', color: '#8b5cf6', icon: '⚡' },
+                { text: 'Driver J.Smith called in sick', status: 'Reassigned', color: '#fbbf24', icon: '↻' },
+                { text: 'Supplier ABC delayed shipment', status: '34 SKUs', color: '#ef4444', icon: '▲' },
+                { text: 'Route BOS-3 ahead of schedule', status: '+20 min', color: '#22c55e', icon: '✓' },
+                { text: 'Sysco payment received $47.8K', status: 'Paid', color: '#22c55e', icon: '$' },
+                { text: 'Low stock alert: SKU-4891', status: 'Reorder', color: '#ef4444', icon: '!' },
+                { text: 'Route PHI-2 fuel efficiency up', status: '+12%', color: '#22c55e', icon: '📊' },
+                { text: 'Customer complaint resolved', status: 'Closed', color: '#22c55e', icon: '✓' },
+                { text: 'New driver onboarded', status: 'Training', color: '#1B9AAA', icon: '👤' },
+                { text: 'Inventory cycle count started', status: 'Zone A', color: '#1B9AAA', icon: '📋' },
+                { text: 'Route DC-1 optimized', status: '-18 min', color: '#22c55e', icon: '🚛' },
+                { text: 'Quote expired: Metro Foods', status: 'Follow-up', color: '#fbbf24', icon: '📞' },
+                { text: 'Warehouse C temp alarm', status: 'Resolved', color: '#22c55e', icon: '🌡' },
+            ];
+
+            let cooFeedIndex = 0;
+            let cooDashboardAnimated = false;
+
+            function initCooDashboard() {
+                const dashboard = document.getElementById('cooDashboard');
+                if (!dashboard) return;
+
+                const feedScroll = document.getElementById('cooFeedScroll');
+                if (!feedScroll) return;
+
+                // Render initial feed items
+                renderCooFeed();
+
+                // Start feed rotation
+                setInterval(() => {
+                    rotateCooFeed();
+                }, 3500);
+
+                // Set up intersection observer for animations
+                const cooObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !cooDashboardAnimated) {
+                            cooDashboardAnimated = true;
+                            animateCooDashboard();
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                cooObserver.observe(dashboard);
+            }
+
+            function renderCooFeed() {
+                const feedScroll = document.getElementById('cooFeedScroll');
+                if (!feedScroll) return;
+
+                let html = '';
+                for (let i = 0; i < 6; i++) {
+                    const activity = cooActivities[(cooFeedIndex + i) % cooActivities.length];
+                    html += `
+                        <div class="coo-feed-item">
+                            <div class="coo-feed-text">${activity.text}</div>
+                            <div class="coo-feed-status" style="color: ${activity.color}">
+                                <div class="coo-feed-icon"></div>
+                                ${activity.status}
+                            </div>
+                        </div>
+                    `;
+                }
+                feedScroll.innerHTML = html;
+            }
+
+            function rotateCooFeed() {
+                const feedScroll = document.getElementById('cooFeedScroll');
+                if (!feedScroll) return;
+
+                feedScroll.style.transform = 'translateY(-20px)';
+                feedScroll.style.opacity = '0.7';
+
+                setTimeout(() => {
+                    cooFeedIndex = (cooFeedIndex + 1) % cooActivities.length;
+                    renderCooFeed();
+                    feedScroll.style.transition = 'none';
+                    feedScroll.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        feedScroll.style.transition = 'all 0.5s ease';
+                        feedScroll.style.transform = 'translateY(0)';
+                        feedScroll.style.opacity = '1';
+                    }, 50);
+                }, 300);
+            }
+
+            function animateCooDashboard() {
+                // Animate KPI cards with count-up
+                const kpiCards = document.querySelectorAll('#cooDashboard .coo-kpi-card');
+                kpiCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        animateKpiCard(card);
+                    }, index * 100);
+                });
+
+                // Animate trend chart
+                setTimeout(() => {
+                    const trendPath = document.querySelector('#cooDashboard .coo-trend-path');
+                    if (trendPath) {
+                        trendPath.classList.add('animate');
+                    }
+                }, 800);
+            }
+
+            function animateKpiCard(card) {
+                const valueElement = card.querySelector('.coo-kpi-value');
+                const originalText = valueElement.textContent;
+                const animateValue = card.dataset.animate;
+                
+                if (!animateValue) return;
+
+                let currentValue = 0;
+                const targetValue = parseFloat(animateValue);
+                const duration = 1500;
+                const steps = 60;
+                const increment = targetValue / steps;
+
+                card.style.transform = 'scale(0.95)';
+                card.style.transition = 'transform 0.3s ease';
+
+                const counter = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= targetValue) {
+                        currentValue = targetValue;
+                        clearInterval(counter);
+                        card.style.transform = 'scale(1)';
+                    }
+
+                    // Update display based on original format
+                    let displayText = originalText;
+                    if (originalText.includes('%')) {
+                        displayText = currentValue.toFixed(1) + '%';
+                    } else if (originalText.includes('x')) {
+                        displayText = currentValue.toFixed(1) + 'x';
+                    } else if (originalText.includes('/')) {
+                        displayText = Math.floor(currentValue) + '/40';
+                    } else {
+                        displayText = Math.floor(currentValue).toString();
+                    }
+
+                    valueElement.textContent = displayText;
+                }, duration / steps);
+            }
+
+            // Initialize when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initCooDashboard);
+            } else {
+                initCooDashboard();
+            }
+        })();
+
+        // ========== LEGACY LIVE DASHBOARD (Hero Section) ==========
         (function() {
             const activities = [
                 { text: 'Order #2847 - Sysco Northeast', status: 'Delivered', color: '#2ECC71', icon: '✓' },
@@ -4354,6 +4774,13 @@
             }
             
             animateDashboardCard(card) {
+                // Check if this is the new COO dashboard
+                if (card.querySelector('#cooDashboard')) {
+                    // COO dashboard is handled by its own animation system
+                    return;
+                }
+
+                // Legacy dashboard animation (for any remaining old dashboards)
                 const kpiValues = card.querySelectorAll('.kpi-value');
                 const bars = card.querySelectorAll('.dashboard-bar');
                 const chartContainer = card.querySelector('.mini-chart-container');
