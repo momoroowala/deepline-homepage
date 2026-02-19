@@ -5455,12 +5455,21 @@
                     result: document.getElementById('quoteResult')
                 };
 
-                // Clear previous state
+                // Hard reset everything from previous scenario
                 clearFieldStates();
                 if (elements.result) {
                     elements.result.classList.remove('show');
                     elements.result.style.display = 'none';
                 }
+                var prevWarning = document.getElementById('quoteWarning');
+                if (prevWarning) prevWarning.style.display = 'none';
+                var prevSub = document.getElementById('quoteSubstitute');
+                if (prevSub) prevSub.style.display = 'none';
+                var prevInv = document.getElementById('quoteInventory');
+                if (prevInv) prevInv.style.display = 'none';
+                var prevGen = document.getElementById('quoteGenerating');
+                if (prevGen) prevGen.style.display = 'none';
+                if (elements.customer) elements.customer.textContent = '';
                 
                 // Update customer
                 if (elements.customer) {
