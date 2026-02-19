@@ -879,6 +879,119 @@
             font-size: 8px;
         }
 
+        /* Enhanced Quoting Interface Styles */
+        .quote-customer-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark-ink);
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: var(--off-white);
+            border-radius: 4px;
+            border-left: 3px solid var(--teal-accent);
+        }
+
+        .quote-warning {
+            margin: 8px 0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .quote-warning.warning-yellow {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+            color: #92400e;
+        }
+
+        .quote-warning.warning-red {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #dc2626;
+        }
+
+        .quote-warning.warning-orange {
+            background: #fed7aa;
+            border: 1px solid #fb923c;
+            color: #ea580c;
+        }
+
+        .quote-result.result-stockout {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+        }
+
+        .quote-result.result-warning {
+            background: #fef3c7;
+            border: 1px solid #fbbf24;
+        }
+
+        .quote-result.result-normal {
+            background: #ecfdf5;
+            border: 1px solid #10b981;
+        }
+
+        .quote-price.price-na {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .quote-inventory {
+            margin-top: 8px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .inventory-level {
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .inventory-green {
+            background: #dcfce7;
+            color: #16a34a;
+            border: 1px solid #22c55e;
+        }
+
+        .inventory-yellow {
+            background: #fef3c7;
+            color: #ca8a04;
+            border: 1px solid #eab308;
+        }
+
+        .inventory-red {
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #ef4444;
+        }
+
+        .quote-substitute {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #ecfeff;
+            border: 1px solid #06b6d4;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #0e7490;
+        }
+
+        .quote-substitute-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        /* Cycling Animation */
+        .quoting-interface.cycling {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .quoting-interface.cycling.visible {
+            opacity: 1;
+        }
+
         .generate-btn {
             background: var(--teal-accent);
             color: white;
@@ -3219,24 +3332,29 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="quoting-interface">
-                            <div class="quote-form">
-                                <input type="text" class="form-field" placeholder="Customer: ACME Corp" readonly>
-                                <input type="text" class="form-field" placeholder="Product: Widget Pro" readonly>
-                                <input type="text" class="form-field" placeholder="Quantity: 500" readonly>
-                                <input type="text" class="form-field" placeholder="Terms: NET30" readonly>
+                        <div class="quoting-interface" id="quotingCycler">
+                            <div class="quote-customer-header" id="quoteCustomer">Customer: Sysco Northeast</div>
+                            <div class="quote-form" id="quoteForm">
+                                <input type="text" class="form-field" id="quoteProd" value="Organic Black Beans 25lb (SKU-4412)" readonly>
+                                <input type="text" class="form-field" id="quoteQty" value="Quantity: 500" readonly>
+                                <input type="text" class="form-field" id="quoteTerms" value="Terms: NET30" readonly>
+                                <input type="text" class="form-field" id="quoteDue" value="Due: Mar 21, 2026" readonly>
                             </div>
-                            <button class="generate-btn">Generate Quote</button>
-                            <div class="quote-result">
+                            <div class="quote-warning" id="quoteWarning" style="display: none;"></div>
+                            <div class="quote-result" id="quoteResult">
                                 <div>
-                                    <div class="quote-price">$12,847.50</div>
-                                    <div style="font-size: 11px; color: #6b7280;">Margin: 32.4%</div>
+                                    <div class="quote-price" id="quotePrice">$12,847.50</div>
+                                    <div style="font-size: 11px; color: #6b7280;" id="quoteMargin">Margin: 32.4%</div>
                                 </div>
                                 <div class="quote-status">
                                     <div class="quote-checkmark">✓</div>
-                                    Generated in 12 seconds
+                                    <span id="quoteStatus">Generated in 12 seconds</span>
                                 </div>
                             </div>
+                            <div class="quote-inventory" id="quoteInventory">
+                                <div class="inventory-level inventory-green">2,340 units in stock</div>
+                            </div>
+                            <div class="quote-substitute" id="quoteSubstitute" style="display: none;"></div>
                         </div>
                     </div>
                     <a href="#contact" class="service-link">Learn More →</a>
@@ -4888,6 +5006,240 @@
         document.addEventListener('DOMContentLoaded', () => {
             new ServiceCardAnimator();
         });
+
+        // ========== CYCLING QUOTE SCENARIOS ==========
+        (function() {
+            const quoteScenarios = [
+                {
+                    customer: "Sysco Northeast",
+                    product: "Organic Black Beans 25lb (SKU-4412)",
+                    quantity: "Quantity: 500",
+                    terms: "Terms: NET30",
+                    due: "Due: Mar 21, 2026",
+                    price: "$12,847.50",
+                    margin: "Margin: 32.4%",
+                    status: "Generated in 12 seconds",
+                    inventory: "2,340 units in stock",
+                    inventoryLevel: "green",
+                    type: "normal"
+                },
+                {
+                    customer: "Gordon Food Service",
+                    product: "IQF Rice Pilaf 10lb (SKU-2891)",
+                    quantity: "Quantity: 800",
+                    terms: "Terms: NET45",
+                    due: "Due: Apr 5, 2026",
+                    price: "$19,440.00",
+                    margin: "Margin: 28.1%",
+                    status: "Generated in 8 seconds",
+                    inventory: "127 units remaining",
+                    inventoryLevel: "yellow",
+                    warning: "Low Stock Alert: Only 127 units. Partial fill available.",
+                    warningType: "yellow",
+                    type: "low-inventory"
+                },
+                {
+                    customer: "Restaurant Depot",
+                    product: "Frozen Edamame 5lb (SKU-1055)",
+                    quantity: "Quantity: 1,200",
+                    terms: "Terms: NET30",
+                    due: "Due: Apr 5, 2026",
+                    price: "N/A",
+                    margin: "",
+                    status: "STOCKOUT",
+                    inventory: "0 units",
+                    inventoryLevel: "red",
+                    substitute: "Recommended: Frozen Sugar Snap Peas 5lb (SKU-1062), 3,100 in stock, $8.42/unit",
+                    type: "stockout"
+                },
+                {
+                    customer: "US Foods",
+                    product: "All-Purpose Flour 50lb (SKU-3301)",
+                    quantity: "Quantity: 2,500",
+                    terms: "Terms: NET60",
+                    due: "Due: Apr 20, 2026",
+                    price: "$31,250.00",
+                    margin: "Margin: 22.7% (volume discount applied)",
+                    status: "Generated in 15 seconds",
+                    inventory: "8,900 units in stock",
+                    inventoryLevel: "green",
+                    type: "volume-discount"
+                },
+                {
+                    customer: "Fresh Direct",
+                    product: "Frozen Mango Chunks 2lb (SKU-7744)",
+                    quantity: "Quantity: 300",
+                    terms: "Terms: COD",
+                    due: "Due: Immediate (COD)",
+                    price: "$5,670.00 (includes 8% rush surcharge)",
+                    margin: "Margin: 35.2%",
+                    status: "Generated in 6 seconds",
+                    inventory: "1,450 units in stock",
+                    inventoryLevel: "green",
+                    warning: "Rush Order: 8% surcharge applied",
+                    warningType: "orange",
+                    type: "rush-order"
+                },
+                {
+                    customer: "Costco Wholesale",
+                    product: "White Rice 50lb (SKU-2200)",
+                    quantity: "Quantity: 5,000",
+                    terms: "Terms: NET90",
+                    due: "Due: May 20, 2026",
+                    price: "$42,500.00",
+                    margin: "Margin: 11.3%",
+                    status: "Generated in 18 seconds",
+                    inventory: "12,400 units in stock",
+                    inventoryLevel: "green",
+                    warning: "Margin Alert: Below 15% threshold. Manager approval required.",
+                    warningType: "red",
+                    type: "low-margin"
+                },
+                {
+                    customer: "Aramark Corp",
+                    product: "Quinoa Blend 10lb (SKU-5590)",
+                    quantity: "Quantity: 600",
+                    terms: "Terms: NET30",
+                    due: "Due: Apr 20, 2026",
+                    price: "N/A",
+                    margin: "",
+                    status: "STOCKOUT",
+                    inventory: "0 units",
+                    inventoryLevel: "red",
+                    substitute: "Recommended: Ancient Grain Blend 10lb (SKU-5595), 890 in stock, $14.20/unit",
+                    type: "stockout"
+                }
+            ];
+
+            let currentScenario = 0;
+            let isAnimating = false;
+            let cycleInterval = null;
+
+            function updateQuoteDisplay(scenario) {
+                const elements = {
+                    customer: document.getElementById('quoteCustomer'),
+                    product: document.getElementById('quoteProd'),
+                    quantity: document.getElementById('quoteQty'),
+                    terms: document.getElementById('quoteTerms'),
+                    due: document.getElementById('quoteDue'),
+                    price: document.getElementById('quotePrice'),
+                    margin: document.getElementById('quoteMargin'),
+                    status: document.getElementById('quoteStatus'),
+                    inventory: document.getElementById('quoteInventory'),
+                    warning: document.getElementById('quoteWarning'),
+                    substitute: document.getElementById('quoteSubstitute'),
+                    result: document.getElementById('quoteResult')
+                };
+
+                // Update basic info
+                if (elements.customer) elements.customer.textContent = `Customer: ${scenario.customer}`;
+                if (elements.product) elements.product.value = scenario.product;
+                if (elements.quantity) elements.quantity.value = scenario.quantity;
+                if (elements.terms) elements.terms.value = scenario.terms;
+                if (elements.due) elements.due.value = scenario.due;
+                if (elements.price) elements.price.textContent = scenario.price;
+                if (elements.margin) elements.margin.textContent = scenario.margin;
+                if (elements.status) elements.status.textContent = scenario.status;
+
+                // Update inventory
+                if (elements.inventory) {
+                    elements.inventory.innerHTML = `<div class="inventory-level inventory-${scenario.inventoryLevel}">${scenario.inventory}</div>`;
+                }
+
+                // Handle warnings
+                if (scenario.warning && elements.warning) {
+                    elements.warning.textContent = scenario.warning;
+                    elements.warning.className = `quote-warning warning-${scenario.warningType}`;
+                    elements.warning.style.display = 'block';
+                } else if (elements.warning) {
+                    elements.warning.style.display = 'none';
+                }
+
+                // Handle substitutes
+                if (scenario.substitute && elements.substitute) {
+                    elements.substitute.innerHTML = `<div class="quote-substitute-title">Substitute Available:</div>${scenario.substitute}`;
+                    elements.substitute.style.display = 'block';
+                } else if (elements.substitute) {
+                    elements.substitute.style.display = 'none';
+                }
+
+                // Update result styling
+                if (elements.result) {
+                    elements.result.className = 'quote-result';
+                    if (scenario.type === 'stockout') {
+                        elements.result.classList.add('result-stockout');
+                    } else if (scenario.type === 'low-inventory' || scenario.type === 'low-margin') {
+                        elements.result.classList.add('result-warning');
+                    } else {
+                        elements.result.classList.add('result-normal');
+                    }
+                }
+
+                // Update price styling
+                if (elements.price) {
+                    if (scenario.price === 'N/A') {
+                        elements.price.classList.add('price-na');
+                    } else {
+                        elements.price.classList.remove('price-na');
+                    }
+                }
+            }
+
+            function cycleToNext() {
+                if (isAnimating) return;
+                
+                const quotingInterface = document.getElementById('quotingCycler');
+                if (!quotingInterface) return;
+
+                isAnimating = true;
+                quotingInterface.classList.add('cycling');
+
+                setTimeout(() => {
+                    currentScenario = (currentScenario + 1) % quoteScenarios.length;
+                    updateQuoteDisplay(quoteScenarios[currentScenario]);
+                    
+                    quotingInterface.classList.add('visible');
+                    setTimeout(() => {
+                        quotingInterface.classList.remove('cycling');
+                        isAnimating = false;
+                    }, 100);
+                }, 250);
+            }
+
+            function startCycling() {
+                // Initialize with first scenario
+                updateQuoteDisplay(quoteScenarios[currentScenario]);
+                
+                // Start cycling every 5 seconds
+                cycleInterval = setInterval(cycleToNext, 5000);
+            }
+
+            function stopCycling() {
+                if (cycleInterval) {
+                    clearInterval(cycleInterval);
+                    cycleInterval = null;
+                }
+            }
+
+            // Set up intersection observer to start/stop cycling
+            const quotingObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startCycling();
+                    } else {
+                        stopCycling();
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            // Start observing when DOM is ready
+            document.addEventListener('DOMContentLoaded', () => {
+                const quotingCycler = document.getElementById('quotingCycler');
+                if (quotingCycler) {
+                    quotingObserver.observe(quotingCycler);
+                }
+            });
+        })();
     </script>
 </body>
 </html>< ! - -   d e p l o y e d   - - > 
