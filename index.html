@@ -118,7 +118,7 @@
             100% { transform: translate(30px, 30px); }
         }
 
-        .floating-particles {
+        .hero-ambient {
             position: absolute;
             top: 0;
             left: 0;
@@ -127,29 +127,42 @@
             height: 200%;
             overflow: hidden;
             will-change: transform;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
         }
 
-        .particle {
+        .hero-ambient::before {
+            content: '';
             position: absolute;
-            border-radius: 50%;
-            animation: float 20s infinite linear;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle 1px at 20% 30%, rgba(27,154,170,0.4) 0%, transparent 1px),
+                radial-gradient(circle 1px at 60% 20%, rgba(27,154,170,0.3) 0%, transparent 1px),
+                radial-gradient(circle 1px at 80% 45%, rgba(27,154,170,0.35) 0%, transparent 1px),
+                radial-gradient(circle 1px at 35% 55%, rgba(27,154,170,0.25) 0%, transparent 1px),
+                radial-gradient(circle 1px at 70% 65%, rgba(27,154,170,0.3) 0%, transparent 1px),
+                radial-gradient(circle 1px at 15% 70%, rgba(27,154,170,0.2) 0%, transparent 1px),
+                radial-gradient(circle 1px at 90% 25%, rgba(27,154,170,0.3) 0%, transparent 1px),
+                radial-gradient(circle 1px at 45% 80%, rgba(27,154,170,0.25) 0%, transparent 1px);
+            animation: ambientPulse 6s ease-in-out infinite alternate;
         }
 
-        .particle:nth-child(odd) {
-            background: rgba(27, 154, 170, 0.6);
-            box-shadow: 0 0 12px rgba(27, 154, 170, 0.5), 0 0 24px rgba(27, 154, 170, 0.2);
+        .hero-ambient::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle 1px at 25% 40%, rgba(148,163,184,0.2) 0%, transparent 1px),
+                radial-gradient(circle 1px at 55% 35%, rgba(148,163,184,0.15) 0%, transparent 1px),
+                radial-gradient(circle 1px at 75% 55%, rgba(148,163,184,0.2) 0%, transparent 1px),
+                radial-gradient(circle 1px at 40% 25%, rgba(148,163,184,0.15) 0%, transparent 1px),
+                radial-gradient(circle 1px at 85% 70%, rgba(148,163,184,0.2) 0%, transparent 1px);
+            animation: ambientPulse 6s ease-in-out infinite alternate-reverse;
         }
 
-        .particle:nth-child(even) {
-            background: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        @keyframes ambientPulse {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
 
         /* Navigation */
@@ -3672,21 +3685,7 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="animated-grid"></div>
-        <div class="floating-particles">
-            <div class="particle" style="width: 8px; height: 8px; left: 10%; animation-delay: 0s; animation-duration: 15s;"></div>
-            <div class="particle" style="width: 10px; height: 10px; left: 20%; animation-delay: 2s; animation-duration: 18s;"></div>
-            <div class="particle" style="width: 6px; height: 6px; left: 30%; animation-delay: 4s; animation-duration: 22s;"></div>
-            <div class="particle" style="width: 9px; height: 9px; left: 40%; animation-delay: 1s; animation-duration: 16s;"></div>
-            <div class="particle" style="width: 7px; height: 7px; left: 60%; animation-delay: 3s; animation-duration: 20s;"></div>
-            <div class="particle" style="width: 12px; height: 12px; left: 70%; animation-delay: 5s; animation-duration: 17s;"></div>
-            <div class="particle" style="width: 6px; height: 6px; left: 80%; animation-delay: 2s; animation-duration: 19s;"></div>
-            <div class="particle" style="width: 8px; height: 8px; left: 90%; animation-delay: 4s; animation-duration: 21s;"></div>
-            <div class="particle" style="width: 14px; height: 14px; left: 15%; animation-delay: 6s; animation-duration: 14s;"></div>
-            <div class="particle" style="width: 7px; height: 7px; left: 50%; animation-delay: 7s; animation-duration: 23s;"></div>
-            <div class="particle" style="width: 10px; height: 10px; left: 75%; animation-delay: 1s; animation-duration: 13s;"></div>
-            <div class="particle" style="width: 5px; height: 5px; left: 35%; animation-delay: 8s; animation-duration: 25s;"></div>
-            <div class="particle" style="width: 9px; height: 9px; left: 55%; animation-delay: 3s; animation-duration: 16s;"></div>
-        </div>
+        <div class="hero-ambient"></div>
         <div class="container">
             <div class="hero-grid">
                 <div class="hero-content">
@@ -4545,8 +4544,7 @@
 
         // Nav scroll shadow + hero parallax
         const heroGrid = document.querySelector('.hero .animated-grid');
-        const heroParticles = document.querySelector('.hero .floating-particles');
-        const heroBefore = document.querySelector('.hero');
+        const heroAmbient = document.querySelector('.hero .hero-ambient');
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 20) {
@@ -4558,7 +4556,7 @@
             var sy = window.scrollY;
             if (sy < 1200) {
                 if (heroGrid) heroGrid.style.transform = 'translateY(' + (sy * 0.5) + 'px)';
-                if (heroParticles) heroParticles.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
+                if (heroAmbient) heroAmbient.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
             }
         });
 
