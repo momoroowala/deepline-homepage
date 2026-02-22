@@ -3661,6 +3661,295 @@
                 gap: 24px;
             }
         }
+        /* ========== NEW SERVICE CARD PREVIEW STYLES ========== */
+
+        /* Customer Health Analysis */
+        .health-analysis {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 16px;
+            color: white;
+            min-height: 260px;
+        }
+        .health-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+        .health-pulse {
+            width: 6px; height: 6px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            display: inline-block;
+        }
+        .health-table { margin-bottom: 12px; }
+        .health-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 8px;
+            font-size: 9px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 4px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .health-table-body { min-height: 120px; }
+        .health-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 8px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 11px;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+        .health-row.visible { opacity: 1; transform: translateX(0); }
+        .health-row .customer-name { color: #e2e8f0; font-weight: 500; }
+        .health-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .health-badge.green { background: rgba(34,197,94,0.2); color: #22c55e; }
+        .health-badge.yellow { background: rgba(251,191,36,0.2); color: #fbbf24; }
+        .health-badge.red { background: rgba(239,68,68,0.2); color: #ef4444; }
+        .health-row .dormant-days { color: #94a3b8; font-size: 10px; }
+        .health-row .risk-amount { color: #fbbf24; font-weight: 600; font-size: 10px; }
+        .health-summary {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8px;
+        }
+        .health-stat { text-align: center; }
+        .health-stat-val { font-size: 16px; font-weight: 700; display: block; }
+        .health-stat-lbl { font-size: 9px; color: #94a3b8; text-transform: uppercase; }
+
+        /* Campaign Flow */
+        .campaign-flow {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 16px;
+            color: white;
+            min-height: 260px;
+        }
+        .campaign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+        .campaign-segments {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .campaign-segment {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .campaign-segment.active { border-color: var(--teal-accent); background: rgba(27,154,170,0.1); }
+        .segment-icon { font-size: 16px; margin-bottom: 2px; }
+        .segment-label { font-size: 9px; color: #94a3b8; }
+        .segment-count { font-size: 14px; font-weight: 700; color: var(--teal-accent); }
+        .campaign-emails { min-height: 100px; overflow: hidden; position: relative; }
+        .campaign-email {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease;
+        }
+        .campaign-email.visible { opacity: 1; transform: translateY(0); }
+        .email-icon { font-size: 12px; }
+        .email-target { color: #e2e8f0; flex: 1; }
+        .email-status {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 8px;
+            font-weight: 600;
+        }
+        .email-status.sent { background: rgba(27,154,170,0.2); color: #1B9AAA; }
+        .email-status.opened { background: rgba(251,191,36,0.2); color: #fbbf24; }
+        .email-status.clicked { background: rgba(139,92,246,0.2); color: #a78bfa; }
+        .email-status.reactivated { background: rgba(34,197,94,0.2); color: #22c55e; }
+        .campaign-stats-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 8px;
+        }
+        .campaign-stat { text-align: center; }
+        .campaign-stat-val { font-size: 14px; font-weight: 700; color: var(--teal-accent); display: block; }
+        .campaign-stat-lbl { font-size: 9px; color: #94a3b8; text-transform: uppercase; }
+
+        /* Revenue Dashboard */
+        .rev-dashboard {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 16px;
+            color: white;
+            min-height: 320px;
+        }
+        .rev-dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+        .rev-segments {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .rev-seg {
+            background: rgba(255,255,255,0.05);
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 3px solid;
+            text-align: center;
+        }
+        .rev-seg-val { font-size: 14px; font-weight: 700; color: var(--teal-accent); }
+        .rev-seg-lbl { font-size: 9px; color: #94a3b8; margin-top: 2px; }
+        .rev-charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .rev-chart-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 6px;
+            padding: 8px;
+        }
+        .rev-chart-title { font-size: 10px; color: #cbd5e1; font-weight: 600; margin-bottom: 6px; }
+        .rev-trend-svg { width: 100%; height: 40px; }
+        .rev-churn-path {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            filter: drop-shadow(0 0 4px rgba(34,197,94,0.6));
+        }
+        .rev-churn-path.animate { animation: drawTrendLine 2s ease-out forwards; }
+        .rev-recovered { text-align: center; padding: 8px 0; }
+        .rev-recovered-val { font-size: 22px; font-weight: 700; color: #22c55e; display: block; }
+        .rev-recovered-lbl { font-size: 9px; color: #94a3b8; }
+        .rev-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+        .rev-feed-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            font-size: 10px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .rev-feed-item.visible { opacity: 1; }
+        .rev-feed-text { color: #d1d5db; }
+        .rev-feed-status { font-weight: 600; }
+
+        /* Revenue Timeline */
+        .revenue-timeline {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 16px;
+            color: white;
+            min-height: 280px;
+            position: relative;
+        }
+        .rev-tl-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #334155;
+        }
+        .rev-tl-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 140px;
+            padding: 0 4px;
+            margin-bottom: 8px;
+        }
+        .rev-tl-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            min-height: 4px;
+            transition: height 1s ease;
+            position: relative;
+        }
+        .rev-tl-bar .bar-month {
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 7px;
+            color: #64748b;
+            white-space: nowrap;
+        }
+        .rev-tl-annotations {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 48px;
+        }
+        .rev-tl-annotation {
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: rgba(27,154,170,0.1);
+            border-left: 2px solid var(--teal-accent);
+            color: #cbd5e1;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.4s ease;
+        }
+        .rev-tl-annotation.visible { opacity: 1; transform: translateX(0); }
+        .rev-tl-stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.05);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 8px;
+        }
+        .rev-tl-stat { text-align: center; }
+        .rev-tl-stat-val { font-size: 16px; font-weight: 700; display: block; }
+        .rev-tl-stat-lbl { font-size: 9px; color: #94a3b8; text-transform: uppercase; }
+
     </style>
 </head>
 <body>
@@ -3820,28 +4109,23 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="quoting-interface" id="quotingCycler">
-                            <div class="quote-customer-header" id="quoteCustomer">Customer: Sysco Northeast</div>
-                            <div class="quote-form" id="quoteForm">
-                                <input type="text" class="form-field" id="quoteProd" placeholder="Product/SKU..." readonly>
-                                <input type="text" class="form-field" id="quoteQty" placeholder="Quantity..." readonly>
-                                <input type="text" class="form-field" id="quoteTerms" placeholder="Terms..." readonly>
+                        <div class="health-analysis" id="healthAnalysis">
+                            <div class="health-header">
+                                <span style="font-size:12px;font-weight:600;color:#cbd5e1;">Customer Health Analysis</span>
+                                <span style="display:flex;align-items:center;gap:6px;font-size:10px;color:#64748b;"><span class="health-pulse"></span>Live</span>
                             </div>
-                            <div class="quote-warning" id="quoteWarning" style="display: none;"></div>
-                            <div class="quote-result" id="quoteResult" style="display: none;">
-                                <div>
-                                    <div class="quote-price" id="quotePrice">$12,847.50</div>
-                                    <div style="font-size: 12px; color: #6b7280; margin-top: 4px;" id="quoteMargin">Margin: 32.4%</div>
+                            <div class="health-table">
+                                <div class="health-table-header">
+                                    <span>Customer</span><span>Health</span><span>Dormant</span><span>At Risk $</span>
                                 </div>
-                                <div class="quote-status">
-                                    <div class="quote-checkmark">✓</div>
-                                    <span id="quoteStatus">Quote generated</span>
+                                <div class="health-table-body" id="healthTableBody">
                                 </div>
                             </div>
-                            <div class="quote-inventory" id="quoteInventory" style="display: none;">
-                                <div class="inventory-level inventory-green">2,340 units in stock</div>
+                            <div class="health-summary" id="healthSummary">
+                                <div class="health-stat"><span class="health-stat-val" style="color:#22c55e;">142</span><span class="health-stat-lbl">Healthy</span></div>
+                                <div class="health-stat"><span class="health-stat-val" style="color:#fbbf24;">87</span><span class="health-stat-lbl">At Risk</span></div>
+                                <div class="health-stat"><span class="health-stat-val" style="color:#ef4444;">34</span><span class="health-stat-lbl">Dormant</span></div>
                             </div>
-                            <div class="quote-substitute" id="quoteSubstitute" style="display: none;"></div>
                         </div>
                     </div>
                     <a href="#contact" class="service-link">Learn More →</a>
@@ -3868,16 +4152,36 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="integration-diagram" id="orchDiagram">
-                            <svg class="orch-svg" id="orchSvg"></svg>
-                            <div class="orch-node n-erp" data-node="erp">ERP<span class="node-sub">Orders, Inventory</span></div>
-                            <div class="orch-node n-tms" data-node="tms">TMS<span class="node-sub">Routes, Tracking</span></div>
-                            <div class="orch-node n-wms" data-node="wms">WMS<span class="node-sub">Stock, Picking</span></div>
-                            <div class="orch-node n-crm" data-node="crm">CRM<span class="node-sub">Customers, Quotes</span></div>
-                            <div class="orch-hub-ring2"></div>
-                            <div class="orch-hub-ring"></div>
-                            <div class="orch-hub"><span class="hub-icon">&#9670;</span>DeepLine</div>
-                            <div class="orch-status">Syncing <span id="orchSyncCount">0</span> records/sec across <span>4 systems</span></div>
+                        <div class="campaign-flow" id="campaignFlow">
+                            <div class="campaign-header">
+                                <span style="font-size:12px;font-weight:600;color:#cbd5e1;">Re-engagement Campaign</span>
+                                <span style="font-size:10px;color:#64748b;">Active</span>
+                            </div>
+                            <div class="campaign-segments">
+                                <div class="campaign-segment" data-segment="dormant">
+                                    <div class="segment-icon">💤</div>
+                                    <div class="segment-label">Dormant</div>
+                                    <div class="segment-count">34</div>
+                                </div>
+                                <div class="campaign-segment" data-segment="declining">
+                                    <div class="segment-icon">📉</div>
+                                    <div class="segment-label">Declining</div>
+                                    <div class="segment-count">87</div>
+                                </div>
+                                <div class="campaign-segment" data-segment="at-risk">
+                                    <div class="segment-icon">⚠️</div>
+                                    <div class="segment-label">At Risk</div>
+                                    <div class="segment-count">52</div>
+                                </div>
+                            </div>
+                            <div class="campaign-emails" id="campaignEmails">
+                            </div>
+                            <div class="campaign-stats-bar">
+                                <div class="campaign-stat"><span class="campaign-stat-val" id="cSent">0</span><span class="campaign-stat-lbl">Sent</span></div>
+                                <div class="campaign-stat"><span class="campaign-stat-val" id="cOpened">0</span><span class="campaign-stat-lbl">Opened</span></div>
+                                <div class="campaign-stat"><span class="campaign-stat-val" id="cClicked">0</span><span class="campaign-stat-lbl">Clicked</span></div>
+                                <div class="campaign-stat"><span class="campaign-stat-val" style="color:#22c55e;" id="cReactivated">0</span><span class="campaign-stat-lbl">Reactivated</span></div>
+                            </div>
                         </div>
                     </div>
                     <a href="#contact" class="service-link">Learn More →</a>
@@ -3908,88 +4212,45 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="dashboard-preview" id="cooDashboard">
-                            <div class="dashboard-header-mini">
-                                <span>COO Operations Dashboard</span>
-                                <span style="display: flex; align-items: center; gap: 6px;">
-                                    <div class="coo-feed-pulse"></div>
-                                    Live
-                                </span>
+                        <div class="rev-dashboard" id="revDashboard">
+                            <div class="rev-dash-header">
+                                <span style="font-size:12px;font-weight:600;color:#cbd5e1;">Revenue Intelligence Dashboard</span>
+                                <span style="display:flex;align-items:center;gap:6px;font-size:10px;color:#64748b;"><span class="health-pulse"></span>Live</span>
                             </div>
-                            
-                            <div class="coo-dashboard-grid">
-                                <div class="coo-left-panel">
-                                    <!-- Top 4 Critical KPIs -->
-                                    <div class="coo-kpi-grid">
-                                        <div class="coo-kpi-card status-good" data-animate="96.2">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">96.2%</div>
-                                            <div class="coo-kpi-label">Fill Rate</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-good" data-animate="94.7">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">94.7%</div>
-                                            <div class="coo-kpi-label">On-Time Del</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-good" data-animate="8.3">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">8.3x</div>
-                                            <div class="coo-kpi-label">Inv Turns</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-good" data-animate="18.4">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">18.4%</div>
-                                            <div class="coo-kpi-label">Gross Margin</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Bottom 4 KPIs -->
-                                    <div class="coo-kpi-grid">
-                                        <div class="coo-kpi-card status-good" data-animate="34">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">34/40</div>
-                                            <div class="coo-kpi-label">Routes Active</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-good" data-animate="127">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">127</div>
-                                            <div class="coo-kpi-label">Stockouts</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-good" data-animate="89">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">89</div>
-                                            <div class="coo-kpi-label">Same-Day</div>
-                                        </div>
-                                        <div class="coo-kpi-card status-warning" data-animate="82">
-                                            <div class="coo-status-indicator"></div>
-                                            <div class="coo-kpi-value">82%</div>
-                                            <div class="coo-kpi-label">Warehouse Cap</div>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Order Volume Trend Chart -->
-                                    <div class="coo-trend-chart">
-                                        <div class="coo-trend-title">Order Volume (7-Day Trend)</div>
-                                        <svg class="coo-trend-line" viewBox="0 0 200 30">
-                                            <path class="coo-trend-path" d="M 10,25 Q 40,20 70,18 T 130,12 T 190,8"></path>
-                                        </svg>
+                            <div class="rev-segments">
+                                <div class="rev-seg" style="border-left-color:#22c55e;">
+                                    <div class="rev-seg-val">$847K</div>
+                                    <div class="rev-seg-lbl">VIP (42)</div>
+                                </div>
+                                <div class="rev-seg" style="border-left-color:#1B9AAA;">
+                                    <div class="rev-seg-val">$1.2M</div>
+                                    <div class="rev-seg-lbl">Active (186)</div>
+                                </div>
+                                <div class="rev-seg" style="border-left-color:#fbbf24;">
+                                    <div class="rev-seg-val">$320K</div>
+                                    <div class="rev-seg-lbl">At Risk (87)</div>
+                                </div>
+                                <div class="rev-seg" style="border-left-color:#ef4444;">
+                                    <div class="rev-seg-val">$180K</div>
+                                    <div class="rev-seg-lbl">Dormant (34)</div>
+                                </div>
+                            </div>
+                            <div class="rev-charts-row">
+                                <div class="rev-chart-box">
+                                    <div class="rev-chart-title">Churn Rate (Trending ↓)</div>
+                                    <svg class="rev-trend-svg" viewBox="0 0 200 50" id="churnTrendSvg">
+                                        <path class="rev-churn-path" d="M10,10 Q50,15 80,20 T140,35 T190,42" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </div>
+                                <div class="rev-chart-box">
+                                    <div class="rev-chart-title">Recovered Revenue</div>
+                                    <div class="rev-recovered" id="revRecovered">
+                                        <span class="rev-recovered-val">$0</span>
+                                        <span class="rev-recovered-lbl">this quarter</span>
                                     </div>
                                 </div>
-                                
-                                <div class="coo-right-panel">
-                                    <!-- Live Activity Feed -->
-                                    <div class="coo-activity-feed">
-                                        <div class="coo-feed-title">
-                                            <div class="coo-feed-pulse"></div>
-                                            Live Operations Feed
-                                        </div>
-                                        <div class="coo-feed-items">
-                                            <div class="coo-feed-scroll" id="cooFeedScroll">
-                                                <!-- Feed items will be populated by JavaScript -->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="rev-feed" id="revFeed">
                             </div>
                         </div>
                     </div>
@@ -4014,22 +4275,19 @@
                         </ul>
                     </div>
                     <div class="service-preview">
-                        <div class="route-map" id="routeMap">
-                            <div class="route-map-grid"></div>
-                            <div class="state-outline" id="stateOutline"></div>
-                            <div class="route-header-bar">
-                                <span class="route-title" id="routeTitle">Route NJ-7 | North Jersey</span>
-                                <span class="route-badge" id="routeBadge">Optimizing...</span>
+                        <div class="revenue-timeline" id="revenueTimeline">
+                            <div class="rev-tl-header">
+                                <span style="font-size:12px;font-weight:600;color:#cbd5e1;">Revenue Growth Timeline</span>
+                                <span style="font-size:10px;color:#64748b;">12-Month View</span>
                             </div>
-                            <svg class="route-svg" id="routeSvg" viewBox="0 0 400 240" preserveAspectRatio="none"></svg>
-                            <div id="routeStops"></div>
-                            <div class="route-truck" id="routeTruck">🚛</div>
-                            <div class="route-stats-panel">
-                                <div class="route-stat"><div class="route-stat-val" id="rStops">7</div><div class="route-stat-lbl">Stops</div></div>
-                                <div class="route-stat"><div class="route-stat-val" id="rMiles">48.3 mi</div><div class="route-stat-lbl">Total</div></div>
-                                <div class="route-stat"><div class="route-stat-val" id="rTime">2.1h</div><div class="route-stat-lbl">Est. Time</div></div>
-                                <div class="route-stat"><div class="route-stat-val savings" id="rGas">31%</div><div class="route-stat-lbl">Gas Saved</div></div>
-                                <div class="route-stat"><div class="route-stat-val savings" id="rTimeSaved">38 min</div><div class="route-stat-lbl">Saved vs Manual</div></div>
+                            <div class="rev-tl-bars" id="revTlBars">
+                            </div>
+                            <div class="rev-tl-annotations" id="revTlAnnotations">
+                            </div>
+                            <div class="rev-tl-stats">
+                                <div class="rev-tl-stat"><span class="rev-tl-stat-val" style="color:#ef4444;" id="revBefore">$1.8M</span><span class="rev-tl-stat-lbl">Before</span></div>
+                                <div class="rev-tl-stat"><span class="rev-tl-stat-val" style="color:#22c55e;" id="revAfter">$2.4M</span><span class="rev-tl-stat-lbl">After</span></div>
+                                <div class="rev-tl-stat"><span class="rev-tl-stat-val" style="color:#1B9AAA;" id="revLift">+33%</span><span class="rev-tl-stat-lbl">Revenue Lift</span></div>
                             </div>
                         </div>
                     </div>
@@ -4692,7 +4950,261 @@
         initTicker();
         window.addEventListener('resize', initTicker);
 
-        // ========== ROUTE OPTIMIZATION ==========
+        // ========== NEW SERVICE CARD ANIMATIONS ==========
+
+        // ========== 1. CUSTOMER HEALTH ANALYSIS ==========
+        (function() {
+            const customers = [
+                { name: 'Metro Foods NE', health: 'green', days: '—', risk: '—' },
+                { name: 'Sysco Northeast', health: 'yellow', days: '45d', risk: '$23K' },
+                { name: 'Gordon FSvc', health: 'green', days: '—', risk: '—' },
+                { name: 'Restaurant Depot', health: 'red', days: '120d', risk: '$47K' },
+                { name: 'Fresh Direct', health: 'yellow', days: '32d', risk: '$18K' },
+                { name: 'US Foods', health: 'green', days: '—', risk: '—' },
+                { name: 'Costco Wholesale', health: 'red', days: '180d', risk: '$62K' },
+                { name: 'Aramark Corp', health: 'yellow', days: '58d', risk: '$31K' },
+                { name: 'Compass Group', health: 'green', days: '—', risk: '—' },
+                { name: 'Whole Foods NE', health: 'red', days: '95d', risk: '$38K' },
+                { name: 'Ben E. Keith', health: 'yellow', days: '41d', risk: '$15K' },
+                { name: 'PFG Southeast', health: 'green', days: '—', risk: '—' },
+            ];
+            const healthLabels = { green: 'Healthy', yellow: 'At Risk', red: 'Dormant' };
+            let healthIdx = 0;
+            let healthStarted = false;
+
+            function renderHealth() {
+                const body = document.getElementById('healthTableBody');
+                if (!body) return;
+                body.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    const c = customers[(healthIdx + i) % customers.length];
+                    const row = document.createElement('div');
+                    row.className = 'health-row';
+                    row.innerHTML = '<span class="customer-name">' + c.name + '</span>' +
+                        '<span class="health-badge ' + c.health + '">' + healthLabels[c.health] + '</span>' +
+                        '<span class="dormant-days">' + c.days + '</span>' +
+                        '<span class="risk-amount">' + c.risk + '</span>';
+                    body.appendChild(row);
+                    setTimeout(function(r) { r.classList.add('visible'); }, 100 + i * 150, row);
+                }
+            }
+
+            function cycleHealth() {
+                const body = document.getElementById('healthTableBody');
+                if (!body) return;
+                const rows = body.querySelectorAll('.health-row');
+                rows.forEach(function(r) { r.style.opacity = '0'; r.style.transform = 'translateX(10px)'; });
+                setTimeout(function() {
+                    healthIdx = (healthIdx + 2) % customers.length;
+                    renderHealth();
+                }, 400);
+            }
+
+            const healthObs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting && !healthStarted) {
+                        healthStarted = true;
+                        renderHealth();
+                        setInterval(cycleHealth, 4000);
+                    }
+                });
+            }, { threshold: 0.3 });
+            const ha = document.getElementById('healthAnalysis');
+            if (ha) healthObs.observe(ha);
+        })();
+
+        // ========== 2. CAMPAIGN FLOW ==========
+        (function() {
+            const emailData = [
+                { target: 'Restaurant Depot', segment: 'dormant', status: 'sent', statusLabel: 'Sent' },
+                { target: 'Whole Foods NE', segment: 'declining', status: 'opened', statusLabel: 'Opened' },
+                { target: 'Costco Wholesale', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
+                { target: 'Aramark Corp', segment: 'at-risk', status: 'clicked', statusLabel: 'Clicked' },
+                { target: 'Ben E. Keith', segment: 'declining', status: 'sent', statusLabel: 'Sent' },
+                { target: 'Metro Foods', segment: 'at-risk', status: 'opened', statusLabel: 'Opened' },
+                { target: 'Sysco Boston', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
+                { target: 'PFG Southeast', segment: 'declining', status: 'clicked', statusLabel: 'Clicked' },
+                { target: 'Fresh Direct', segment: 'at-risk', status: 'sent', statusLabel: 'Sent' },
+                { target: 'Gordon Atlanta', segment: 'dormant', status: 'opened', statusLabel: 'Opened' },
+            ];
+            let emailIdx = 0;
+            let campaignStarted = false;
+            let sent = 0, opened = 0, clicked = 0, reactivated = 0;
+            const icons = { sent: '📧', opened: '📬', clicked: '🖱️', reactivated: '✅' };
+
+            function addEmail() {
+                const container = document.getElementById('campaignEmails');
+                if (!container) return;
+                const d = emailData[emailIdx % emailData.length];
+                emailIdx++;
+
+                // Highlight segment
+                document.querySelectorAll('.campaign-segment').forEach(function(s) { s.classList.remove('active'); });
+                var seg = document.querySelector('[data-segment="' + d.segment + '"]');
+                if (seg) seg.classList.add('active');
+
+                const el = document.createElement('div');
+                el.className = 'campaign-email';
+                el.innerHTML = '<span class="email-icon">' + icons[d.status] + '</span>' +
+                    '<span class="email-target">' + d.target + '</span>' +
+                    '<span class="email-status ' + d.status + '">' + d.statusLabel + '</span>';
+                container.insertBefore(el, container.firstChild);
+                setTimeout(function() { el.classList.add('visible'); }, 50);
+
+                // Remove excess
+                while (container.children.length > 5) container.removeChild(container.lastChild);
+
+                // Update stats
+                sent++;
+                if (d.status === 'opened' || d.status === 'clicked' || d.status === 'reactivated') opened++;
+                if (d.status === 'clicked' || d.status === 'reactivated') clicked++;
+                if (d.status === 'reactivated') reactivated++;
+                var cS = document.getElementById('cSent'); if (cS) cS.textContent = sent;
+                var cO = document.getElementById('cOpened'); if (cO) cO.textContent = opened;
+                var cC = document.getElementById('cClicked'); if (cC) cC.textContent = clicked;
+                var cR = document.getElementById('cReactivated'); if (cR) cR.textContent = reactivated;
+            }
+
+            const campObs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting && !campaignStarted) {
+                        campaignStarted = true;
+                        addEmail();
+                        setInterval(addEmail, 2500);
+                    }
+                });
+            }, { threshold: 0.3 });
+            var cf = document.getElementById('campaignFlow');
+            if (cf) campObs.observe(cf);
+        })();
+
+        // ========== 3. REVENUE INTELLIGENCE DASHBOARD ==========
+        (function() {
+            let revStarted = false;
+            const feedItems = [
+                { text: 'Costco Wholesale reactivated', color: '#22c55e' },
+                { text: 'Sysco NE moved to At Risk', color: '#fbbf24' },
+                { text: 'VIP retention: Gordon FSvc saved', color: '#22c55e' },
+                { text: 'Fresh Direct order declined 22%', color: '#ef4444' },
+                { text: 'Cross-sell campaign: +$18K', color: '#1B9AAA' },
+            ];
+            let feedIdx = 0;
+            let recoveredVal = 0;
+            const recoveredTarget = 184000;
+
+            function animateRevDashboard() {
+                // Animate churn trend line
+                var cp = document.querySelector('.rev-churn-path');
+                if (cp) setTimeout(function() { cp.classList.add('animate'); }, 500);
+
+                // Animate recovered revenue counter
+                var rv = document.querySelector('.rev-recovered-val');
+                if (rv) {
+                    var steps = 60;
+                    var inc = recoveredTarget / steps;
+                    var count = 0;
+                    var timer = setInterval(function() {
+                        count += inc;
+                        if (count >= recoveredTarget) { count = recoveredTarget; clearInterval(timer); }
+                        rv.textContent = '$' + Math.floor(count / 1000) + 'K';
+                    }, 30);
+                }
+
+                // Start feed
+                renderRevFeed();
+                setInterval(rotateRevFeed, 3500);
+            }
+
+            function renderRevFeed() {
+                var feed = document.getElementById('revFeed');
+                if (!feed) return;
+                feed.innerHTML = '';
+                for (var i = 0; i < 3; i++) {
+                    var item = feedItems[(feedIdx + i) % feedItems.length];
+                    var el = document.createElement('div');
+                    el.className = 'rev-feed-item';
+                    el.innerHTML = '<span class="rev-feed-text">' + item.text + '</span><span class="rev-feed-status" style="color:' + item.color + '">●</span>';
+                    feed.appendChild(el);
+                    setTimeout(function(e) { e.classList.add('visible'); }, 100 + i * 100, el);
+                }
+            }
+
+            function rotateRevFeed() {
+                feedIdx = (feedIdx + 1) % feedItems.length;
+                renderRevFeed();
+            }
+
+            var revObs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting && !revStarted) {
+                        revStarted = true;
+                        animateRevDashboard();
+                    }
+                });
+            }, { threshold: 0.3 });
+            var rd = document.getElementById('revDashboard');
+            if (rd) revObs.observe(rd);
+        })();
+
+        // ========== 4. REVENUE GROWTH TIMELINE ==========
+        (function() {
+            let tlStarted = false;
+            const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            const beforeHeights = [65, 60, 55, 50, 48, 45, 44, 42, 40, 38, 36, 35];
+            const afterHeights  = [65, 60, 58, 62, 68, 75, 80, 88, 92, 98, 105, 110];
+            const annotations = [
+                { month: 3, text: '📋 Diagnostic complete' },
+                { month: 5, text: '📧 Dormant reactivated (+$42K)' },
+                { month: 7, text: '🎯 Cross-sell campaign (+$28K)' },
+                { month: 10, text: '⭐ VIP retained ($95K saved)' },
+            ];
+
+            function renderTimeline() {
+                var barsEl = document.getElementById('revTlBars');
+                var annoEl = document.getElementById('revTlAnnotations');
+                if (!barsEl) return;
+                barsEl.innerHTML = '';
+                annoEl.innerHTML = '';
+
+                for (var i = 0; i < 12; i++) {
+                    var bar = document.createElement('div');
+                    bar.className = 'rev-tl-bar';
+                    var h = afterHeights[i];
+                    var pct = (h / 115) * 100;
+                    // Color gradient: red early, transitioning to green
+                    var color = i < 3 ? '#ef4444' : (i < 6 ? '#fbbf24' : '#22c55e');
+                    bar.style.height = '0px';
+                    bar.style.background = 'linear-gradient(to top, ' + color + ', ' + color + 'aa)';
+                    bar.innerHTML = '<span class="bar-month">' + months[i] + '</span>';
+                    barsEl.appendChild(bar);
+                    setTimeout(function(b, p) {
+                        b.style.height = p + '%';
+                    }, 200 + i * 100, bar, pct);
+                }
+
+                // Show annotations
+                annotations.forEach(function(a, idx) {
+                    var anno = document.createElement('div');
+                    anno.className = 'rev-tl-annotation';
+                    anno.textContent = a.text;
+                    annoEl.appendChild(anno);
+                    setTimeout(function() { anno.classList.add('visible'); }, 1000 + idx * 600);
+                });
+            }
+
+            var tlObs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(e) {
+                    if (e.isIntersecting && !tlStarted) {
+                        tlStarted = true;
+                        renderTimeline();
+                    }
+                });
+            }, { threshold: 0.3 });
+            var rt = document.getElementById('revenueTimeline');
+            if (rt) tlObs.observe(rt);
+        })();
+
+        // ========== ROUTE OPTIMIZATION (legacy - elements removed, auto-exits) ==========
         (function() {
             var routeMap = document.getElementById('routeMap');
             if (!routeMap) return;
