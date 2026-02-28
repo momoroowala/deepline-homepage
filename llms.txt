@@ -1,0 +1,23 @@
+# DeepLine Operations
+
+> Revenue recovery specialists for distributors. We help distributors find and reactivate dormant customers using data analytics.
+
+## About
+DeepLine Operations helps distributors ($5M-$100M revenue) recover revenue lost to silent customer churn. Founded by Mo Roowala, M.S. Robotics from NYU Tandon, with 6+ years in data systems engineering.
+
+## Services
+- Customer Data Diagnostic: 48-hour QuickBooks export analysis identifying dormant accounts and revenue at risk
+- Recovery Plan: Prioritized reactivation list with messaging recommendations
+- Automated Outreach: Set-and-forget email campaigns to bring dormant customers back
+
+## Key Facts
+- Distributors lose 15-25% of customers annually to silent churn
+- Customer reactivation costs $312 vs $1,847 for new acquisition (6x cheaper)
+- 92% of distributors have no churn early warning system
+- Average recovery: $180K per quarter for mid-size distributors
+- 20-30% dormant customer reactivation rate
+
+## Contact
+- Website: https://deeplineop.ai
+- Schedule: https://calendly.com/mo-deeplineop/30min
+- Location: New Jersey, USA
