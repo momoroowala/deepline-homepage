@@ -128,18 +128,18 @@ window.addEventListener('resize', initTicker, { passive: true });
 // ========== 1. CUSTOMER HEALTH ANALYSIS ==========
 (function() {
     var customers = [
-        { name: 'Metro Foods NE', health: 'green', days: '\u2014', risk: '\u2014' },
-        { name: 'Sysco Northeast', health: 'yellow', days: '45d', risk: '$23K' },
-        { name: 'Gordon FSvc', health: 'green', days: '\u2014', risk: '\u2014' },
-        { name: 'Restaurant Depot', health: 'red', days: '120d', risk: '$47K' },
-        { name: 'Fresh Direct', health: 'yellow', days: '32d', risk: '$18K' },
-        { name: 'US Foods', health: 'green', days: '\u2014', risk: '\u2014' },
-        { name: 'Costco Wholesale', health: 'red', days: '180d', risk: '$62K' },
-        { name: 'Aramark Corp', health: 'yellow', days: '58d', risk: '$31K' },
-        { name: 'Compass Group', health: 'green', days: '\u2014', risk: '\u2014' },
-        { name: 'Whole Foods NE', health: 'red', days: '95d', risk: '$38K' },
-        { name: 'Ben E. Keith', health: 'yellow', days: '41d', risk: '$15K' },
-        { name: 'PFG Southeast', health: 'green', days: '\u2014', risk: '\u2014' }
+        { name: 'Grainger Regional', health: 'green', days: '\u2014', risk: '\u2014' },
+        { name: 'Fastenal Corp', health: 'yellow', days: '45d', risk: '$23K' },
+        { name: 'Motion Ind', health: 'green', days: '\u2014', risk: '\u2014' },
+        { name: 'Applied Industrial', health: 'red', days: '120d', risk: '$47K' },
+        { name: 'Kaman Industrial', health: 'yellow', days: '32d', risk: '$18K' },
+        { name: 'MSC Industrial', health: 'green', days: '\u2014', risk: '\u2014' },
+        { name: 'W.W. Grainger', health: 'red', days: '180d', risk: '$62K' },
+        { name: 'HD Supply', health: 'yellow', days: '58d', risk: '$31K' },
+        { name: 'Wesco Intl', health: 'green', days: '\u2014', risk: '\u2014' },
+        { name: 'Fastenal NE', health: 'red', days: '95d', risk: '$38K' },
+        { name: 'ORS Nasco', health: 'yellow', days: '41d', risk: '$15K' },
+        { name: 'Bearings Direct', health: 'green', days: '\u2014', risk: '\u2014' }
     ];
     var healthLabels = { green: 'Healthy', yellow: 'At Risk', red: 'Dormant' };
     var healthIdx = 0, healthStarted = false, healthInterval = null;
@@ -183,16 +183,16 @@ window.addEventListener('resize', initTicker, { passive: true });
 // ========== 2. CAMPAIGN FLOW ==========
 (function() {
     var emailData = [
-        { target: 'Restaurant Depot', segment: 'dormant', status: 'sent', statusLabel: 'Sent' },
-        { target: 'Whole Foods NE', segment: 'declining', status: 'opened', statusLabel: 'Opened' },
-        { target: 'Costco Wholesale', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
-        { target: 'Aramark Corp', segment: 'at-risk', status: 'clicked', statusLabel: 'Clicked' },
-        { target: 'Ben E. Keith', segment: 'declining', status: 'sent', statusLabel: 'Sent' },
-        { target: 'Metro Foods', segment: 'at-risk', status: 'opened', statusLabel: 'Opened' },
-        { target: 'Sysco Boston', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
-        { target: 'PFG Southeast', segment: 'declining', status: 'clicked', statusLabel: 'Clicked' },
-        { target: 'Fresh Direct', segment: 'at-risk', status: 'sent', statusLabel: 'Sent' },
-        { target: 'Gordon Atlanta', segment: 'dormant', status: 'opened', statusLabel: 'Opened' }
+        { target: 'Applied Industrial', segment: 'dormant', status: 'sent', statusLabel: 'Sent' },
+        { target: 'Fastenal NE', segment: 'declining', status: 'opened', statusLabel: 'Opened' },
+        { target: 'W.W. Grainger', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
+        { target: 'HD Supply', segment: 'at-risk', status: 'clicked', statusLabel: 'Clicked' },
+        { target: 'ORS Nasco', segment: 'declining', status: 'sent', statusLabel: 'Sent' },
+        { target: 'Grainger Regional', segment: 'at-risk', status: 'opened', statusLabel: 'Opened' },
+        { target: 'Fastenal Boston', segment: 'dormant', status: 'reactivated', statusLabel: 'Reactivated!' },
+        { target: 'Bearings Direct', segment: 'declining', status: 'clicked', statusLabel: 'Clicked' },
+        { target: 'Kaman Industrial', segment: 'at-risk', status: 'sent', statusLabel: 'Sent' },
+        { target: 'Motion Atlanta', segment: 'dormant', status: 'opened', statusLabel: 'Opened' }
     ];
     var emailIdx = 0, campaignStarted = false;
     var sent = 0, opened = 0, clicked = 0, reactivated = 0;
@@ -243,10 +243,10 @@ window.addEventListener('resize', initTicker, { passive: true });
 (function() {
     var revStarted = false, revFeedInterval = null;
     var feedItems = [
-        { text: 'Costco Wholesale reactivated', color: '#22c55e' },
-        { text: 'Sysco NE moved to At Risk', color: '#fbbf24' },
-        { text: 'VIP retention: Gordon FSvc saved', color: '#22c55e' },
-        { text: 'Fresh Direct order declined 22%', color: '#ef4444' },
+        { text: 'W.W. Grainger reactivated', color: '#22c55e' },
+        { text: 'Fastenal NE moved to At Risk', color: '#fbbf24' },
+        { text: 'VIP retention: Motion Ind saved', color: '#22c55e' },
+        { text: 'Kaman Industrial order declined 22%', color: '#ef4444' },
         { text: 'Cross-sell campaign: +$18K', color: '#1B9AAA' }
     ];
     var feedIdx = 0;
@@ -347,12 +347,12 @@ window.addEventListener('resize', initTicker, { passive: true });
             title: "Route NJ-7 | North Jersey",
             stops: [
                 { label: "Warehouse", x: 45, y: 150, wh: true },
-                { label: "Metro Foods", x: 85, y: 85 },
-                { label: "Sysco NE", x: 140, y: 110 },
-                { label: "Fresh Direct", x: 195, y: 65 },
-                { label: "RestaurantDepot", x: 245, y: 130 },
-                { label: "Gordon FSvc", x: 300, y: 80 },
-                { label: "US Foods", x: 355, y: 155 }
+                { label: "Grainger Regional", x: 85, y: 85 },
+                { label: "Fastenal NE", x: 140, y: 110 },
+                { label: "Kaman Industrial", x: 195, y: 65 },
+                { label: "Applied Ind", x: 245, y: 130 },
+                { label: "Motion Ind", x: 300, y: 80 },
+                { label: "MSC Industrial", x: 355, y: 155 }
             ],
             stats: ["7","48.3 mi","2.1h","31%","38 min"],
             outline: "M30,50 L100,35 L200,30 L350,45 L370,100 L360,180 L300,210 L120,220 L50,200 L25,140Z"
@@ -361,12 +361,12 @@ window.addEventListener('resize', initTicker, { passive: true });
             title: "Route TX-3 | Dallas-Fort Worth",
             stops: [
                 { label: "Warehouse", x: 200, y: 130, wh: true },
-                { label: "Sysco DFW", x: 140, y: 170 },
-                { label: "Ben E. Keith", x: 70, y: 120 },
-                { label: "PFG", x: 120, y: 70 },
-                { label: "US Foods", x: 230, y: 55 },
-                { label: "Gordon FSvc", x: 310, y: 90 },
-                { label: "RestaurantDepot", x: 350, y: 160 }
+                { label: "Fastenal DFW", x: 140, y: 170 },
+                { label: "ORS Nasco", x: 70, y: 120 },
+                { label: "Bearings Dir", x: 120, y: 70 },
+                { label: "MSC Industrial", x: 230, y: 55 },
+                { label: "Motion Ind", x: 310, y: 90 },
+                { label: "Applied Ind", x: 350, y: 160 }
             ],
             stats: ["7","62.7 mi","2.8h","28%","44 min"],
             outline: "M20,30 L180,25 L370,40 L385,130 L360,210 L200,225 L60,215 L15,120Z"
@@ -375,12 +375,12 @@ window.addEventListener('resize', initTicker, { passive: true });
             title: "Route GA-1 | Metro Atlanta",
             stops: [
                 { label: "Warehouse", x: 300, y: 60, wh: true },
-                { label: "Fresh Point", x: 250, y: 95 },
-                { label: "Sysco ATL", x: 180, y: 75 },
-                { label: "US Foods", x: 110, y: 120 },
-                { label: "PFG Southeast", x: 80, y: 170 },
-                { label: "Gordon FSvc", x: 170, y: 180 },
-                { label: "Ben E. Keith", x: 300, y: 160 }
+                { label: "Kaman Dist", x: 250, y: 95 },
+                { label: "Fastenal ATL", x: 180, y: 75 },
+                { label: "MSC Industrial", x: 110, y: 120 },
+                { label: "Bearings Direct", x: 80, y: 170 },
+                { label: "Motion Ind", x: 170, y: 180 },
+                { label: "ORS Nasco", x: 300, y: 160 }
             ],
             stats: ["7","37.1 mi","1.9h","36%","35 min"],
             outline: "M40,60 L160,30 L330,35 L380,80 L370,180 L300,220 L100,215 L30,160Z"
@@ -592,14 +592,14 @@ window.addEventListener('resize', initTicker, { passive: true });
         { text: 'Driver J.Smith called in sick', status: 'Reassigned', color: '#fbbf24' },
         { text: 'Supplier ABC delayed shipment', status: '34 SKUs', color: '#ef4444' },
         { text: 'Route BOS-3 ahead of schedule', status: '+20 min', color: '#22c55e' },
-        { text: 'Sysco payment received $47.8K', status: 'Paid', color: '#22c55e' },
+        { text: 'Fastenal payment received $47.8K', status: 'Paid', color: '#22c55e' },
         { text: 'Low stock alert: SKU-4891', status: 'Reorder', color: '#ef4444' },
         { text: 'Route PHI-2 fuel efficiency up', status: '+12%', color: '#22c55e' },
         { text: 'Customer complaint resolved', status: 'Closed', color: '#22c55e' },
         { text: 'New driver onboarded', status: 'Training', color: '#1B9AAA' },
         { text: 'Inventory cycle count started', status: 'Zone A', color: '#1B9AAA' },
         { text: 'Route DC-1 optimized', status: '-18 min', color: '#22c55e' },
-        { text: 'Quote expired: Metro Foods', status: 'Follow-up', color: '#fbbf24' },
+        { text: 'Quote expired: Grainger Regional', status: 'Follow-up', color: '#fbbf24' },
         { text: 'Warehouse C temp alarm', status: 'Resolved', color: '#22c55e' }
     ];
     var cooFeedIndex = 0, cooDashboardAnimated = false, cooFeedInterval = null;
@@ -680,21 +680,21 @@ window.addEventListener('resize', initTicker, { passive: true });
 // ========== HERO LIVE DASHBOARD ==========
 (function() {
     var activities = [
-        { text: 'Metro Foods - 6 months dormant', status: 'Reactivated', color: '#2ECC71', icon: '\u2713' },
-        { text: 'Sysco Northeast - order declined', status: 'At Risk', color: '#ef4444', icon: '!' },
-        { text: 'Gordon Food Service - email opened', status: 'Engaged', color: '#1B9AAA', icon: '\u25CF' },
-        { text: 'Restaurant Depot - VIP flagged', status: 'Priority', color: '#fbbf24', icon: '\u25D0' },
-        { text: 'Fresh Direct - campaign response', status: 'Interested', color: '#818cf8', icon: '\u25C9' },
-        { text: 'US Foods - payment received $47.8K', status: 'Recovered', color: '#2ECC71', icon: '\u2713' },
-        { text: 'Costco Wholesale - 4 month gap', status: 'Flagged', color: '#ef4444', icon: '!' },
-        { text: 'Aramark Corp - follow-up scheduled', status: 'Outreach', color: '#fbbf24', icon: '\u25D0' },
-        { text: 'Compass Group - order resumed', status: 'Win Back', color: '#2ECC71', icon: '\u2713' },
-        { text: 'Whole Foods NE - declining trend', status: 'Monitor', color: '#fbbf24', icon: '!' },
-        { text: 'Sysco Boston - customer reactivated', status: 'Success', color: '#2ECC71', icon: '\u2713' },
-        { text: 'Ben E Keith - 8 months dormant', status: 'Target', color: '#ef4444', icon: '!' },
+        { text: 'Grainger Regional - 6 months dormant', status: 'Reactivated', color: '#2ECC71', icon: '\u2713' },
+        { text: 'Fastenal Corp - order declined', status: 'At Risk', color: '#ef4444', icon: '!' },
+        { text: 'Motion Industries - email opened', status: 'Engaged', color: '#1B9AAA', icon: '\u25CF' },
+        { text: 'Applied Industrial - VIP flagged', status: 'Priority', color: '#fbbf24', icon: '\u25D0' },
+        { text: 'Kaman Industrial - campaign response', status: 'Interested', color: '#818cf8', icon: '\u25C9' },
+        { text: 'MSC Industrial - payment received $47.8K', status: 'Recovered', color: '#2ECC71', icon: '\u2713' },
+        { text: 'W.W. Grainger - 4 month gap', status: 'Flagged', color: '#ef4444', icon: '!' },
+        { text: 'HD Supply - follow-up scheduled', status: 'Outreach', color: '#fbbf24', icon: '\u25D0' },
+        { text: 'Wesco Intl - order resumed', status: 'Win Back', color: '#2ECC71', icon: '\u2713' },
+        { text: 'Fastenal NE - declining trend', status: 'Monitor', color: '#fbbf24', icon: '!' },
+        { text: 'Fastenal Boston - customer reactivated', status: 'Success', color: '#2ECC71', icon: '\u2713' },
+        { text: 'ORS Nasco - 8 months dormant', status: 'Target', color: '#ef4444', icon: '!' },
         { text: 'PFG - engagement campaign sent', status: 'Outbound', color: '#1B9AAA', icon: '\u25CF' },
-        { text: 'Gordon Atlanta - VIP retention', status: 'Saved', color: '#2ECC71', icon: '\u2713' },
-        { text: 'US Foods West - churn prevented', status: 'Retained', color: '#2ECC71', icon: '\u2713' }
+        { text: 'Motion Atlanta - VIP retention', status: 'Saved', color: '#2ECC71', icon: '\u2713' },
+        { text: 'MSC Industrial West - churn prevented', status: 'Retained', color: '#2ECC71', icon: '\u2713' }
     ];
     var feedIndex = 0;
     var feedInner = document.getElementById('feedInner');
@@ -770,13 +770,13 @@ window.addEventListener('resize', initTicker, { passive: true });
 // ========== ENHANCED QUOTING WITH TYPING ==========
 (function() {
     var quoteScenarios = [
-        { customer: "Sysco Northeast", product: "Organic Black Beans 25lb (SKU-4412)", quantity: "500", terms: "NET30", dueDate: "Mar 21, 2026", price: "$12,847.50", margin: "32.4%", marginColor: "green", inventory: "2,340 in stock", inventoryLevel: "green", type: "normal" },
-        { customer: "Gordon Food Service", product: "IQF Rice Pilaf 10lb (SKU-2891)", quantity: "800", terms: "NET45", dueDate: "Apr 5, 2026", price: "$19,440.00", margin: "28.1%", marginColor: "green", inventory: "127 units - LOW STOCK", inventoryLevel: "yellow", warning: "Low Stock Alert: Only 127 units. Partial fill available.", warningType: "yellow", type: "low-inventory" },
-        { customer: "Restaurant Depot", product: "Frozen Edamame 5lb (SKU-1055)", quantity: "1,200", terms: "NET30", dueDate: "Apr 5, 2026", price: "STOCKOUT", margin: "", inventory: "STOCKOUT", inventoryLevel: "red", warning: "Stockout: Frozen Sugar Snap Peas available as substitute", warningType: "red", substitute: "Substitute Available: Frozen Sugar Snap Peas 5lb (SKU-1062), 3,100 in stock, $8.42/unit", type: "stockout" },
-        { customer: "US Foods", product: "All-Purpose Flour 50lb (SKU-3301)", quantity: "2,500", terms: "NET60", dueDate: "Apr 20, 2026", price: "$31,250.00", margin: "22.7%", marginColor: "green", inventory: "8,900 in stock", inventoryLevel: "green", type: "volume-discount" },
-        { customer: "Fresh Direct", product: "Frozen Mango Chunks 2lb (SKU-7744)", quantity: "300", terms: "COD", dueDate: "Immediate (COD)", price: "$5,670.00", margin: "35.2%", marginColor: "green", inventory: "1,450 in stock", inventoryLevel: "green", warning: "Rush Order: 8% surcharge applied", warningType: "orange", type: "rush-order" },
-        { customer: "Costco Wholesale", product: "White Rice 50lb (SKU-2200)", quantity: "5,000", terms: "NET90", dueDate: "May 20, 2026", price: "$42,500.00", margin: "11.3%", marginColor: "red", inventory: "12,400 in stock", inventoryLevel: "green", warning: "Margin Alert: Below 15% threshold. Manager approval required.", warningType: "red", type: "low-margin" },
-        { customer: "Aramark Corp", product: "Quinoa Blend 10lb (SKU-5590)", quantity: "600", terms: "NET30", dueDate: "Apr 20, 2026", price: "STOCKOUT", margin: "", inventory: "STOCKOUT", inventoryLevel: "red", warning: "Stockout: Ancient Grain Blend available as substitute", warningType: "red", substitute: "Substitute Available: Ancient Grain Blend 10lb (SKU-5595), 890 in stock, $14.20/unit", type: "stockout" }
+        { customer: "Fastenal Corp", product: "Ball Bearings SKF 6205 (SKU-4412)", quantity: "500", terms: "NET30", dueDate: "Mar 21, 2026", price: "$12,847.50", margin: "32.4%", marginColor: "green", inventory: "2,340 in stock", inventoryLevel: "green", type: "normal" },
+        { customer: "Motion Industries", product: "Safety Gloves 3M XL (SKU-2891)", quantity: "800", terms: "NET45", dueDate: "Apr 5, 2026", price: "$19,440.00", margin: "28.1%", marginColor: "green", inventory: "127 units - LOW STOCK", inventoryLevel: "yellow", warning: "Low Stock Alert: Only 127 units. Partial fill available.", warningType: "yellow", type: "low-inventory" },
+        { customer: "Applied Industrial", product: "Hydraulic Hose 3/8in (SKU-1055)", quantity: "1,200", terms: "NET30", dueDate: "Apr 5, 2026", price: "STOCKOUT", margin: "", inventory: "STOCKOUT", inventoryLevel: "red", warning: "Stockout: Hydraulic Hose 1/2in available as substitute", warningType: "red", substitute: "Substitute Available: Hydraulic Hose 1/2in (SKU-1062), 3,100 in stock, $8.42/unit", type: "stockout" },
+        { customer: "MSC Industrial", product: "Cut-Off Wheels 4.5in (SKU-3301)", quantity: "2,500", terms: "NET60", dueDate: "Apr 20, 2026", price: "$31,250.00", margin: "22.7%", marginColor: "green", inventory: "8,900 in stock", inventoryLevel: "green", type: "volume-discount" },
+        { customer: "Kaman Industrial", product: "Welding Rod E7018 (SKU-7744)", quantity: "300", terms: "COD", dueDate: "Immediate (COD)", price: "$5,670.00", margin: "35.2%", marginColor: "green", inventory: "1,450 in stock", inventoryLevel: "green", warning: "Rush Order: 8% surcharge applied", warningType: "orange", type: "rush-order" },
+        { customer: "W.W. Grainger", product: "V-Belt A68 Gates (SKU-2200)", quantity: "5,000", terms: "NET90", dueDate: "May 20, 2026", price: "$42,500.00", margin: "11.3%", marginColor: "red", inventory: "12,400 in stock", inventoryLevel: "green", warning: "Margin Alert: Below 15% threshold. Manager approval required.", warningType: "red", type: "low-margin" },
+        { customer: "HD Supply", product: "Pneumatic Cylinder 2in (SKU-5590)", quantity: "600", terms: "NET30", dueDate: "Apr 20, 2026", price: "STOCKOUT", margin: "", inventory: "STOCKOUT", inventoryLevel: "red", warning: "Stockout: Pneumatic Cylinder 2.5in available as substitute", warningType: "red", substitute: "Substitute Available: Pneumatic Cylinder 2.5in (SKU-5595), 890 in stock, $14.20/unit", type: "stockout" }
     ];
     var currentScenario = 0, isAnimating = false, cycleInterval = null, currentAnimation = null;
 
