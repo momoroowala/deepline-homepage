@@ -31,7 +31,7 @@ var staggerObserver = new IntersectionObserver(function(entries) {
         }
     });
 }, { threshold: 0.1 });
-document.querySelectorAll('.problem-card, .step-card, .service-card, .tool-card').forEach(function(card) {
+document.querySelectorAll('.problem-card, .service-card, .tool-card').forEach(function(card) {
     card.style.opacity = '0';
     card.style.transform = 'translateY(20px)';
     card.style.transition = 'all 0.6s ease';
@@ -702,7 +702,6 @@ window.addEventListener('resize', initTicker, { passive: true });
     var dormant = 860, atRisk = 1.38, vipCustomers = 204;
 
     function renderFeedItems() {
-        if (!feedInner) return;
         var html = '';
         for (var i = 0; i < 4; i++) {
             var item = activities[(feedIndex + i) % activities.length];
@@ -713,7 +712,7 @@ window.addEventListener('resize', initTicker, { passive: true });
     renderFeedItems();
 
     function startHeroAnimations() {
-        if (heroIntervals.length || !feedInner) return;
+        if (heroIntervals.length) return;
         heroIntervals.push(setInterval(function() {
             feedInner.style.transform = 'translateY(-24px)';
             feedInner.style.opacity = '0.5';
@@ -962,106 +961,3 @@ window.addEventListener('resize', initTicker, { passive: true });
         quotingObserver.observe(quotingCycler);
     }
 })();
-
-// ========== RESULT CARDS ANIMATION ==========
-var resultObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-            entry.target.querySelectorAll('.result-card').forEach(function(card, index) {
-                var delay = card.dataset.delay || index * 200;
-                setTimeout(function() { card.classList.add('animate'); }, delay);
-            });
-            resultObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.2 });
-var resultsSection = document.querySelector('.results');
-if (resultsSection) resultObserver.observe(resultsSection);
-
-// ========== FAQ TOGGLE ==========
-document.querySelectorAll('.faq-question').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        var item = this.parentElement;
-        var isOpen = item.classList.contains('open');
-        // Close all
-        document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
-        // Open clicked if it was closed
-        if (!isOpen) item.classList.add('open');
-    });
-});
-
-// ========== MOBILE MENU ==========
-var mobileBtn = document.querySelector('.mobile-menu');
-var navRight = document.querySelector('.nav-right');
-if (mobileBtn && navRight) {
-    mobileBtn.addEventListener('click', function() {
-        var isVisible = navRight.style.display === 'flex';
-        navRight.style.display = isVisible ? 'none' : 'flex';
-        navRight.style.flexDirection = 'column';
-        navRight.style.position = 'absolute';
-        navRight.style.top = '100%';
-        navRight.style.left = '0';
-        navRight.style.right = '0';
-        navRight.style.background = 'var(--deep-purple-navy)';
-        navRight.style.padding = '16px 40px';
-        navRight.style.borderTop = '1px solid rgba(255,255,255,0.1)';
-    });
-}
-
-// ========== MOCKUP ANIMATIONS ==========
-function countUp(el) {
-    var target = parseFloat(el.dataset.count);
-    var prefix = el.dataset.prefix || '';
-    var suffix = el.dataset.suffix || '';
-    var decimals = parseInt(el.dataset.decimal) || 0;
-    var duration = 800;
-    var start = performance.now();
-    function update(now) {
-        var progress = Math.min((now - start) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        var current = eased * target;
-        el.textContent = prefix + current.toFixed(decimals) + suffix;
-        if (progress < 1) requestAnimationFrame(update);
-    }
-    requestAnimationFrame(update);
-}
-
-var mockupObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('mockup-visible');
-            var countEls = entry.target.querySelectorAll('.count-val');
-            countEls.forEach(function(el, i) {
-                setTimeout(function() { countUp(el); }, 100 + i * 80);
-            });
-            mockupObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.2 });
-document.querySelectorAll('.service-preview').forEach(function(p) { mockupObserver.observe(p); });
-
-// ========== LEAD CAPTURE (Google Apps Script) ==========
-function handleLeadCapture(e) {
-    e.preventDefault();
-    var firstName = document.getElementById('leadFirst').value.trim();
-    var lastName = document.getElementById('leadLast').value.trim();
-    var company = document.getElementById('leadCompany').value.trim();
-    var email = document.getElementById('leadEmail').value.trim();
-    if (!firstName || !lastName || !company || !email) return;
-
-    fetch('https://script.google.com/macros/s/AKfycbxH-0F_yuJve8Bvzf1WWqYc5Z0ptXRRktVCmLEEa-7Dbs3ear7cNESr6-Bmm8mQIJaZ/exec', {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({
-            name: firstName + ' ' + lastName,
-            email: email,
-            tool: 'Industrial Distributor Free Account Review',
-            _subject: 'New Lead: ' + firstName + ' ' + lastName + ' (' + company + ') - Free Account Review',
-            message: firstName + ' ' + lastName + ' from ' + company + ' (' + email + ') requested a free operations diagnostic from the industrial distributors homepage.'
-        })
-    }).catch(function() {});
-
-    document.getElementById('leadForm').style.display = 'none';
-    document.getElementById('formNote').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-}
