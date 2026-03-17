@@ -702,6 +702,7 @@ window.addEventListener('resize', initTicker, { passive: true });
     var dormant = 860, atRisk = 1.38, vipCustomers = 204;
 
     function renderFeedItems() {
+        if (!feedInner) return;
         var html = '';
         for (var i = 0; i < 4; i++) {
             var item = activities[(feedIndex + i) % activities.length];
@@ -712,7 +713,7 @@ window.addEventListener('resize', initTicker, { passive: true });
     renderFeedItems();
 
     function startHeroAnimations() {
-        if (heroIntervals.length) return;
+        if (heroIntervals.length || !feedInner) return;
         heroIntervals.push(setInterval(function() {
             feedInner.style.transform = 'translateY(-24px)';
             feedInner.style.opacity = '0.5';
