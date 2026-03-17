@@ -3,6 +3,19 @@
    Non-critical CSS loaded asynchronously
    ============================================ */
 
+/* ========== Section Header (shared) ========== */
+.section-header {
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.section-header p {
+    color: var(--medium-gray);
+    margin: 0 auto;
+    max-width: 600px;
+}
+
 /* ========== Problems Section ========== */
 .problems {
     background: white;
@@ -3797,6 +3810,566 @@ footer {
     font-size: 9px;
     color: #94a3b8;
     text-transform: uppercase;
+}
+
+/* ========== Results Grid (from inline) ========== */
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+    position: relative;
+}
+
+.result-card {
+    background: white;
+    padding: 32px;
+    border-radius: 12px;
+    border: 1px solid var(--light-gray);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.result-card.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.result-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.result-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--signal-green), var(--teal-accent));
+}
+
+.result-tag {
+    display: inline-block;
+    background: rgba(46, 204, 113, 0.1);
+    color: var(--signal-green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.result-card h4 {
+    color: var(--dark-ink);
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.result-company {
+    color: var(--medium-gray);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.result-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--signal-green);
+    margin-bottom: 8px;
+}
+
+.result-detail {
+    color: var(--medium-gray);
+    font-size: 14px;
+}
+
+/* ========== How It Works (from inline) ========== */
+.how-it-works {
+    background: white;
+    position: relative;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+    position: relative;
+}
+
+.steps-grid::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--muted-indigo), var(--teal-accent));
+    z-index: 0;
+}
+
+.step-card {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.step-card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.step-time {
+    color: var(--teal-accent);
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+
+.step-card p {
+    color: var(--medium-gray);
+    font-size: 14px;
+    margin: 0 auto;
+}
+
+.no-migration {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background: rgba(79, 70, 229, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(79, 70, 229, 0.1);
+    position: relative;
+}
+
+.no-migration p {
+    color: var(--dark-ink);
+    font-weight: 500;
+    margin: 0 auto;
+}
+
+/* ========== Free Report (from inline) ========== */
+.free-report {
+    background: var(--off-white);
+    position: relative;
+}
+
+.free-report-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+
+.free-report h2 {
+    margin-bottom: 12px;
+}
+
+.free-report .subtext {
+    color: var(--medium-gray);
+    margin-bottom: 32px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: none;
+}
+
+.lead-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 420px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.lead-form-row {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+}
+
+.lead-form-row input {
+    flex: 1;
+    min-width: 0;
+}
+
+.lead-form input {
+    padding: 14px 18px;
+    border: 1px solid var(--light-gray);
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: border-color 0.3s ease;
+}
+
+.lead-form input:focus {
+    outline: none;
+    border-color: var(--muted-indigo);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.lead-form button {
+    padding: 16px;
+    background: var(--muted-indigo);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.lead-form button:hover {
+    background: #4338CA;
+    transform: translateY(-1px);
+}
+
+.form-note {
+    color: var(--medium-gray);
+    font-size: 13px;
+    margin-top: 12px;
+}
+
+/* ========== Diagnostic Offer (from inline) ========== */
+.diagnostic-offer {
+    background: var(--deep-purple-navy);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.diagnostic-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+.price-anchor {
+    color: #94a3b8;
+    font-size: 15px;
+    margin-bottom: 8px;
+    max-width: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.price-anchor .strikethrough {
+    text-decoration: line-through;
+    color: #64748b;
+}
+
+.diagnostic-price {
+    font-size: 64px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.guarantee-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid rgba(46, 204, 113, 0.3);
+    color: var(--signal-green);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+.deliverables {
+    text-align: left;
+    max-width: 480px;
+    margin: 0 auto 40px;
+}
+
+.deliverable-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.deliverable-item:last-child {
+    border-bottom: none;
+}
+
+.deliverable-check {
+    color: var(--signal-green);
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.deliverable-text {
+    color: #D1D5DB;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.diagnostic-cta {
+    display: inline-block;
+    background: var(--teal-accent);
+    color: white;
+    padding: 18px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.diagnostic-cta:hover {
+    background: #148994;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(27, 154, 170, 0.3);
+}
+
+.diagnostic-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.diagnostic-cta:hover::before {
+    left: 100%;
+}
+
+/* ========== FAQ (from inline) ========== */
+.faq-section {
+    background: var(--off-white);
+}
+
+.faq-list {
+    max-width: 700px;
+    margin: 32px auto 0;
+    position: relative;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(15, 11, 46, 0.05);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: var(--muted-indigo);
+}
+
+.faq-question {
+    width: 100%;
+    padding: 20px 24px;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--dark-ink);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+}
+
+.faq-toggle {
+    font-size: 20px;
+    color: var(--muted-indigo);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 16px;
+}
+
+.faq-item.open .faq-toggle {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.faq-answer-inner {
+    padding: 0 24px 20px;
+    color: var(--medium-gray);
+    line-height: 1.6;
+}
+
+.faq-item.open .faq-answer {
+    max-height: 200px;
+}
+
+/* ========== Final CTA Inline Variant (from inline) ========== */
+.final-cta .subtext {
+    color: var(--medium-gray);
+    margin: 0 auto 32px;
+    max-width: none;
+    text-align: center;
+}
+
+.final-cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.final-cta-buttons a {
+    padding: 16px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.final-cta-buttons .primary {
+    background: var(--teal-accent);
+    color: white;
+}
+
+.final-cta-buttons .primary:hover {
+    background: #148994;
+    transform: translateY(-2px);
+}
+
+.final-cta-buttons .secondary {
+    background: var(--muted-indigo);
+    color: white;
+}
+
+.final-cta-buttons .secondary:hover {
+    background: #4338CA;
+    transform: translateY(-2px);
+}
+
+.final-phone {
+    color: var(--medium-gray);
+    font-size: 15px;
+    text-align: center;
+    max-width: none;
+}
+
+.final-phone a {
+    color: var(--muted-indigo);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.final-phone a:hover {
+    color: var(--teal-accent);
+}
+
+/* ========== Service Price Badge (from inline) ========== */
+.service-price-badge {
+    display: inline-block;
+    background: rgba(46, 204, 113, 0.1);
+    color: var(--signal-green);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* ========== Problem Stat (from inline) ========== */
+.problem-stat {
+    color: #ff4757;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+/* ========== Problem Icon (from inline) ========== */
+.problem-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 71, 87, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+/* ========== About Specialist Tag (from inline) ========== */
+.about-specialist-tag {
+    display: inline-block;
+    background: rgba(27, 154, 170, 0.1);
+    color: var(--teal-accent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+/* ========== Mobile: Non-ATF sections (from inline) ========== */
+@media (max-width: 768px) {
+    .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .service-card.full-width {
+        grid-column: auto;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px;
+    }
+
+    .steps-grid::before {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .diagnostic-price {
+        font-size: 48px;
+    }
 }
 
 /* ========== FIX 6: will-change only where needed ========== */

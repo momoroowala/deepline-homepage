@@ -1,0 +1,2 @@
+commit	metric	status	description
+baseline	28.0	baseline	270KB HTML, 621KB images, 512ms FCP, 3 JS errors, 1500 lines inline CSS

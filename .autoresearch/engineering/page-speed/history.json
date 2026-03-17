@@ -1,0 +1,36 @@
+[
+  {
+    "timestamp": "2026-03-17T00:33:29.775301",
+    "score": 35,
+    "html_kb": 107.1,
+    "css_kb": 75.5,
+    "js_kb": 50.3,
+    "img_kb": 303.7,
+    "inline_css_lines": 1517,
+    "inline_js_lines": 162,
+    "font_deferred": false,
+    "css_deferred": false,
+    "js_external": false,
+    "lazy_images": true,
+    "image_dimensions": true,
+    "preconnect": true,
+    "reduced_motion": true
+  },
+  {
+    "timestamp": "2026-03-17T00:42:35.072174",
+    "score": 85,
+    "html_kb": 67.9,
+    "css_kb": 86.6,
+    "js_kb": 54.8,
+    "img_kb": 303.7,
+    "inline_css_lines": 402,
+    "inline_js_lines": 5,
+    "font_deferred": true,
+    "css_deferred": true,
+    "js_external": true,
+    "lazy_images": true,
+    "image_dimensions": true,
+    "preconnect": true,
+    "reduced_motion": true
+  }
+]

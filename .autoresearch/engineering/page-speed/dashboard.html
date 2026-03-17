@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Speed Experiment Dashboard</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+    --bg: #0f172a; --card: #1e293b; --border: #334155;
+    --text: #e2e8f0; --muted: #94a3b8; --green: #22c55e;
+    --red: #ef4444; --teal: #1B9AAA; --indigo: #4F46E5;
+}
+body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); padding: 24px; }
+h1 { font-size: 24px; margin-bottom: 8px; }
+.subtitle { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.card-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.card-value { font-size: 32px; font-weight: 700; }
+.card-value.good { color: var(--green); }
+.card-value.bad { color: var(--red); }
+.card-value.neutral { color: var(--teal); }
+.card-delta { font-size: 13px; margin-top: 4px; }
+.card-delta.improved { color: var(--green); }
+.card-delta.worse { color: var(--red); }
+.score-ring { width: 160px; height: 160px; margin: 0 auto 16px; position: relative; }
+.score-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.score-ring circle { fill: none; stroke-width: 10; }
+.score-ring .bg { stroke: var(--border); }
+.score-ring .fg { stroke: var(--teal); stroke-linecap: round; transition: stroke-dasharray 1s ease; }
+.score-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.score-num { font-size: 42px; font-weight: 700; color: var(--teal); }
+.score-label { font-size: 12px; color: var(--muted); }
+.checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 8px 12px; background: rgba(255,255,255,0.03); border-radius: 6px; }
+.check .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.check .dot.on { background: var(--green); }
+.check .dot.off { background: var(--red); }
+.history-chart { width: 100%; height: 200px; margin-top: 16px; }
+.bar-container { display: flex; align-items: flex-end; gap: 4px; height: 160px; padding: 0 4px; }
+.bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.5s ease; min-width: 20px; }
+.bar.baseline { background: var(--border); }
+.bar.keep { background: linear-gradient(to top, var(--teal), var(--green)); }
+.bar.discard { background: var(--red); opacity: 0.4; }
+.bar-label { font-size: 9px; color: var(--muted); text-align: center; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-score { font-size: 11px; font-weight: 600; color: var(--text); }
+.section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+.two-col { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-bottom: 32px; }
+.refresh-btn { position: fixed; bottom: 24px; right: 24px; background: var(--teal); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
+.refresh-btn:hover { background: #148994; }
+.timestamp { color: var(--muted); font-size: 12px; text-align: right; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<h1>Page Speed Experiment Dashboard</h1>
+<p class="subtitle">deepline-homepage | autoresearch/engineering/page-speed</p>
+<div id="timestamp" class="timestamp">Loading...</div>
+
+<div class="two-col">
+    <div class="card" style="text-align:center;">
+        <div class="score-ring">
+            <svg viewBox="0 0 160 160">
+                <circle class="bg" cx="80" cy="80" r="65"/>
+                <circle class="fg" id="scoreRing" cx="80" cy="80" r="65" stroke-dasharray="0 408.4"/>
+            </svg>
+            <div class="score-center">
+                <div class="score-num" id="scoreNum">--</div>
+                <div class="score-label">/ 100</div>
+            </div>
+        </div>
+        <div class="card-delta" id="scoreDelta"></div>
+    </div>
+    <div>
+        <div class="section-title">Optimization Checklist</div>
+        <div class="checks" id="checks"></div>
+    </div>
+</div>
+
+<div class="grid" id="metrics"></div>
+
+<div class="card">
+    <div class="section-title">Experiment History</div>
+    <div class="bar-container" id="history"></div>
+</div>
+
+<button class="refresh-btn" onclick="loadData()">Refresh</button>
+
+<script>
+const BASELINE = { score: 35, html_kb: 107.1, css_kb: 75.5, js_kb: 50.3, img_kb: 303.7, inline_css_lines: 1517, inline_js_lines: 162 };
+
+async function loadData() {
+    try {
+        const [currentRes, historyRes] = await Promise.all([
+            fetch('dashboard_data.json?' + Date.now()),
+            fetch('history.json?' + Date.now())
+        ]);
+        const current = await currentRes.json();
+        const history = await historyRes.json();
+        render(current, history);
+    } catch(e) {
+        // Try loading from results.tsv if JSON not available
+        document.getElementById('timestamp').textContent = 'Waiting for first experiment run...';
+    }
+}
+
+function render(data, history) {
+    document.getElementById('timestamp').textContent = 'Last updated: ' + new Date(data.timestamp).toLocaleString();
+
+    // Score ring
+    const circumference = 2 * Math.PI * 65;
+    const dashLen = (data.score / 100) * circumference;
+    document.getElementById('scoreRing').setAttribute('stroke-dasharray', `${dashLen} ${circumference}`);
+    document.getElementById('scoreNum').textContent = data.score;
+    const delta = data.score - BASELINE.score;
+    const deltaEl = document.getElementById('scoreDelta');
+    deltaEl.textContent = delta > 0 ? `+${delta} from baseline` : delta === 0 ? 'No change' : `${delta} from baseline`;
+    deltaEl.className = 'card-delta ' + (delta > 0 ? 'improved' : delta < 0 ? 'worse' : '');
+
+    // Checks
+    const checks = [
+        ['Font deferred', data.font_deferred],
+        ['CSS deferred', data.css_deferred],
+        ['JS externalized', data.js_external],
+        ['Lazy images', data.lazy_images],
+        ['Image dimensions', data.image_dimensions],
+        ['Preconnect hints', data.preconnect],
+        ['Reduced motion', data.reduced_motion],
+    ];
+    document.getElementById('checks').innerHTML = checks.map(([label, ok]) =>
+        `<div class="check"><span class="dot ${ok ? 'on' : 'off'}"></span>${label}</div>`
+    ).join('');
+
+    // Metrics
+    const metrics = [
+        ['HTML Size', `${data.html_kb} KB`, data.html_kb < BASELINE.html_kb ? 'good' : data.html_kb > BASELINE.html_kb ? 'bad' : 'neutral', `${((1 - data.html_kb/BASELINE.html_kb)*100).toFixed(0)}% reduction`],
+        ['Inline CSS', `${data.inline_css_lines}`, data.inline_css_lines < BASELINE.inline_css_lines ? 'good' : 'bad', `was ${BASELINE.inline_css_lines} lines`],
+        ['Inline JS', `${data.inline_js_lines}`, data.inline_js_lines < BASELINE.inline_js_lines ? 'good' : 'bad', `was ${BASELINE.inline_js_lines} lines`],
+        ['Total Size', `${(data.html_kb + data.css_kb + data.js_kb + data.img_kb).toFixed(0)} KB`, 'neutral', `HTML+CSS+JS+IMG`],
+    ];
+    document.getElementById('metrics').innerHTML = metrics.map(([label, value, cls, delta]) =>
+        `<div class="card"><div class="card-label">${label}</div><div class="card-value ${cls}">${value}</div><div class="card-delta ${cls === 'good' ? 'improved' : ''}">${delta}</div></div>`
+    ).join('');
+
+    // History bars
+    const maxScore = Math.max(...history.map(h => h.score), 100);
+    document.getElementById('history').innerHTML = history.map((h, i) => {
+        const height = Math.max((h.score / maxScore) * 150, 4);
+        const cls = i === 0 ? 'baseline' : 'keep';
+        return `<div class="bar-wrapper"><div class="bar-score">${h.score}</div><div class="bar ${cls}" style="height:${height}px"></div><div class="bar-label">Run ${i}</div></div>`;
+    }).join('');
+}
+
+loadData();
+setInterval(loadData, 10000); // Auto-refresh every 10s
+</script>
+</body>
+</html>
