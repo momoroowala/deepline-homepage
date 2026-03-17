@@ -1,2 +1,3 @@
 commit	metric	status	description
-baseline	28.0	baseline	270KB HTML, 621KB images, 512ms FCP, 3 JS errors, 1500 lines inline CSS
+baseline	35.0	baseline	107KB HTML, 304KB images, 512ms FCP, 3 JS errors, 1517 lines inline CSS, 162 lines inline JS
+cac5335	85.0	keep	Critical CSS split (1517→402 lines), deferred CSS/fonts, externalized JS (162→5 lines)

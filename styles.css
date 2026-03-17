@@ -3,6 +3,161 @@
    Non-critical CSS loaded asynchronously
    ============================================ */
 
+/* ========== Moved from inline: Nav hover/interaction states ========== */
+.nav-phone {
+    color: #D1D5DB;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+.nav-phone:hover {
+    color: var(--teal-accent);
+}
+
+.nav-cta:hover {
+    background: #148994;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.nav-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.nav-cta:hover::before {
+    left: 100%;
+}
+
+/* ========== Moved from inline: Hero hover/interaction states ========== */
+.hero::before {
+    content: none;
+}
+
+.hero-ambient::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+        radial-gradient(circle 1px at 20% 30%, rgba(27,154,170,0.4) 0%, transparent 1px),
+        radial-gradient(circle 1px at 60% 20%, rgba(27,154,170,0.3) 0%, transparent 1px),
+        radial-gradient(circle 1px at 80% 45%, rgba(27,154,170,0.35) 0%, transparent 1px),
+        radial-gradient(circle 1px at 35% 55%, rgba(27,154,170,0.25) 0%, transparent 1px);
+    opacity: 0.7;
+}
+
+.hero-cta.primary:hover {
+    background: #148994;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(27, 154, 170, 0.3);
+}
+
+.hero-cta.secondary:hover {
+    border-color: white;
+    transform: translateY(-2px);
+}
+
+.hero-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.6s;
+}
+
+.hero-cta:hover::before {
+    left: 100%;
+}
+
+/* ========== Moved from inline: Stats Bar ========== */
+.stats-bar {
+    background: var(--off-white);
+    padding: 40px 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+.stats-bar .visible-override {
+    opacity: 1;
+    transform: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    text-align: center;
+}
+
+.stat-item .stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--muted-indigo);
+    display: block;
+}
+
+.stat-item .stat-label {
+    font-size: 14px;
+    color: var(--medium-gray);
+    margin-top: 4px;
+}
+
+/* ========== Moved from inline: Mobile Nav + Hero ========== */
+@media (max-width: 768px) {
+    .nav-right {
+        display: none;
+    }
+
+    .mobile-menu {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    h1 {
+        font-size: 36px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    .hero {
+        padding: 80px 0 60px;
+    }
+
+    section {
+        padding: 60px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 16px;
+    }
+
+    .nav-container {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+}
+
 /* ========== Section Header (shared) ========== */
 .section-header {
     text-align: center;
