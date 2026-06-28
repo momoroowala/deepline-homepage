@@ -395,6 +395,18 @@
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 30px 30px;
+            animation: gridDrift 50s linear infinite;
+            will-change: background-position;
+        }
+
+        @keyframes gridDrift {
+            from { background-position: 0 0; }
+            to   { background-position: 30px 30px; }
+        }
+
+        @keyframes ambientPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50%      { opacity: 0.85; transform: scale(1.04); }
         }
 
         .hero-ambient {
@@ -415,6 +427,8 @@
                 radial-gradient(circle 1px at 80% 45%, rgba(27,154,170,0.35) 0%, transparent 1px),
                 radial-gradient(circle 1px at 35% 55%, rgba(27,154,170,0.25) 0%, transparent 1px);
             opacity: 0.7;
+            animation: ambientPulse 9s ease-in-out infinite;
+            will-change: opacity, transform;
         }
 
         .hero-content {
@@ -1160,19 +1174,25 @@
         }
 
         .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.35s ease;
         }
 
         .faq-answer-inner {
-            padding: 0 24px 20px;
+            overflow: hidden;
+            min-height: 0;
+            padding: 0 24px;
             color: var(--medium-gray);
             line-height: 1.6;
         }
 
         .faq-item.open .faq-answer {
-            max-height: 200px;
+            grid-template-rows: 1fr;
+        }
+
+        .faq-item.open .faq-answer-inner {
+            padding-bottom: 20px;
         }
 
         /* ========== Final CTA ========== */
@@ -1717,6 +1737,12 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
+            /* Guarantee content is visible even if a scroll observer misfires */
+            section,
+            .problem-card, .step-card, .service-card, .result-card {
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
     </style>
 </head>
@@ -1760,19 +1786,19 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number">34%</span>
+                    <span class="stat-number count-val" data-count="34" data-suffix="%">0%</span>
                     <span class="stat-label">Avg. Dormant Customers</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">$180K</span>
+                    <span class="stat-number count-val" data-count="180" data-prefix="$" data-suffix="K">$0K</span>
                     <span class="stat-label">Avg. Quarterly Recovery</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">92%</span>
+                    <span class="stat-number count-val" data-count="92" data-suffix="%">0%</span>
                     <span class="stat-label">Have No Churn Warning</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">6x</span>
+                    <span class="stat-number count-val" data-count="6" data-suffix="x">0x</span>
                     <span class="stat-label">Cheaper Than New Leads</span>
                 </div>
             </div>
@@ -2535,6 +2561,9 @@
             });
         }, { threshold: 0.2 });
         document.querySelectorAll('.service-preview').forEach(function(p) { mockupObserver.observe(p); });
+        // Animate the hero stats bar numbers on scroll-in (reuses count-up)
+        var statsBar = document.querySelector('.stats-bar');
+        if (statsBar) mockupObserver.observe(statsBar);
 
         // ========== LEAD CAPTURE (Google Apps Script) ==========
         function handleLeadCapture(e) {
